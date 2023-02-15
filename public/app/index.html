@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de compras</title>
+
+    <link rel="stylesheet" href="/universal.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="shortcut icon" href="/imagens/mercearias.png" type="image/png">
+
+    <script defer src="app.js"></script>
+</head>
+<body>
+    <header>
+        <img data-cabecalho="foto-de-perfil" src="/imagens/foto-de-perfil.png" alt="Foto do usuário" width="36" height="36" class="esqueleto-de-carregamento_animacao">
+        <h1>Lista de compras</h1>
+        <span id="logout" class="material-symbols-rounded" title="Sair">
+            logout
+        </span>
+    </header>
+
+    <main>
+        <template id="template-lista_item">
+            <article class="lista_item">
+                <input type="checkbox">
+                <h2></h2>
+            </article>
+        </template>
+        <section id="esqueleto-de-carregamento">
+            <article class="esqueleto-de-carregamento_item esqueleto-de-carregamento_animacao"></article>
+            <article class="esqueleto-de-carregamento_item esqueleto-de-carregamento_animacao"></article>
+            <article class="esqueleto-de-carregamento_item esqueleto-de-carregamento_animacao"></article>
+            <article class="esqueleto-de-carregamento_item esqueleto-de-carregamento_animacao"></article>
+            <article class="esqueleto-de-carregamento_item esqueleto-de-carregamento_animacao"></article>
+        </section>
+        <section id="lista-vazia">
+            <img src="/imagens/lista-de-compras.png" alt="Ícone de lista." width="96" height="96">
+            <h2>Nenhum item</h2>
+            <p>Clique no botão no canto inferior direito para adicionar um item.</p>
+        </section>
+    </main>
+
+    <button id="adicionar-item" title="Adicionar item">
+        <input type="text" placeholder="Eu preciso comprar...">
+        <span class="material-symbols-rounded">add</span>
+    </button>
+</body>
+</html>
