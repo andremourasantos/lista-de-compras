@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator, collection, onSnapshot, setDoc, addDoc, deleteDoc, doc, getDoc, query, orderBy, serverTimestamp, where } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, collection, onSnapshot, setDoc, addDoc, deleteDoc, doc, getDoc, query, orderBy, serverTimestamp, where, updateDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -13,9 +13,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
-const db = getFirestore(app);
+const bd = getFirestore(app);
 (() => {if(window.location.hostname === 'localhost'){
-    connectFirestoreEmulator(db, 'localhost', 8080);
+    connectFirestoreEmulator(bd, 'localhost', 8080);
 }})()
 
 onAuthStateChanged(auth, async (user) => {
@@ -23,16 +23,18 @@ onAuthStateChanged(auth, async (user) => {
         document.querySelector('[data-cabecalho="foto-de-perfil"]').classList.remove('esqueleto-de-carregamento_animacao')
         document.querySelector('[data-cabecalho="foto-de-perfil"]').src = user.photoURL
 
-        document.querySelector('#logout').addEventListener('click', () => {auth.signOut()})
+        document.querySelector('[data-menu-btn="sair"]').addEventListener('click', () => {auth.signOut()})
 
-        if((await getDoc(doc(db, "lista-de-compras", user.uid))).exists()){
-            const coleçãoReferência = query(collection(db, `lista-de-compras/${user.uid}/lista`), orderBy('criacao', 'asc'))
+        if((await getDoc(doc(bd, "lista-de-compras", user.uid))).exists()){
+            const coleçãoReferência = query(collection(bd, `lista-de-compras/${user.uid}/lista`), orderBy('criacao', 'asc'))
            
-           onSnapshot(coleçãoReferência, (snapshot) => {
+            onSnapshot(coleçãoReferência, (snapshot) => {
             let itens = []
 
-            snapshot.forEach(doc => {
-                itens.push({...doc.data(), id: doc.id})
+            snapshot.forEach(documento => {
+                if(documento.data().item != ''){itens.push({...documento.data(), id: documento.id})} else {
+                    deleteDoc(doc(bd, `lista-de-compras/${user.uid}/lista`, documento.id))
+                }
             })
 
             if(itens.length == 0){estadoDaLista('vazia'); return;}
@@ -43,7 +45,7 @@ onAuthStateChanged(auth, async (user) => {
             return;
            })
         } else {
-            setDoc(doc(db, "lista-de-compras", user.uid), {nome: user.displayName, email: user.email, criacao: serverTimestamp()})
+            setDoc(doc(bd, "lista-de-compras", user.uid), {nome: user.displayName, email: user.email, criacao: serverTimestamp(), edicao: serverTimestamp()})
             estadoDaLista('vazia');
         }
     } else{window.open('/', '_self')}
@@ -59,6 +61,7 @@ function adicionarItens(lista) {
         document.querySelector('main').append(elemento)
 
         document.querySelectorAll('.lista_item input[type="checkbox"]').forEach(item => {item.addEventListener('click', removerItem)})
+        document.querySelectorAll('.lista_item span.material-symbols-rounded').forEach(item => {item.addEventListener('click', editarItem)})
     }
 
     const itensNaLista = Array.from(document.querySelectorAll('.lista_item input[type="checkbox"]'), item => {return item.getAttribute('data-bd-doc-id')})
@@ -70,6 +73,12 @@ function adicionarItens(lista) {
     }
 }
 
+//ADICIONAR ACIONADORES NO CABEÇALHO
+(() => {
+    document.querySelector('[data-cabecalho="foto-de-perfil"]').addEventListener('click', () => {document.querySelector('header section:nth-child(2)').classList.toggle('cabeçalho-menu')})
+})();
+
+//ADICIONAR ITENS À LISTA
 (() => {
     const adicionarClasse = () => {
         if(!(document.querySelector('#adicionar-item').className.includes('adicionar-item_aberto'))){
@@ -83,10 +92,13 @@ function adicionarItens(lista) {
 
     document.querySelector('#adicionar-item > span.material-symbols-rounded').addEventListener('click', ()=>{
         if(document.querySelector('#adicionar-item').className.includes('adicionar-item_aberto')){
+            const nome = document.querySelector('#adicionar-item > input[type=text]').value.trim()
             document.querySelector('#adicionar-item').classList.remove('adicionar-item_aberto')
 
-            addDoc(collection(db, `lista-de-compras/${auth.currentUser.uid}/lista`), {
-                item: document.querySelector('#adicionar-item > input[type=text]').value.trim(),
+            if(nome === ''){alert('Você não pode adicionar um item vazio.'); return}
+
+            addDoc(collection(bd, `lista-de-compras/${auth.currentUser.uid}/lista`), {
+                item: nome,
                 criacao: serverTimestamp(),
             })
         } else {
@@ -95,6 +107,39 @@ function adicionarItens(lista) {
         }
     })
 })()
+
+function editarItem() {
+    const elemento = event.currentTarget.parentNode
+    const docID =  event.currentTarget.parentNode.querySelector('input[type="checkbox"]').getAttribute('data-bd-doc-id')
+    const ícone = event.currentTarget
+
+    const título = elemento.querySelector('h2')
+    const campoDeEdição = elemento.querySelector('input[type="text"]')
+    const novoValor = campoDeEdição.value
+
+    setTimeout(() => {
+        campoDeEdição.focus()
+    }, 250);    
+    campoDeEdição.value = título.textContent
+
+    switch (elemento.classList.contains('lista_item_edição')) {
+        case true:
+            ícone.textContent = 'edit'
+            
+            if(título.textContent === novoValor){break;}
+            
+            updateDoc(doc(bd,`lista-de-compras/${auth.currentUser.uid}/lista`, docID), {item: novoValor, criacao: serverTimestamp()})
+
+            título.textContent = novoValor
+            break;
+    
+        default:
+            ícone.textContent = 'check'
+            break;
+    }
+
+    elemento.classList.toggle('lista_item_edição')
+}
 
 function itemRemovido(itens) {
     let itensBd = Array.from(itens, item => {return item.id})
@@ -112,7 +157,7 @@ function removerItem() {
     const item = elemento.querySelector('h2').textContent
     
     elemento.remove()
-    deleteDoc(doc(db, `lista-de-compras/${auth.currentUser.uid}/lista`, docID))
+    deleteDoc(doc(bd, `lista-de-compras/${auth.currentUser.uid}/lista`, docID))
 }
 
 function estadoDaLista(estado) {    

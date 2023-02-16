@@ -22,6 +22,7 @@ const auth = getAuth();
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         const user = result.user;
+        window.open('/app', '_self')
       }).catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
