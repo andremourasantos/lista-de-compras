@@ -1,0 +1,95 @@
+@charset "UTF-8";
+
+/*→ GERAL ←*/
+body {
+    height: 100vh; /*compatibilidade*/
+    height: 100dvh;
+    width: 100%; /*compatibilidade*/
+    width: 100dvw;
+    background-image: url(imagens/foto-pagina-aterrissagem.jpg);
+    background-size: cover;
+    background-position: center;
+    backdrop-filter: blur(5px);
+    text-align: center;
+}
+
+h1 {font-size: 28px;}
+
+/*→ ATERRISSAGEM ←*/
+main {
+    height: 90vh; /*compatibilidade*/
+    height: 90dvh;
+    /* background-color: #00000020; */
+    box-sizing: border-box;
+    padding: 24px;
+}
+
+#forma_branca {
+    height: 55vh; /*compatibilidade*/
+    height: 55dvh;
+    width: 100%; /*compatibilidade*/
+    width: 100dvw;
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: 80px 80px 0px 0px;
+    box-shadow: 0px -8px 50px #FFFFFF50;
+}
+
+#apresentacao {
+    margin-top: 33vh; /*compatibilidade*/
+    margin-top: 33dvh;
+}
+
+#apresentacao > section:nth-child(1) img {
+    border-radius: 16px;
+    padding: 16px;
+    background-color: var(--plano_de_fundo_colorido);
+    box-shadow: 0px 8px 16px #14141416;
+    margin-bottom: 16px;
+}
+
+#apresentacao > section:nth-child(2) {
+    margin-top: 24px;
+}
+
+#apresentacao > section:nth-child(2) button {
+    box-shadow: var(--sombra_leve);
+}
+
+footer {
+    min-height: fit-content;
+    height: 10vh; /*compatibilidade*/
+    height: 10dvh;
+    width: 100%; /*compatibilidade*/
+    width: 100dvw;
+    display: grid;
+    align-items: center;
+}
+
+    /*→ ATERRISSAGEM: RESPONSIVIDADE ←*/
+    @media screen and (min-width: 768px), screen and (max-height: 600px) {
+        #forma_branca {display: none;}
+
+        main {
+            display: grid;
+            align-items: center;
+            height: 90vh; /*compatibilidade*/
+            height: 90dvh;
+        }
+
+        #apresentacao {
+            max-width: 300px;
+            margin: unset;
+            background-color: var(--plano_de_fundo);
+            padding: 48px 24px;
+            border-radius: 24px;
+            margin: auto;
+        }
+
+        footer {background-color: #00000050;}
+
+        footer * {color: var(--parágrafo_cor_clara);}
+    }
