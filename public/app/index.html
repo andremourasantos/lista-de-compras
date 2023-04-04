@@ -39,11 +39,38 @@
         <img src="/public/logo.png" alt="" height="40" width="40">
         <h1>Minha lista de compras</h1>
         <section>
-            <button>
+            <button data-btn-acao="abrir_menu_cabecalho">
                 <span class="material-symbols-rounded">
                     menu
                 </span>
             </button>
+
+            <div id="menu_cabecalho">
+                <button class="btn-menu_cabecalho">
+                    Configurações
+                    <span class="material-symbols-rounded">
+                        settings
+                    </span>
+                </button>
+                <button class="btn-menu_cabecalho">
+                    Novidades
+                    <span class="material-symbols-rounded">
+                        temp_preferences_custom
+                    </span>
+                </button>
+                <button class="btn-menu_cabecalho">
+                    Atalho na tela inicial
+                    <span class="material-symbols-rounded">
+                        install_mobile
+                    </span>
+                </button>
+                <button class="btn-menu_cabecalho">
+                    Sair da conta
+                    <span class="material-symbols-rounded">
+                        logout
+                    </span>
+                </button>
+            </div>
         </section>
     </header>
     <main>
@@ -147,7 +174,14 @@
             </span>
         </button>
     </main>
+
     <script>
+        document.querySelector('[data-btn-acao="abrir_menu_cabecalho"]').addEventListener('click', ()=>{
+            const display = document.querySelector('#menu_cabecalho').style.display === 'grid' ? 'none' : 'grid'
+            console.log(display)
+            document.querySelector('#menu_cabecalho').style.display = display;
+        })
+
         document.querySelectorAll('.item_da_lista').forEach(item => {
             item.addEventListener('click', (e)=>{
                 item.classList.toggle('editar_item')

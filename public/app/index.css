@@ -32,7 +32,7 @@ header h1 {
 
 header section {display: grid;}
 
-header .material-symbols-rounded{
+body > header > section > button > .material-symbols-rounded {
     font-variation-settings:
     'FILL' 0,
     'wght' 200,
@@ -44,6 +44,39 @@ header .material-symbols-rounded{
 header button {
     padding: unset;
     background: none;
+}
+
+/*→ MENU DO CABEÇALHO ←*/
+#menu_cabecalho {
+    display: none;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(auto-fill, minmax(40px, 40px));
+    justify-content: end;
+    grid-gap: 8px;
+    position: absolute;
+    top: calc(56px + 8px);
+    right: 16px;
+    height: fit-content;
+    width: fit-content;
+    padding: 16px;
+    border-radius: 16px;
+    background-color: var(--plano_de_fundo);
+    box-shadow: var(--sombra_leve);
+}
+
+#menu_cabecalho button.btn-menu_cabecalho {
+    justify-content: flex-end;
+    margin-right: 0px;
+    height: 40px;
+    width: fit-content;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+#menu_cabecalho button.btn-menu_cabecalho:hover {
+    background-color: var(--plano_de_fundo_colorido);
+    box-shadow: var(--sombra
+    );
 }
 
 /*→ LISTA DE ITENS ←*/
@@ -74,6 +107,8 @@ main {
         display: grid;
         align-items: center;
         justify-content: center;
+        grid-template-columns: auto;
+        grid-template-rows: auto;
     }
 
     main:not(:has(article.item_da_lista)) article:first-of-type {
