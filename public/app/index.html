@@ -39,12 +39,107 @@
         <img src="/public/logo.png" alt="" height="40" width="40">
         <h1>Minha lista de compras</h1>
         <section>
-            <span class="material-symbols-rounded">
-                menu
-            </span>
+            <button>
+                <span class="material-symbols-rounded">
+                    menu
+                </span>
+            </button>
         </section>
     </header>
     <main>
+        <!--MODELOS-->
+        <template>
+            <article class="item_da_lista" data-item-id="">
+                <p></p>
+                <section>
+                    <button data-btn-acao="deletar_item">
+                        <span class="material-symbols-rounded">
+                            delete
+                        </span>
+                    </button>
+                    <button data-btn-acao="editar_item">
+                        <span class="material-symbols-rounded">
+                            edit
+                        </span>
+                    </button>
+                    <button data-btn-acao="concluir_item">
+                        <span class="material-symbols-rounded">
+                            check_circle
+                        </span>
+                    </button>
+                </section>
+            </article>
+        </template>
+
+        <!--LISTA VAZIA-->
+        <article>
+            <img src="/public/imagens/ilustracoes/lista_vazia.png" alt="" height="96" width="96">
+            <h2>Nenhum item na lista</h2>
+            <p>Para começar, adiciona um item à lista.</p>
+        </article>
+
+        <!--ITENS DA LISTA-->
+        <article class="item_da_lista" data-item-id="">
+            <p>Banana</p>
+            <section>
+                <button data-btn-acao="deletar_item">
+                    <span class="material-symbols-rounded">
+                        delete
+                    </span>
+                </button>
+                <button data-btn-acao="editar_item">
+                    <span class="material-symbols-rounded">
+                        edit
+                    </span>
+                </button>
+                <button data-btn-acao="concluir_item">
+                    <span class="material-symbols-rounded">
+                        check_circle
+                    </span>
+                </button>
+            </section>
+        </article>
+        <article class="item_da_lista" data-item-id="">
+            <p>Banana</p>
+            <section>
+                <button data-btn-acao="deletar_item">
+                    <span class="material-symbols-rounded">
+                        delete
+                    </span>
+                </button>
+                <button data-btn-acao="editar_item">
+                    <span class="material-symbols-rounded">
+                        edit
+                    </span>
+                </button>
+                <button data-btn-acao="concluir_item">
+                    <span class="material-symbols-rounded">
+                        check_circle
+                    </span>
+                </button>
+            </section>
+        </article>
+        <article class="item_da_lista" data-item-id="">
+            <p>Banana</p>
+            <section>
+                <button data-btn-acao="deletar_item">
+                    <span class="material-symbols-rounded">
+                        delete
+                    </span>
+                </button>
+                <button data-btn-acao="editar_item">
+                    <span class="material-symbols-rounded">
+                        edit
+                    </span>
+                </button>
+                <button data-btn-acao="concluir_item">
+                    <span class="material-symbols-rounded">
+                        check_circle
+                    </span>
+                </button>
+            </section>
+        </article>
+
         <button class="btn-acao_primaria" id="adicionar_item">
             Adicionar item
             <span class="material-symbols-rounded">
@@ -52,5 +147,20 @@
             </span>
         </button>
     </main>
+    <script>
+        document.querySelectorAll('.item_da_lista').forEach(item => {
+            item.addEventListener('click', (e)=>{
+                item.classList.toggle('editar_item')
+            })
+        })
+
+        document.querySelectorAll('.item_da_lista section').forEach(section => {
+            section.addEventListener('click', (e)=>{
+                e.stopImmediatePropagation()
+                
+            }
+            )
+        })
+    </script>
 </body>
 </html>

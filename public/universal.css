@@ -38,7 +38,8 @@ h1,h2,h3,h4,h5,h6 {
 
 button {
   background-color: var(--plano_de_fundo_colorido);
-  padding: 16px; display: flex;
+  padding: 16px;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;

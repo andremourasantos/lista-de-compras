@@ -41,16 +41,109 @@ header .material-symbols-rounded{
     font-size: 40px;
 }
 
+header button {
+    padding: unset;
+    background: none;
+}
+
 /*→ LISTA DE ITENS ←*/
 main {
+    display: grid;
+    height: calc(100% - 56px);
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(140px,140px));
+    grid-template-rows: repeat(auto-fill, minmax(80px,80px));
+    justify-content: center;
+    justify-items: center;
+    grid-gap: 24px;
+    box-sizing: border-box;
+    padding: 36px 16px 16px 16px;
     height: calc(100% - 56px);
     width: 100%;
     box-sizing: border-box;
     padding: 36px 16px 16px 16px;
 }
 
-main.lista_vazia {
-    
+    /*→ LISTA COM ITENS ←*/
+    main:has(article.item_da_lista) article:first-of-type {
+        display: none;
+    }
+
+    /*→ LISTA VAZIA ←*/
+    main:not(:has(article.item_da_lista)) {
+        display: grid;
+        align-items: center;
+        justify-content: center;
+    }
+
+    main:not(:has(article.item_da_lista)) article:first-of-type {
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        max-width: 250px;
+        text-align: center;
+        filter: opacity(0.5);
+    }
+
+    main:not(:has(article.item_da_lista)) article:first-of-type img {
+        margin-bottom: 16px;
+    }
+
+/*→ ITENS DA LISTA ←*/
+article.item_da_lista {
+    display: grid;
+    height: fit-content;
+    width: 140px;
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 8px;
+    align-items: center;
+    justify-items: center;
+    background-color: var(--plano_de_fundo);
+    box-shadow: var(--sombra_leve);
+    box-sizing: border-box;
+    padding: 16px 8px 8px 8px;
+    border-radius: 8px;
+}
+
+article.item_da_lista p {font-size: 20px;}
+
+article.item_da_lista section {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    grid-gap: 8px;
+    height: fit-content;
+    width: fit-content;
+    padding: 4px 16px;
+    background-color: var(--plano_de_fundo_colorido);
+    border-radius: 8px;
+}
+
+article.item_da_lista section button {
+    display: none;
+    height: 24px;
+    width: 24px;
+    padding: unset;
+    background: none;
+}
+
+article.item_da_lista.editar_item section {
+    padding: 4px 8px;
+    grid-template-columns: repeat(3, 24px)
+}
+
+article.item_da_lista.editar_item section button {
+    display: initial !important;
+}
+
+button[data-btn-acao="concluir_item"] {
+    display: flex !important;
+}
+
+button[data-btn-acao="concluir_item"] .material-symbols-rounded {
+    font-variation-settings:
+    'FILL' 1 !important;
+    color: var(--destaque);
 }
 
 /*→ BOTÃO DE ADICIONAR ITEM ←*/
