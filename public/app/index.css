@@ -97,6 +97,7 @@ main {
     display: grid;
     height: calc(100% - 56px);
     width: 100%;
+    overflow-y: scroll;
     grid-template-columns: repeat(auto-fill, minmax(140px,140px));
     grid-template-rows: repeat(auto-fill, minmax(80px,80px));
     justify-content: center;
@@ -153,9 +154,25 @@ article.item_da_lista {
     border-radius: 8px;
     border: 0px solid var(--destaque);
     transition-duration: 100ms;
+    animation: ease-in 250ms;
+    animation-name: adicionar_item;
 }
 
-article.item_da_lista p {font-size: 20px;}
+    @keyframes adicionar_item {
+        0% {transform: scale(0); opacity: 0;}
+        100% {transform: scale(1); opacity: 1;}
+    }
+
+    @keyframes deletar_item {
+        0% {transform: scale(1); opacity: 1;}
+        100% {transform: scale(0); opacity: 0;}
+    }
+
+article.item_da_lista:last-child .popup:not([style*="display: none"]) {
+    z-index: 1; /*o btn de adicionar item fica por cima desse elemento.*/
+}
+
+article.item_da_lista p {text-align: center;font-size: 20px; overflow: auto; white-space: nowrap; width: 90%;}
 
 article.item_da_lista section {
     display: grid;

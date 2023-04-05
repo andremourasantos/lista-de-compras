@@ -64,7 +64,11 @@ const DATA_ITEM = {
         document.querySelector(`[data-item-id="${item_id}"] p`).textContent = item_info.nome
     },
     REMOVER: (item_id) => {
+        document.querySelector(`[data-item-id="${item_id}"]`).style.animationName = 'deletar_item'
 
+        setTimeout(() => {
+            document.querySelector(`[data-item-id="${item_id}"]`).remove()
+        }, 250);
     }
 };
 const DATA_ITEM_BTN = {
@@ -77,6 +81,7 @@ const DATA_ITEM_BTN = {
             document.querySelector('[data-item="popup"]').style.animationName = 'abrir_popup'
             setTimeout(()=>{
                 document.querySelector('[data-item="popup"]').style.display = 'grid'
+                document.querySelector('[data-item="popup"] input:first-of-type').focus()
             },100)
     
             const item_info = {
@@ -89,6 +94,8 @@ const DATA_ITEM_BTN = {
                 DATA_ITEM.EDITAR(id, item_info)
     
                 document.querySelector('[data-item="popup"] .btn-acao_primaria').removeEventListener('click', editar)
+
+                document.querySelector(`[data-item-id="${id}"]`).classList.remove('editar_item')
                 
                 document.querySelector('[data-item="popup"] .btn-acao_secundaria').click()
             }
@@ -100,8 +107,9 @@ const DATA_ITEM_BTN = {
         elemento_de_item.querySelectorAll('[data-item="deletar_item"], [data-item="concluir_item"]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const pai = DATA_ITEM.OBTER_ELEMENTO_PAI(e)
-    
-                pai.remove()
+                const id = DATA_ITEM.OBTER_ID(pai)
+
+                DATA_ITEM.REMOVER(id)
             })
         })
     },
@@ -127,7 +135,10 @@ document.querySelector('[data-item="adicionar_item"]').addEventListener('click',
     document.querySelector('[data-item="popup"]').style.animationName = 'abrir_popup'
     setTimeout(()=>{
         document.querySelector('[data-item="popup"]').style.display = 'grid'
+        document.querySelector('[data-item="popup"] input:first-of-type').focus()
     },100)
+
+    
 
     const item_info = {
         nome: document.querySelector('[data-item="popup"] input[type="text"]').value
@@ -154,4 +165,10 @@ document.querySelector('[data-item="popup"] .btn-acao_secundaria').addEventListe
         document.querySelector('[data-item="popup"] input[type="text"]').value = ''
         document.querySelector('[data-item="popup"]').style.display = 'none'
     },100)
+
+    //Cria uma cópia do botão para remover todos os eventListeners.
+    const btn = document.querySelector('[data-item="popup"] .btn-acao_primaria');
+    const btn_copia = btn.cloneNode(true);
+
+    btn.parentNode.replaceChild(btn_copia, btn)
 })
