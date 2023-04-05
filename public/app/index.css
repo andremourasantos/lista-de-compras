@@ -32,7 +32,7 @@ header h1 {
 
 header section {display: grid;}
 
-body > header > section > button > .material-symbols-rounded {
+[data-btn-acao="abrir_menu_cabecalho"] .material-symbols-rounded {
     font-variation-settings:
     'FILL' 0,
     'wght' 200,
@@ -171,13 +171,16 @@ article.item_da_lista.editar_item section button {
     display: initial !important;
 }
 
-button[data-btn-acao="concluir_item"] {
+button[data-item="concluir_item"] {
     display: flex !important;
 }
 
-button[data-btn-acao="concluir_item"] .material-symbols-rounded {
+button[data-item="concluir_item"] .material-symbols-rounded {
     font-variation-settings:
-    'FILL' 1 !important;
+    'FILL' 1,
+    'wght' 200,
+    'GRAD' 200,
+    'opsz' 24 !important;
     color: var(--destaque);
 }
 
@@ -196,4 +199,56 @@ button[data-btn-acao="concluir_item"] .material-symbols-rounded {
     'GRAD' 200,
     'opsz' 24 !important;
     color: var(--parágrafo_cor_clara);
+}
+
+/*→ POPUPs ←*/
+section.popup {
+    display: none;
+    grid-gap: 24px;
+    height: fit-content;
+    max-width: 300px;
+    position: absolute;
+    margin: auto;
+    inset: 0 0 0 0;
+    background-color: var(--plano_de_fundo);
+    box-sizing: border-box;
+    padding: 24px;
+    border-radius: 24px;
+    box-shadow: var(--sombra_de_tela_inteira);
+    text-align: center;
+}
+
+section.popup h2 {
+    font-size: 20px;
+}
+
+section.popup input {
+    height: 48px;
+    width: 100%;
+    background-color: var(--plano_de_fundo_colorido);
+    border: 2px solid var(--destaque);
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 8px;
+}
+
+section.popup div.container_btns_popup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    height: 100%;
+    width: 100%;
+}
+
+section.popup div.container_btns_popup .btn-acao_primaria {
+    width: 100%;
+}
+
+section.popup div.container_btns_popup .btn-acao_secundaria .material-symbols-rounded {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 200,
+    'GRAD' 200,
+    'opsz' 24 !important;
 }

@@ -20,6 +20,7 @@
 
     /*→ OUTROS ←*/
     --sombra_leve: 0px 0px 10px #14141408;
+    --sombra_de_tela_inteira: 0px 0px 0px 100vh #14141416;
 }
 
 /*→ GERAL ←*/
@@ -55,6 +56,9 @@ button {
     }
     button.btn-acao_secundaria {
       background-color: var(--plano_de_fundo_colorido);
+      color: var(--destaque);
+    }
+    button.btn-acao_secundaria .material-symbols-rounded {
       color: var(--destaque);
     }
 
