@@ -39,7 +39,7 @@
         <img src="/public/logo.png" alt="" height="40" width="40">
         <h1>Minha lista de compras</h1>
         <section>
-            <button data-btn-acao="abrir_menu_cabecalho">
+            <button data-btn-acao="abrir_menu_cabecalho" title="Abrir menu">
                 <span class="material-symbols-rounded">
                     menu
                 </span>
@@ -76,26 +76,24 @@
     <main>
         <!--MODELOS-->
         <template>
-            <article class="item_da_lista" data-item-id="">
                 <p></p>
                 <section>
-                    <button data-item="deletar_item">
+                    <button data-item="deletar_item" title="Deletar item">
                         <span class="material-symbols-rounded">
                             delete
                         </span>
                     </button>
-                    <button data-item="editar_item">
+                    <button data-item="editar_item" title="Editar item">
                         <span class="material-symbols-rounded">
                             edit
                         </span>
                     </button>
-                    <button data-item="concluir_item">
+                    <button data-item="concluir_item" title="Marcar item como comprado">
                         <span class="material-symbols-rounded">
                             check_circle
                         </span>
                     </button>
                 </section>
-            </article>
         </template>
 
         <!--LISTA VAZIA-->
@@ -103,68 +101,6 @@
             <img src="/public/imagens/ilustracoes/lista_vazia.png" alt="" height="96" width="96">
             <h2>Nenhum item na lista</h2>
             <p>Para começar, adiciona um item à lista.</p>
-        </article>
-
-        <!--ITENS DA LISTA-->
-        <article class="item_da_lista" data-item-id="1">
-            <p>Banana</p>
-            <section>
-                <button data-item="deletar_item">
-                    <span class="material-symbols-rounded">
-                        delete
-                    </span>
-                </button>
-                <button data-item="editar_item">
-                    <span class="material-symbols-rounded">
-                        edit
-                    </span>
-                </button>
-                <button data-item="concluir_item">
-                    <span class="material-symbols-rounded">
-                        check_circle
-                    </span>
-                </button>
-            </section>
-        </article>
-        <article class="item_da_lista" data-item-id="2">
-            <p>Pera</p>
-            <section>
-                <button data-item="deletar_item">
-                    <span class="material-symbols-rounded">
-                        delete
-                    </span>
-                </button>
-                <button data-item="editar_item">
-                    <span class="material-symbols-rounded">
-                        edit
-                    </span>
-                </button>
-                <button data-item="concluir_item">
-                    <span class="material-symbols-rounded">
-                        check_circle
-                    </span>
-                </button>
-            </section>
-        </article>
-        <article class="item_da_lista" data-item-id="3">
-            <p>Maçã</p>
-            <section>
-                <button data-item="deletar_item">
-                    <span class="material-symbols-rounded">
-                        delete
-                    </span>
-                </button>
-                <button data-item="editar_item">
-                    <span class="material-symbols-rounded">
-                        edit
-                    </span>
-                </button>
-                <button data-item="concluir_item">
-                    <span class="material-symbols-rounded">
-                        check_circle
-                    </span>
-                </button>
-            </section>
         </article>
 
         <button class="btn-acao_primaria" id="adicionar_item" data-item="adicionar_item">
@@ -182,7 +118,7 @@
         </div>
         <input type="text" id="nome_do_item" placeholder="Escreva o nome do item...">
         <div class="container_btns_popup">
-            <button class="btn-acao_secundaria">
+            <button class="btn-acao_secundaria" title="Voltar">
                 <span class="material-symbols-rounded">
                     undo
                 </span>
@@ -191,75 +127,6 @@
         </div>
     </section>
 
-    <script>
-        /*SCRIPTS PARA TESTE*/
-        document.querySelector('[data-btn-acao="abrir_menu_cabecalho"]').addEventListener('click', ()=>{
-            const display = document.querySelector('#menu_cabecalho').style.display === 'grid' ? 'none' : 'grid'
-            console.log(display)
-            document.querySelector('#menu_cabecalho').style.display = display;
-        })
-
-        document.querySelectorAll('.item_da_lista').forEach(item => {
-            item.addEventListener('click', (e)=>{
-                item.classList.toggle('editar_item')
-            })
-        })
-
-        document.querySelectorAll('.item_da_lista section').forEach(section => {
-            section.addEventListener('click', (e)=>{
-                e.stopImmediatePropagation()
-            })
-        })
-
-        document.querySelector('[data-item="adicionar_item"]').addEventListener('click', ()=>{
-            DATA_ITEM_POPUP.ADICIONAR()
-            document.querySelector('[data-item="popup"]').style.display = 'grid'
-        })
-
-        document.querySelector('[data-item="popup"] .btn-acao_secundaria').addEventListener('click', () => {
-            document.querySelector('[data-item="popup"] input[type="text"]').value = ''
-            document.querySelector('[data-item="popup"]').style.display = 'none'
-        })
-
-        //POPUP DE AÇÃO COM ITEM
-        const DATA_ITEM = {
-            OBTER_ELEMENTO_PAI: (evento) => {
-                let pai = evento.currentTarget
-                while (pai.nodeName != 'ARTICLE'){
-                    pai = pai.parentNode
-                }
-                return pai
-            },
-            OBTER_ID: (elemento_pai) => {
-                return elemento_pai.getAttribute('data-item-id')
-            }
-        }
-        const DATA_ITEM_POPUP = {
-            ADICIONAR: () => {
-                document.querySelector('[data-item="popup"] h2').textContent = 'Adicionar item';
-                document.querySelector('[data-item="popup"] p').textContent = 'O que você vai adicionar?';
-                document.querySelector('[data-item="popup"] input[type="text"]').value = ''
-                document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Adicionar';
-            },
-            EDITAR: (elemento_pai) => {
-                document.querySelector('[data-item="popup"] h2').textContent = 'Editar item';
-                document.querySelector('[data-item="popup"] p').textContent = 'O que você deseja alterar?';
-                document.querySelector('[data-item="popup"] input[type="text"]').value = elemento_pai.querySelector('p').textContent
-                document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Alterar';
-            }
-        }
-
-        document.querySelectorAll('[data-item="editar_item"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const pai = DATA_ITEM.OBTER_ELEMENTO_PAI(e)
-                
-                DATA_ITEM_POPUP.EDITAR(pai)
-
-                document.querySelector('[data-item="popup"]').style.display = 'grid';
-
-                console.log(DATA_ITEM.OBTER_ID(pai))
-            })
-        })
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
