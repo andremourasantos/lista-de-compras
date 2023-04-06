@@ -55,10 +55,11 @@ const DATA_ITEM = {
             container.classList.toggle('editar_item')
         })
 
-        DATA_ITEM_BTN.EDITAR(container)
-        DATA_ITEM_BTN.DELETAR(container)
+        DATA_ITEM_ACAO.EDITAR(container)
+        DATA_ITEM_ACAO.DELETAR(container)
 
         document.querySelector('main').appendChild(container)
+        DATA_ITEM.NOTIFICAR('check_circle', `O item ${item_info.nome} foi adicionado à sua lista de compras.`)
     },
     EDITAR: (item_id, item_info) => {
         document.querySelector(`[data-item-id="${item_id}"] p`).textContent = item_info.nome
@@ -69,9 +70,20 @@ const DATA_ITEM = {
         setTimeout(() => {
             document.querySelector(`[data-item-id="${item_id}"]`).remove()
         }, 250);
+    },
+    NOTIFICAR: (nome_icone, texto) => {        
+        document.querySelector('#notificacao .material-symbols-rounded').textContent = nome_icone
+        document.querySelector('#notificacao p').textContent = texto
+
+        document.querySelector('#notificacao').style.display = 'grid'
+
+        setTimeout(() => {
+            document.querySelector('#notificacao').style.display = 'none'
+        }, 3000);
     }
 };
-const DATA_ITEM_BTN = {
+const DATA_ITEM_ACAO = {
+    /*AÇÕES DOS BOTÕES NA SEÇÃO DE ÍCONES DO ITEM*/
     EDITAR: (elemento_de_item) => {
         elemento_de_item.querySelector('[data-item="editar_item"]').addEventListener('click', (e) => {
             const pai = DATA_ITEM.OBTER_ELEMENTO_PAI(e)
@@ -85,11 +97,20 @@ const DATA_ITEM_BTN = {
             },100)
     
             const item_info = {
-                nome: ''
+                nome: '',
+                nomeAntigo: document.querySelector(`[data-item-id="${id}"] p`).textContent
             }
     
             const editar = () => {
-                item_info.nome = document.querySelector('[data-item="popup"] input[type="text"]').value
+                const nome = document.querySelector('[data-item="popup"] input[type="text"]').value
+
+                if(nome === ''){
+                    DATA_ITEM.NOTIFICAR('warning', 'Não é possível alterar o título para nada.');
+                    document.querySelector('[data-item="popup"] .btn-acao_secundaria').click();
+                    return
+                }
+
+                item_info.nome = nome
     
                 DATA_ITEM.EDITAR(id, item_info)
     
@@ -98,6 +119,8 @@ const DATA_ITEM_BTN = {
                 document.querySelector(`[data-item-id="${id}"]`).classList.remove('editar_item')
                 
                 document.querySelector('[data-item="popup"] .btn-acao_secundaria').click()
+
+                DATA_ITEM.NOTIFICAR('check_circle', `O item "${item_info.nomeAntigo}" foi alterado para "${item_info.nome}".`)
             }
     
             document.querySelector('[data-item="popup"] .btn-acao_primaria').addEventListener('click', editar)
@@ -113,7 +136,7 @@ const DATA_ITEM_BTN = {
             })
         })
     },
-}
+};
 const DATA_ITEM_POPUP = {
     ADICIONAR: () => {
         document.querySelector('[data-item="popup"] h2').textContent = 'Adicionar item';
@@ -136,9 +159,7 @@ document.querySelector('[data-item="adicionar_item"]').addEventListener('click',
     setTimeout(()=>{
         document.querySelector('[data-item="popup"]').style.display = 'grid'
         document.querySelector('[data-item="popup"] input:first-of-type').focus()
-    },100)
-
-    
+    },100)    
 
     const item_info = {
         nome: document.querySelector('[data-item="popup"] input[type="text"]').value
