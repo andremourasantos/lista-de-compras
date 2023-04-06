@@ -64,9 +64,20 @@ async function resgatarItensDaLista () {
 
     onSnapshot(CONSULTA, (snapshot) => {
         let itens_da_lista = []
+        
+        //Filtro de itens já adicionados
+        const itens_ja_adicionados = []
+        document.querySelectorAll('.item_da_lista').forEach(item => {
+            itens_ja_adicionados.push(item.getAttribute('data-item-id'))
+        })
 
         snapshot.forEach(documento => {
-            itens_da_lista.push({...documento.data(), id: documento.id})
+            if(itens_ja_adicionados.includes(documento.id)){
+                return;
+            } else {
+                itens_da_lista.push({...documento.data(), id: documento.id});
+            }
+            
         })
 
         if(itens_da_lista.length == 0){return}
@@ -125,8 +136,8 @@ const DATA_ITEM = {
             container.classList.toggle('editar_item')
         })
 
-        DATA_ITEM_ACAO.EDITAR(container)
-        DATA_ITEM_ACAO.DELETAR(container)
+        // DATA_ITEM_ACAO.EDITAR(container)
+        // DATA_ITEM_ACAO.DELETAR(container)
 
         //Anexando ao DOM
         document.querySelector('main').appendChild(container)
