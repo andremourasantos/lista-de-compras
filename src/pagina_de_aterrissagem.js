@@ -20,7 +20,7 @@ const auth = getAuth();
     document.querySelector('[data-btn-login="google"]').addEventListener('click', () => {
         signInWithPopup(auth, AUTENTICACAO_GOOGLE)
             .then(()=>{return})
-            .catch(()=>{
+            .catch((error)=>{
                 // Handle Errors here.
                 const errorCode = error.code;
                 const errorMessage = error.message;
