@@ -132,6 +132,7 @@ main {
         max-width: 250px;
         text-align: center;
         filter: opacity(0.5);
+        animation: adicionar_item 250ms ease-in;
     }
 
     main:not(:has(article.item_da_lista)) article:first-of-type img {
@@ -159,12 +160,12 @@ article.item_da_lista {
 }
 
     @keyframes adicionar_item {
-        0% {transform: scale(0); opacity: 0;}
+        0% {transform: scale(0.9); opacity: 0;}
         100% {transform: scale(1); opacity: 1;}
     }
 
     @keyframes deletar_item {
-        0% {transform: scale(1); opacity: 1;}
+        0% {transform: scale(0.9); opacity: 1;}
         100% {transform: scale(0); opacity: 0;}
     }
 

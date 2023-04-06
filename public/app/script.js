@@ -76,6 +76,14 @@ const DATA_ITEM = {
         const modelo = document.importNode(document.querySelector('template').content, true)
         const item = document.importNode(modelo, true)
 
+        const nome = document.querySelector('[data-item="popup"] input[type="text"]').value
+
+                if(nome === ''){
+                    DATA_ITEM.NOTIFICAR('warning', 'Não é possível adicionar um item sem nome.');
+                    document.querySelector('[data-item="popup"] .btn-acao_secundaria').click();
+                    return
+                }
+
         item.querySelector('p').textContent = item_info.nome
 
         const container = document.createElement('article')
