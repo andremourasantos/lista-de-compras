@@ -147,7 +147,9 @@ const DATA_ITEM = {
         updateDoc(doc(BANCO_DE_DADOS, `lista-de-compras/${USUARIO.UID}/lista`, item_info.id), {nome: item_info.nome})
 
         //Atualiza o item na exibição atual do usuário
-        
+        document.querySelector(`[data-item-id="${item_info.id}"] p`).textContent = item_info.nome
+
+        DATA_ITEM.NOTIFICAR('check_circle', `O item "${item_info.nomeAntigo}" foi alterado para "${item_info.nome}".`)
     },
     REMOVER: (item_id) => {
         document.querySelector(`[data-item-id="${item_id}"]`).style.animationName = 'deletar_item'
@@ -210,13 +212,12 @@ const DATA_ITEM_ICONES_DE_ACAO = {
                 
                 document.querySelector(`[data-item-id="${id}"]`).classList.remove('editar_item')
                 document.querySelector('[data-item="popup"] .btn-acao_secundaria').click()
-                DATA_ITEM.NOTIFICAR('check_circle', `O item "${item_info.nomeAntigo}" foi alterado para "${item_info.nome}".`)
             }
 
             document.querySelector('[data-item="popup"] .btn-acao_primaria').addEventListener('click', COLETAR_INFO)
         })
     },
-    // DELETAR: (elemento_de_item) => {
+     DELETAR: (elemento_de_item) => {
     //     elemento_de_item.querySelectorAll('[data-item="deletar_item"], [data-item="concluir_item"]').forEach(btn => {
     //         btn.addEventListener('click', (e) => {
     //             const pai = DATA_ITEM.OBTER_ELEMENTO_PAI(e)
@@ -225,7 +226,7 @@ const DATA_ITEM_ICONES_DE_ACAO = {
     //             DATA_ITEM.REMOVER(id)
     //         })
     //     })
-    // }
+    }
 }
 const DATA_ITEM_POPUP = {
     /*ESSAS FUNÇÕES APENAS ALTERAM O CONTEÚDO DOS POPUPS, NÃO EXECUTAM AÇÕES.*/
