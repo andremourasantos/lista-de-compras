@@ -183,47 +183,47 @@ const DATA_ITEM_ACAO = {
         })
     },
 };
-const DATA_ITEM_POPUP = {
-    ADICIONAR: () => {
-        document.querySelector('[data-item="popup"] h2').textContent = 'Adicionar item';
-        document.querySelector('[data-item="popup"] p').textContent = 'O que você vai adicionar?';
-        document.querySelector('[data-item="popup"] input[type="text"]').value = ''
-        document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Adicionar';
-    },
-    EDITAR: (elemento_pai) => {
-        document.querySelector('[data-item="popup"] h2').textContent = 'Editar item';
-        document.querySelector('[data-item="popup"] p').textContent = 'O que você deseja alterar?';
-        document.querySelector('[data-item="popup"] input[type="text"]').value = elemento_pai.querySelector('p').textContent
-        document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Alterar';
-    }
-};
+// const DATA_ITEM_POPUP = {
+//     ADICIONAR: () => {
+//         document.querySelector('[data-item="popup"] h2').textContent = 'Adicionar item';
+//         document.querySelector('[data-item="popup"] p').textContent = 'O que você vai adicionar?';
+//         document.querySelector('[data-item="popup"] input[type="text"]').value = ''
+//         document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Adicionar';
+//     },
+//     EDITAR: (elemento_pai) => {
+//         document.querySelector('[data-item="popup"] h2').textContent = 'Editar item';
+//         document.querySelector('[data-item="popup"] p').textContent = 'O que você deseja alterar?';
+//         document.querySelector('[data-item="popup"] input[type="text"]').value = elemento_pai.querySelector('p').textContent
+//         document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Alterar';
+//     }
+// };
 
-//Adicionar item
-document.querySelector('[data-item="adicionar_item"]').addEventListener('click', ()=>{
-    DATA_ITEM_POPUP.ADICIONAR()
-    document.querySelector('[data-item="popup"]').style.animationName = 'abrir_popup'
-    setTimeout(()=>{
-        document.querySelector('[data-item="popup"]').style.display = 'grid'
-        document.querySelector('[data-item="popup"] input:first-of-type').focus()
-    },100)    
+// //Adicionar item
+// document.querySelector('[data-item="adicionar_item"]').addEventListener('click', ()=>{
+//     DATA_ITEM_POPUP.ADICIONAR()
+//     document.querySelector('[data-item="popup"]').style.animationName = 'abrir_popup'
+//     setTimeout(()=>{
+//         document.querySelector('[data-item="popup"]').style.display = 'grid'
+//         document.querySelector('[data-item="popup"] input:first-of-type').focus()
+//     },100)    
 
-    const item_info = {
-        nome: document.querySelector('[data-item="popup"] input[type="text"]').value
-    }
+//     const item_info = {
+//         nome: document.querySelector('[data-item="popup"] input[type="text"]').value
+//     }
 
-    const adicionar = () => {
-        const item_info = {
-            nome: document.querySelector('[data-item="popup"] input[type="text"]').value
-        }
-        DATA_ITEM.ADICIONAR(item_info)
+//     const adicionar = () => {
+//         const item_info = {
+//             nome: document.querySelector('[data-item="popup"] input[type="text"]').value
+//         }
+//         DATA_ITEM.ADICIONAR(item_info)
 
-        document.querySelector('[data-item="popup"] .btn-acao_primaria').removeEventListener('click', adicionar)
+//         document.querySelector('[data-item="popup"] .btn-acao_primaria').removeEventListener('click', adicionar)
 
-        document.querySelector('[data-item="popup"] .btn-acao_secundaria').click()
-    }
+//         document.querySelector('[data-item="popup"] .btn-acao_secundaria').click()
+//     }
 
-    document.querySelector('[data-item="popup"] .btn-acao_primaria').addEventListener('click', adicionar)
-})
+//     document.querySelector('[data-item="popup"] .btn-acao_primaria').addEventListener('click', adicionar)
+// })
 
 //Fechar popup
 document.querySelector('[data-item="popup"] .btn-acao_secundaria').addEventListener('click', () => {

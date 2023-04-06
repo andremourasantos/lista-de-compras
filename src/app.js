@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator, getDoc, doc, query, collection, orderBy, setDoc, serverTimestamp, onSnapshot } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, getDoc, doc, query, collection, orderBy, setDoc, serverTimestamp, onSnapshot, addDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -89,9 +89,18 @@ const DATA_ITEM = {
     OBTER_ID: (elemento_pai) => {
         return elemento_pai.getAttribute('data-item-id');
     },
-    SALVAR: () => {
+    SALVAR: (item_info) => {
         /*ADICIONA O ITEM À NUVEM*/
-        
+        if(nome_do_item.nome === ''){
+            DATA_ITEM.NOTIFICAR('warning', 'Não é possível adicionar um item sem nome.');
+            document.querySelector('[data-item="popup"] .btn-acao_secundaria').click();
+            return;
+        }
+
+        addDoc(USUARIO.LISTA_DE_COMPRAS, {
+            nome: item_info.nome,
+            criacao: serverTimestamp()
+        })
     },
     ADICIONAR: (item_info) => {
         /*ADICIONA O ITEM AO DOM*/
@@ -148,6 +157,20 @@ const DATA_ITEM = {
         }, 3000)
     }
 };
+const DATA_ITEM_POPUP = {
+    ACAO_ADICIONAR: () => {
+        document.querySelector('[data-item="popup"] h2').textContent = 'Adicionar item';
+        document.querySelector('[data-item="popup"] p').textContent = 'O que você vai adicionar?';
+        document.querySelector('[data-item="popup"] input[type="text"]').value = ''
+        document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Adicionar';
+    },
+    ACAO_EDITAR: (elemento_pai) => {
+        // document.querySelector('[data-item="popup"] h2').textContent = 'Editar item';
+        // document.querySelector('[data-item="popup"] p').textContent = 'O que você deseja alterar?';
+        // document.querySelector('[data-item="popup"] input[type="text"]').value = elemento_pai.querySelector('p').textContent;
+        // document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Alterar';
+    }
+};
 
 //↓↓ BOTÕES DO MENU
 (() => {
@@ -155,3 +178,26 @@ const DATA_ITEM = {
         auth.signOut()
     })
 })()
+
+//↓↓ BOTÃO DE ADICIONAR ITEM
+document.querySelector('[data-item="adicionar_item"]').addEventListener('click', ()=>{
+    DATA_ITEM_POPUP.ACAO_ADICIONAR()
+
+    document.querySelector('[data-item="popup"]').style.animationName = 'abrir_popup'
+    setTimeout(()=>{
+        document.querySelector('[data-item="popup"]').style.display = 'grid'
+        document.querySelector('[data-item="popup"] input:first-of-type').focus()
+    }, 100)
+
+    const COLETAR_INFO = () => {
+        const item_info = {
+            nome: document.querySelector('[data-item="popup"] input[type="text"]').value
+        }
+        DATA_ITEM.SALVAR(item_info)
+
+        document.querySelector('[data-item="popup"] .btn-acao_primaria').removeEventListener('click', COLETAR_INFO)
+        document.querySelector('[data-item="popup"] .btn-acao_secundaria').click()
+    }
+
+    document.querySelector('[data-item="popup"] .btn-acao_primaria').addEventListener('click', COLETAR_INFO)
+})
