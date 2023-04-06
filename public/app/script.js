@@ -115,7 +115,7 @@ const DATA_ITEM = {
 
         setTimeout(() => {
             document.querySelector(`[data-item-id="${item_id}"]`).remove()
-        }, 250);
+        }, 150);
     },
     NOTIFICAR: (nome_icone, texto) => {        
         // document.querySelector('#notificacao .material-symbols-rounded').textContent = nome_icone

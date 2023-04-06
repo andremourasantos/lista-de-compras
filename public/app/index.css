@@ -132,7 +132,7 @@ main {
         max-width: 250px;
         text-align: center;
         filter: opacity(0.5);
-        animation: adicionar_item 250ms ease-in;
+        animation: adicionar_item 150ms ease-in;
     }
 
     main:not(:has(article.item_da_lista)) article:first-of-type img {
@@ -155,7 +155,7 @@ article.item_da_lista {
     border-radius: 8px;
     border: 0px solid var(--destaque);
     transition-duration: 100ms;
-    animation: ease-in 250ms;
+    animation: ease-in 150ms;
     animation-name: adicionar_item;
 }
 
