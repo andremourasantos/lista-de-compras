@@ -227,10 +227,14 @@ button[data-item="concluir_item"] .material-symbols-rounded {
 
 /*→ BOTÃO DE ADICIONAR ITEM ←*/
 #adicionar_item {
+    justify-content: flex-end;
     position: absolute;
+    width: fit-content;
     bottom: 16px;
     right: 16px;
     box-shadow: var(--sombra_leve);
+    transition: all 150ms ease-in-out;
+    white-space: nowrap;
 }
 
 #adicionar_item .material-symbols-rounded {

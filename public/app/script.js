@@ -7,20 +7,58 @@ document.querySelector('[data-btn-acao="abrir_menu_cabecalho"]').addEventListene
     setTimeout(()=>{
         document.querySelector('#menu_cabecalho').style.display = display;
     },100)
-    
-})
+});
 
 document.querySelectorAll('.item_da_lista').forEach(item => {
     item.addEventListener('click', (e)=>{
         item.classList.toggle('editar_item')
     })
-})
+});
 
 document.querySelectorAll('.item_da_lista section').forEach(section => {
     section.addEventListener('click', (e)=>{
         e.stopImmediatePropagation()
     })
-})
+});
+
+(()=>{
+    const BTN_ADICIONAR_ITEM = {
+        ELEMENTO: document.getElementById("adicionar_item"),
+        TEXTO: '',
+        TAMANHO_G: '',
+        TAMANHO_P: '',
+    }
+
+    BTN_ADICIONAR_ITEM.TEXTO = BTN_ADICIONAR_ITEM.ELEMENTO.childNodes[0]
+    BTN_ADICIONAR_ITEM.TAMANHO_G = BTN_ADICIONAR_ITEM.ELEMENTO.clientWidth
+    BTN_ADICIONAR_ITEM.TAMANHO_P = (Number((getComputedStyle(BTN_ADICIONAR_ITEM.ELEMENTO).padding).replace('px','')))*2 + Number((getComputedStyle(BTN_ADICIONAR_ITEM.ELEMENTO.querySelector('.material-symbols-rounded')).fontSize).replace('px',''))
+
+    BTN_ADICIONAR_ITEM.ELEMENTO.style.width = BTN_ADICIONAR_ITEM.TAMANHO_G + 'px'
+
+    setTimeout(function() {
+        BTN_ADICIONAR_ITEM.TEXTO.remove()
+        BTN_ADICIONAR_ITEM.ELEMENTO.style.width = BTN_ADICIONAR_ITEM.TAMANHO_P + 'px'
+    }, 5000);
+      
+
+    BTN_ADICIONAR_ITEM.ELEMENTO.addEventListener("mouseenter", () => {
+        BTN_ADICIONAR_ITEM.ELEMENTO.style.width = BTN_ADICIONAR_ITEM.TAMANHO_G + 'px'
+        setTimeout(() => {
+            BTN_ADICIONAR_ITEM.ELEMENTO.insertBefore(BTN_ADICIONAR_ITEM.TEXTO, BTN_ADICIONAR_ITEM.ELEMENTO.childNodes[0])
+        }, 150);
+    });
+
+    BTN_ADICIONAR_ITEM.ELEMENTO.addEventListener("mouseleave", () => {
+        BTN_ADICIONAR_ITEM.TEXTO.remove()
+        BTN_ADICIONAR_ITEM.ELEMENTO.style.width = BTN_ADICIONAR_ITEM.TAMANHO_P + 'px'
+    });
+
+    BTN_ADICIONAR_ITEM.ELEMENTO.addEventListener('click', () => {
+        BTN_ADICIONAR_ITEM.TEXTO.remove()
+        BTN_ADICIONAR_ITEM.ELEMENTO.style.width = BTN_ADICIONAR_ITEM.TAMANHO_P + 'px'
+    })
+      
+})()
 
 //AÇÕES COM OS ITENS
 const DATA_ITEM = {
@@ -72,14 +110,14 @@ const DATA_ITEM = {
         }, 250);
     },
     NOTIFICAR: (nome_icone, texto) => {        
-        document.querySelector('#notificacao .material-symbols-rounded').textContent = nome_icone
-        document.querySelector('#notificacao p').textContent = texto
+        // document.querySelector('#notificacao .material-symbols-rounded').textContent = nome_icone
+        // document.querySelector('#notificacao p').textContent = texto
 
-        document.querySelector('#notificacao').style.display = 'grid'
+        // document.querySelector('#notificacao').style.display = 'grid'
 
-        setTimeout(() => {
-            document.querySelector('#notificacao').style.display = 'none'
-        }, 3000);
+        // setTimeout(() => {
+        //     document.querySelector('#notificacao').style.display = 'none'
+        // }, 3000);
     }
 };
 const DATA_ITEM_ACAO = {
