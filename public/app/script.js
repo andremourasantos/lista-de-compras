@@ -183,20 +183,20 @@ const DATA_ITEM_ACAO = {
         })
     },
 };
-// const DATA_ITEM_POPUP = {
-//     ADICIONAR: () => {
-//         document.querySelector('[data-item="popup"] h2').textContent = 'Adicionar item';
-//         document.querySelector('[data-item="popup"] p').textContent = 'O que você vai adicionar?';
-//         document.querySelector('[data-item="popup"] input[type="text"]').value = ''
-//         document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Adicionar';
-//     },
-//     EDITAR: (elemento_pai) => {
-//         document.querySelector('[data-item="popup"] h2').textContent = 'Editar item';
-//         document.querySelector('[data-item="popup"] p').textContent = 'O que você deseja alterar?';
-//         document.querySelector('[data-item="popup"] input[type="text"]').value = elemento_pai.querySelector('p').textContent
-//         document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Alterar';
-//     }
-// };
+const DATA_ITEM_POPUP = {
+    ADICIONAR: () => {
+        document.querySelector('[data-item="popup"] h2').textContent = 'Adicionar item';
+        document.querySelector('[data-item="popup"] p').textContent = 'O que você vai adicionar?';
+        document.querySelector('[data-item="popup"] input[type="text"]').value = ''
+        document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Adicionar';
+    },
+    EDITAR: (elemento_pai) => {
+        document.querySelector('[data-item="popup"] h2').textContent = 'Editar item';
+        document.querySelector('[data-item="popup"] p').textContent = 'O que você deseja alterar?';
+        document.querySelector('[data-item="popup"] input[type="text"]').value = elemento_pai.querySelector('p').textContent
+        document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Alterar';
+    }
+};
 
 // //Adicionar item
 // document.querySelector('[data-item="adicionar_item"]').addEventListener('click', ()=>{

@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator, getDoc, doc, query, collection, orderBy, setDoc, serverTimestamp, onSnapshot, addDoc } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, getDoc, doc, query, collection, orderBy, setDoc, serverTimestamp, onSnapshot, addDoc, updateDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -28,7 +28,7 @@ const USUARIO = {
     NOME: '',
     EMAIL: '',
     DOC_REFERENCIA: '',
-    LISTA_DE_COMPRAS: ''
+    COLECAO_LISTA_DE_COMPRAS: ''
 };
 
 onAuthStateChanged(auth, async (usuario) => {
@@ -40,7 +40,7 @@ onAuthStateChanged(auth, async (usuario) => {
         USUARIO.NOME = usuario.displayName;
         USUARIO.EMAIL = usuario.email;
         USUARIO.DOC_REFERENCIA = doc(BANCO_DE_DADOS, 'lista-de-compras', USUARIO.UID)
-        USUARIO.LISTA_DE_COMPRAS = collection(BANCO_DE_DADOS, 'lista-de-compras', USUARIO.UID, 'lista')
+        USUARIO.COLECAO_LISTA_DE_COMPRAS = collection(BANCO_DE_DADOS, 'lista-de-compras', USUARIO.UID, 'lista')
         checarBancoDeDadosPorListaDoUsuario();
     } else {
         window.open('/', '_self')
@@ -60,7 +60,7 @@ async function checarBancoDeDadosPorListaDoUsuario () {
 }
 
 async function resgatarItensDaLista () {
-    const CONSULTA = query(USUARIO.LISTA_DE_COMPRAS, orderBy('criacao', 'asc'))
+    const CONSULTA = query(USUARIO.COLECAO_LISTA_DE_COMPRAS, orderBy('criacao', 'asc'))
 
     onSnapshot(CONSULTA, (snapshot) => {
         let itens_da_lista = []
@@ -108,7 +108,7 @@ const DATA_ITEM = {
             return;
         }
 
-        addDoc(USUARIO.LISTA_DE_COMPRAS, {
+        addDoc(USUARIO.COLECAO_LISTA_DE_COMPRAS, {
             nome: item_info.nome,
             criacao: serverTimestamp()
         })
@@ -136,14 +136,18 @@ const DATA_ITEM = {
             container.classList.toggle('editar_item')
         })
 
-        // DATA_ITEM_ACAO.EDITAR(container)
-        // DATA_ITEM_ACAO.DELETAR(container)
+        DATA_ITEM_ICONES_DE_ACAO.EDITAR(container)
+        DATA_ITEM_ICONES_DE_ACAO.DELETAR(container)
 
         //Anexando ao DOM
         document.querySelector('main').appendChild(container)
     },
-    EDITAR: (item_id, item_info) => {
-        document.querySelector(`[data-item-id="${item_id}"] p`).textContent = item_info.nome
+    EDITAR: (item_info) => {
+        //Atualiza o item diretamente no banco de dados
+        updateDoc(doc(BANCO_DE_DADOS, `lista-de-compras/${USUARIO.UID}/lista`, item_info.id), {nome: item_info.nome})
+
+        //Atualiza o item na exibição atual do usuário
+        
     },
     REMOVER: (item_id) => {
         document.querySelector(`[data-item-id="${item_id}"]`).style.animationName = 'deletar_item'
@@ -168,7 +172,63 @@ const DATA_ITEM = {
         }, 3000)
     }
 };
+const DATA_ITEM_ICONES_DE_ACAO = {
+    /*AÇÕES DOS BOTÕES NA SEÇÃO DE ÍCONES DO ITEM*/
+    EDITAR: (elemento_de_item) => {
+        elemento_de_item.querySelector('[data-item="editar_item"]').addEventListener('click', (e) => {
+            const pai = DATA_ITEM.OBTER_ELEMENTO_PAI(e)
+            const id = DATA_ITEM.OBTER_ID(pai)
+            DATA_ITEM_POPUP.ACAO_EDITAR(pai)
+    
+            document.querySelector('[data-item="popup"]').style.animationName = 'abrir_popup'
+            setTimeout(()=>{
+                document.querySelector('[data-item="popup"]').style.display = 'grid'
+                document.querySelector('[data-item="popup"] input:first-of-type').focus()
+            }, 100)
+
+            const item_info = {
+                id: id,
+                nome: '',
+                nomeAntigo: document.querySelector(`[data-item-id="${id}"] p`).textContent
+            }
+
+            const COLETAR_INFO = () => {
+                const nome = document.querySelector('[data-item="popup"] input[type="text"]').value
+
+                if(nome === ''){
+                    document.querySelector('[data-item="popup"] .btn-acao_secundaria').click();
+                    DATA_ITEM.NOTIFICAR('warning', 'Não é possível alterar o nome do item para um valor vazio.');
+                    return;
+                } else if (nome === item_info.nomeAntigo){
+                    document.querySelector('[data-item="popup"] .btn-acao_secundaria').click();
+                    DATA_ITEM.NOTIFICAR('warning', 'Novo nome igual ao nome anterior, nada foi feito.');
+                    return;
+                }
+
+                item_info.nome = nome;
+                DATA_ITEM.EDITAR(item_info)
+                
+                document.querySelector(`[data-item-id="${id}"]`).classList.remove('editar_item')
+                document.querySelector('[data-item="popup"] .btn-acao_secundaria').click()
+                DATA_ITEM.NOTIFICAR('check_circle', `O item "${item_info.nomeAntigo}" foi alterado para "${item_info.nome}".`)
+            }
+
+            document.querySelector('[data-item="popup"] .btn-acao_primaria').addEventListener('click', COLETAR_INFO)
+        })
+    },
+    // DELETAR: (elemento_de_item) => {
+    //     elemento_de_item.querySelectorAll('[data-item="deletar_item"], [data-item="concluir_item"]').forEach(btn => {
+    //         btn.addEventListener('click', (e) => {
+    //             const pai = DATA_ITEM.OBTER_ELEMENTO_PAI(e)
+    //             const id = DATA_ITEM.OBTER_ID(pai)
+
+    //             DATA_ITEM.REMOVER(id)
+    //         })
+    //     })
+    // }
+}
 const DATA_ITEM_POPUP = {
+    /*ESSAS FUNÇÕES APENAS ALTERAM O CONTEÚDO DOS POPUPS, NÃO EXECUTAM AÇÕES.*/
     ACAO_ADICIONAR: () => {
         document.querySelector('[data-item="popup"] h2').textContent = 'Adicionar item';
         document.querySelector('[data-item="popup"] p').textContent = 'O que você vai adicionar?';
@@ -176,10 +236,10 @@ const DATA_ITEM_POPUP = {
         document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Adicionar';
     },
     ACAO_EDITAR: (elemento_pai) => {
-        // document.querySelector('[data-item="popup"] h2').textContent = 'Editar item';
-        // document.querySelector('[data-item="popup"] p').textContent = 'O que você deseja alterar?';
-        // document.querySelector('[data-item="popup"] input[type="text"]').value = elemento_pai.querySelector('p').textContent;
-        // document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Alterar';
+        document.querySelector('[data-item="popup"] h2').textContent = 'Editar item';
+        document.querySelector('[data-item="popup"] p').textContent = 'O que você deseja alterar?';
+        document.querySelector('[data-item="popup"] input[type="text"]').value = elemento_pai.querySelector('p').textContent;
+        document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Alterar';
     }
 };
 
@@ -211,4 +271,19 @@ document.querySelector('[data-item="adicionar_item"]').addEventListener('click',
     }
 
     document.querySelector('[data-item="popup"] .btn-acao_primaria').addEventListener('click', COLETAR_INFO)
+})
+
+//FECHAR POPUP
+document.querySelector('[data-item="popup"] .btn-acao_secundaria').addEventListener('click', () => {
+    document.querySelector('[data-item="popup"]').style.animationName = 'fechar_popup';
+    setTimeout(()=>{
+        document.querySelector('[data-item="popup"] input[type="text"]').value = '';
+        document.querySelector('[data-item="popup"]').style.display = 'none';
+    },100)
+
+    //Cria uma cópia do botão para remover todos os eventListeners.
+    const btn = document.querySelector('[data-item="popup"] .btn-acao_primaria');
+    const btn_copia = btn.cloneNode(true);
+
+    btn.parentNode.replaceChild(btn_copia, btn)
 })
