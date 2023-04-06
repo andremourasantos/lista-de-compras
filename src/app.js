@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator, getDoc, doc, query, collection, orderBy, setDoc, serverTimestamp, onSnapshot, addDoc, updateDoc } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, getDoc, doc, query, collection, orderBy, setDoc, serverTimestamp, onSnapshot, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -77,7 +77,6 @@ async function resgatarItensDaLista () {
             } else {
                 itens_da_lista.push({...documento.data(), id: documento.id});
             }
-            
         })
 
         if(itens_da_lista.length == 0){return}
@@ -152,6 +151,8 @@ const DATA_ITEM = {
         DATA_ITEM.NOTIFICAR('check_circle', `O item "${item_info.nomeAntigo}" foi alterado para "${item_info.nome}".`)
     },
     REMOVER: (item_id) => {
+        deleteDoc(doc(BANCO_DE_DADOS, `lista-de-compras/${USUARIO.UID}/lista`, item_id))
+
         document.querySelector(`[data-item-id="${item_id}"]`).style.animationName = 'deletar_item'
 
         setTimeout(() => {
@@ -165,9 +166,8 @@ const DATA_ITEM = {
         document.querySelector('#notificacao').style.display = 'grid'
 
         if (DATA_ITEM.timeoutId) {
-            console.log(1)
             clearTimeout(DATA_ITEM.timeoutId)
-        } else {console.log(2)}
+        }
 
         DATA_ITEM.timeoutId = setTimeout(() => {
             document.querySelector('#notificacao').style.display = 'none'
@@ -217,15 +217,15 @@ const DATA_ITEM_ICONES_DE_ACAO = {
             document.querySelector('[data-item="popup"] .btn-acao_primaria').addEventListener('click', COLETAR_INFO)
         })
     },
-     DELETAR: (elemento_de_item) => {
-    //     elemento_de_item.querySelectorAll('[data-item="deletar_item"], [data-item="concluir_item"]').forEach(btn => {
-    //         btn.addEventListener('click', (e) => {
-    //             const pai = DATA_ITEM.OBTER_ELEMENTO_PAI(e)
-    //             const id = DATA_ITEM.OBTER_ID(pai)
+    DELETAR: (elemento_de_item) => {
+        elemento_de_item.querySelectorAll('[data-item="deletar_item"], [data-item="concluir_item"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const pai = DATA_ITEM.OBTER_ELEMENTO_PAI(e)
+                const id = DATA_ITEM.OBTER_ID(pai)
 
-    //             DATA_ITEM.REMOVER(id)
-    //         })
-    //     })
+                DATA_ITEM.REMOVER(id)
+            })
+        })
     }
 }
 const DATA_ITEM_POPUP = {
