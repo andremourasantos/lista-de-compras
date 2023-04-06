@@ -66,7 +66,7 @@ async function resgatarItensDaLista () {
         let itens_da_lista = []
 
         snapshot.forEach(documento => {
-            itens_da_lista.push({...documento.data(), id: documento})
+            itens_da_lista.push({...documento.data(), id: documento.id})
         })
 
         if(itens_da_lista.length == 0){return}
