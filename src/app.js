@@ -272,9 +272,48 @@ document.querySelector('[data-item="adicionar_item"]').addEventListener('click',
     }
 
     document.querySelector('[data-item="popup"] .btn-acao_primaria').addEventListener('click', COLETAR_INFO)
-})
+});
 
-//FECHAR POPUP
+    //ANIMAÇÃO DO BOTÃO
+    (()=>{
+        const BTN_ADICIONAR_ITEM = {
+            ELEMENTO: document.getElementById("adicionar_item"),
+            TEXTO: '',
+            TAMANHO_G: '',
+            TAMANHO_P: '',
+        }
+    
+        BTN_ADICIONAR_ITEM.TEXTO = BTN_ADICIONAR_ITEM.ELEMENTO.childNodes[0]
+        BTN_ADICIONAR_ITEM.TAMANHO_G = BTN_ADICIONAR_ITEM.ELEMENTO.clientWidth
+        BTN_ADICIONAR_ITEM.TAMANHO_P = (Number((getComputedStyle(BTN_ADICIONAR_ITEM.ELEMENTO).padding).replace('px','')))*2 + Number((getComputedStyle(BTN_ADICIONAR_ITEM.ELEMENTO.querySelector('.material-symbols-rounded')).fontSize).replace('px',''))
+    
+        BTN_ADICIONAR_ITEM.ELEMENTO.style.width = BTN_ADICIONAR_ITEM.TAMANHO_G + 'px'
+    
+        setTimeout(function() {
+            BTN_ADICIONAR_ITEM.TEXTO.remove()
+            BTN_ADICIONAR_ITEM.ELEMENTO.style.width = BTN_ADICIONAR_ITEM.TAMANHO_P + 'px'
+        }, 5000);
+          
+    
+        BTN_ADICIONAR_ITEM.ELEMENTO.addEventListener("mouseenter", () => {
+            BTN_ADICIONAR_ITEM.ELEMENTO.style.width = BTN_ADICIONAR_ITEM.TAMANHO_G + 'px'
+            setTimeout(() => {
+                BTN_ADICIONAR_ITEM.ELEMENTO.insertBefore(BTN_ADICIONAR_ITEM.TEXTO, BTN_ADICIONAR_ITEM.ELEMENTO.childNodes[0])
+            }, 150);
+        });
+    
+        BTN_ADICIONAR_ITEM.ELEMENTO.addEventListener("mouseleave", () => {
+            BTN_ADICIONAR_ITEM.TEXTO.remove()
+            BTN_ADICIONAR_ITEM.ELEMENTO.style.width = BTN_ADICIONAR_ITEM.TAMANHO_P + 'px'
+        });
+    
+        BTN_ADICIONAR_ITEM.ELEMENTO.addEventListener('click', () => {
+            BTN_ADICIONAR_ITEM.TEXTO.remove()
+            BTN_ADICIONAR_ITEM.ELEMENTO.style.width = BTN_ADICIONAR_ITEM.TAMANHO_P + 'px'
+        })
+    })();
+
+//↓↓ FECHAR POPUP
 document.querySelector('[data-item="popup"] .btn-acao_secundaria').addEventListener('click', () => {
     document.querySelector('[data-item="popup"]').style.animationName = 'fechar_popup';
     setTimeout(()=>{
@@ -287,4 +326,4 @@ document.querySelector('[data-item="popup"] .btn-acao_secundaria').addEventListe
     const btn_copia = btn.cloneNode(true);
 
     btn.parentNode.replaceChild(btn_copia, btn)
-})
+});
