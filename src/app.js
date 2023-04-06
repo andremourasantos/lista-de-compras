@@ -246,6 +246,18 @@ const DATA_ITEM_POPUP = {
 
 //↓↓ BOTÕES DO MENU
 (() => {
+    //Animação do menu do cabeçalho.
+    document.querySelector('[data-btn-acao="abrir_menu_cabecalho"]').addEventListener('click', ()=>{
+    const display = document.querySelector('#menu_cabecalho').style.display === 'grid' ? 'none' : 'grid';
+    const animacao = document.querySelector('#menu_cabecalho').style.display === 'grid' ? 'fechar_menu_cabecalho' : 'abrir_menu_cabecalho';
+
+    document.querySelector('#menu_cabecalho').style.animationName = animacao
+    setTimeout(()=>{
+        document.querySelector('#menu_cabecalho').style.display = display;
+    },100)
+    });
+
+    //Ações dos botões
     document.querySelector('[data-btn-cabecalho="sair_da_conta"]').addEventListener('click', ()=>{
         auth.signOut()
     })
