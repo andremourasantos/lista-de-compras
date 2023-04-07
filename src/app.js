@@ -269,7 +269,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
     }
 });
 
-const installButton = document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]');
+const installButton = document.querySelector('[data-popup="pwa"] .btn-acao_primaria');
 
 installButton.addEventListener('click', () => {
   // Show the prompt
@@ -286,18 +286,40 @@ installButton.addEventListener('click', () => {
   });
 });
 
+const POPUPS = {
+    ABRIR: (identificador_do_popup) => {
+        document.querySelector(identificador_do_popup).style.animationName = 'abrir_popup';
+        setTimeout(()=>{
+            document.querySelector(identificador_do_popup).style.display = 'grid'
+        }, 100)
+    },
+    FECHAR: (identificador_do_popup) => {
+        document.querySelectorAll(identificador_do_popup).forEach(popup => {
+            popup.style.animationName = 'fechar_popup';
+            setTimeout(()=>{
+                popup.style.display = 'none';
+            },100)
+        
+            //Cria uma cópia do botão para remover todos os eventListeners.
+            const btn = popup.querySelector('.btn-acao_primaria');
+            const btn_copia = btn.cloneNode(true);
+        
+            btn.parentNode.replaceChild(btn_copia, btn)
+        })
+    }
+}
 
 //↓↓ BOTÕES DO MENU
-(() => {
+function adicionarAcoesAosBotoesDoMenu() {
     //Animação do menu do cabeçalho.
     document.querySelector('[data-btn-acao="abrir_menu_cabecalho"]').addEventListener('click', ()=>{
-    const display = document.querySelector('#menu_cabecalho').style.display === 'grid' ? 'none' : 'grid';
-    const animacao = document.querySelector('#menu_cabecalho').style.display === 'grid' ? 'fechar_menu_cabecalho' : 'abrir_menu_cabecalho';
+        const display = document.querySelector('#menu_cabecalho').style.display === 'grid' ? 'none' : 'grid';
+        const animacao = document.querySelector('#menu_cabecalho').style.display === 'grid' ? 'fechar_menu_cabecalho' : 'abrir_menu_cabecalho';
 
-    document.querySelector('#menu_cabecalho').style.animationName = animacao
-    setTimeout(()=>{
-        document.querySelector('#menu_cabecalho').style.display = display;
-    },100)
+        document.querySelector('#menu_cabecalho').style.animationName = animacao
+        setTimeout(()=>{
+            document.querySelector('#menu_cabecalho').style.display = display;
+        },100)
     });
 
     //Ações dos botões
@@ -305,8 +327,10 @@ installButton.addEventListener('click', () => {
         auth.signOut()
     })
 
-    
-})()
+    document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]').addEventListener('click', () => {
+        POPUPS.ABRIR('[data-popup="pwa"]');
+    })
+}; adicionarAcoesAosBotoesDoMenu();
 
 //↓↓ BOTÃO DE ADICIONAR ITEM
 document.querySelector('[data-item="adicionar_item"]').addEventListener('click', ()=>{
@@ -371,16 +395,7 @@ document.querySelector('[data-item="adicionar_item"]').addEventListener('click',
     })();
 
 //↓↓ FECHAR POPUP
-document.querySelector('[data-item="popup"] .btn-acao_secundaria').addEventListener('click', () => {
-    document.querySelector('[data-item="popup"]').style.animationName = 'fechar_popup';
-    setTimeout(()=>{
-        document.querySelector('[data-item="popup"] input[type="text"]').value = '';
-        document.querySelector('[data-item="popup"]').style.display = 'none';
-    },100)
-
-    //Cria uma cópia do botão para remover todos os eventListeners.
-    const btn = document.querySelector('[data-item="popup"] .btn-acao_primaria');
-    const btn_copia = btn.cloneNode(true);
-
-    btn.parentNode.replaceChild(btn_copia, btn)
-});
+document.querySelectorAll('.popup .btn-acao_secundaria').forEach(btn => {
+    const FECHAR = ()=>{POPUPS.FECHAR('.popup')}
+    btn.addEventListener('click', FECHAR)
+})

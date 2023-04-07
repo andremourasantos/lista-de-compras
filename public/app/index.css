@@ -254,6 +254,8 @@ section.popup {
     display: none;
     grid-gap: 24px;
     height: fit-content;
+    max-height: 450px;
+    overflow-y: hidden;
     max-width: 300px;
     position: absolute;
     margin: auto;
@@ -278,8 +280,22 @@ section.popup {
         100% {transform: scale(0.9); opacity: 0;}
     }
 
+section.popup img {
+    margin: auto;
+}
+
+section.popup .popup_conteudo {
+    max-height: 250px;
+    overflow-y: scroll;
+}
+
 section.popup h2 {
     font-size: 20px;
+}
+
+section.popup .popup_conteudo p {
+    margin: 8px auto;
+    text-align: justify;
 }
 
 section.popup input {
