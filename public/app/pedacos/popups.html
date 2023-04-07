@@ -1,15 +1,34 @@
-<section class="popup" id="popup_exemplo">
-    <img src="/public/imagens/ilustracoes/lista_vazia.png" height="96" width="96" alt="">
-    <div>
-        <h2>Título</h2>
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur aliquid provident fugit quos tenetur quidem dignissimos ratione unde doloribus veritatis omnis, repudiandae laborum beatae minus! Quasi ut fugiat accusamus tempore perferendis error ab, nesciunt vitae vel facilis qui nostrum aspernatur corporis corrupti expedita aperiam voluptates nihil cupiditate, totam eius porro?</p>
+<section class="popup" data-popup="pwa">
+    <img src="/imagens/ilustracoes/aplicativo.png" height="96" width="96">
+    <div class="popup_conteudo">
+        <h2>Atalho na tela inicial</h2>
+        <p>Tenha a sua lista de compras sempre à mão! Adicione o aplicaitvo à sua tela inicial. O atalho não consome a memória no seu dispositivo.</p>
     </div>
     <div class="container_btns_popup">
-        <button class="btn-acao_secundaria">
+        <button class="btn-acao_secundaria" title="Voltar">
             <span class="material-symbols-rounded">
                 undo
             </span>
         </button>
-        <button class="btn-acao_primaria">Concordo</button>
+        <button class="btn-acao_primaria">Adicionar atalho</button>
+    </div>
+</section>
+
+<section class="popup" data-popup="pwa_instalacao">
+    <img src="/imagens/ilustracoes/carregando.png" height="96" width="96">
+    <div class="popup_conteudo">
+        <h2>Adicionando atalho...</h2>
+        <p>Por favor aguarde enquanto o atalho da sua lista de compras é adicionado ao seu dispositivo.</p>
+    </div>
+</section>
+
+<section class="popup" data-popup="pwa_sucesso">
+    <img src="/imagens/ilustracoes/sucesso.png" height="96" width="96">
+    <div class="popup_conteudo">
+        <h2>Sucesso!</h2>
+        <p>Tudo deu certo. Agora você já pode acessar a sua lista de compras pela tela incial do seu dispositivo.</p>
+    </div>
+    <div class="container_btns_popup">
+        <button class="btn-acao_primaria">Fechar</button>
     </div>
 </section>

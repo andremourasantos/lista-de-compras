@@ -1,10 +1,12 @@
 {
     "name": "Lista de compras, por André Moura Santos",
+    "description": "Organize a sua lista de compra para todos os lugares em um só lugar!",
+    "lang": "pt-br",
     "short_name": "Lista de compras",
     "start_url": "/app/",
-    "display": "minimal-ui",
+    "display": "standalone",
     "background_color": "#fafafa",
-    "theme_color": "#db4938",
+    "theme_color": "#A7727D",
     "orientation": "portrait-primary",
     "icons": [
         {
