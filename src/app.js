@@ -227,7 +227,36 @@ const DATA_ITEM_ICONES_DE_ACAO = {
             })
         })
     }
-}
+};
+const POPUPS = {
+    ABRIR: (identificador_do_popup) => {
+        document.querySelector(identificador_do_popup).style.animationName = 'abrir_popup';
+        setTimeout(()=>{
+            document.querySelector(identificador_do_popup).style.display = 'grid'
+        }, 100)
+    },
+    FECHAR: (identificador_do_popup) => {
+        document.querySelectorAll(identificador_do_popup).forEach(popup => {
+            popup.style.animationName = 'fechar_popup';
+            setTimeout(()=>{
+                popup.style.display = 'none';
+            },100)
+        
+            //Cria uma cópia do botão para remover todos os eventListeners.
+            const btn = popup.querySelector('.btn-acao_primaria');
+            const btn_copia = btn.cloneNode(true);
+        
+            btn.parentNode.replaceChild(btn_copia, btn)
+        })
+    },
+    IMPORTAR: async (identificador_do_popup) => {
+        const popups = await fetch('/app/pedacos/popups.html').then(res => {return res.text()})
+        const parser = new DOMParser();
+        const HTML = parser.parseFromString(popups, 'text/html');
+        const POPUP = HTML.querySelector(`[data-popup="${identificador_do_popup}"]`);
+        document.body.appendChild(POPUP)
+    }
+};
 const DATA_ITEM_POPUP = {
     /*ESSAS FUNÇÕES APENAS ALTERAM O CONTEÚDO DOS POPUPS, NÃO EXECUTAM AÇÕES.*/
     ACAO_ADICIONAR: () => {
@@ -254,8 +283,10 @@ if ("serviceWorker" in navigator) {
     })
 }
 
-let deferredPrompt;
+//↓↓ TRILHA PARA INSTALAÇÃO DO PWA
+let promptDeInstalacaoPWA;
 
+let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
     if (window.matchMedia('(display-mode: standalone)').matches) {
         console.log('App is running as a standalone PWA');
@@ -268,9 +299,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
         document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]').style.display = 'flex';
     }
 });
-
 const installButton = document.querySelector('[data-popup="pwa"] .btn-acao_primaria');
-
 installButton.addEventListener('click', () => {
   // Show the prompt
   deferredPrompt.prompt();
@@ -285,29 +314,6 @@ installButton.addEventListener('click', () => {
     deferredPrompt = null;
   });
 });
-
-const POPUPS = {
-    ABRIR: (identificador_do_popup) => {
-        document.querySelector(identificador_do_popup).style.animationName = 'abrir_popup';
-        setTimeout(()=>{
-            document.querySelector(identificador_do_popup).style.display = 'grid'
-        }, 100)
-    },
-    FECHAR: (identificador_do_popup) => {
-        document.querySelectorAll(identificador_do_popup).forEach(popup => {
-            popup.style.animationName = 'fechar_popup';
-            setTimeout(()=>{
-                popup.style.display = 'none';
-            },100)
-        
-            //Cria uma cópia do botão para remover todos os eventListeners.
-            const btn = popup.querySelector('.btn-acao_primaria');
-            const btn_copia = btn.cloneNode(true);
-        
-            btn.parentNode.replaceChild(btn_copia, btn)
-        })
-    }
-}
 
 //↓↓ BOTÕES DO MENU
 function adicionarAcoesAosBotoesDoMenu() {
