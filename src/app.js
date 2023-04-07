@@ -244,6 +244,49 @@ const DATA_ITEM_POPUP = {
     }
 };
 
+//↓↓ REGISTRAR SERVICEWORKER
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker
+        .register("/app/sw.js")
+        .then(res => console.log("service worker registered"))
+        .catch(err => console.log("service worker not registered", err))
+    })
+}
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('App is running as a standalone PWA');
+        return;
+    } else {
+        console.log('App is running in a regular browser');
+        e.preventDefault();
+        deferredPrompt = e;
+
+        document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]').style.display = 'flex';
+    }
+});
+
+const installButton = document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]');
+
+installButton.addEventListener('click', () => {
+  // Show the prompt
+  deferredPrompt.prompt();
+  // Wait for the user to respond to the prompt
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    } else {
+      console.log('User dismissed the install prompt');
+    }
+    // Clear the deferredPrompt variable
+    deferredPrompt = null;
+  });
+});
+
+
 //↓↓ BOTÕES DO MENU
 (() => {
     //Animação do menu do cabeçalho.
@@ -261,6 +304,8 @@ const DATA_ITEM_POPUP = {
     document.querySelector('[data-btn-cabecalho="sair_da_conta"]').addEventListener('click', ()=>{
         auth.signOut()
     })
+
+    
 })()
 
 //↓↓ BOTÃO DE ADICIONAR ITEM

@@ -1,0 +1,16 @@
+{
+    "name": "Lista de compras, por André Moura Santos",
+    "short_name": "Lista de compras",
+    "start_url": "/app/",
+    "display": "minimal-ui",
+    "background_color": "#fafafa",
+    "theme_color": "#db4938",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+        "src": "/logo.png",
+        "type": "image/png",
+        "sizes": "512x512"
+        }
+    ]
+}
