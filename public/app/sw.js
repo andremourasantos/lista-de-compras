@@ -6,7 +6,6 @@ const assets = [
     "/app",
     "/app/index.html",
     "/app/index.css",
-    "/app/app.js",
 ]
 
 self.addEventListener("install", installEvent => {

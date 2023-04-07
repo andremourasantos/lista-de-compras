@@ -101,7 +101,7 @@ const DATA_ITEM = {
     },
     SALVAR: (item_info) => {
         /*ADICIONA O ITEM À NUVEM*/
-        if(nome_do_item.nome === ''){
+        if(item_info.nome === ''){
             DATA_ITEM.NOTIFICAR('warning', 'Não é possível adicionar um item sem nome.');
             document.querySelector('[data-item="popup"] .btn-acao_secundaria').click();
             return;
@@ -278,42 +278,51 @@ if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
       navigator.serviceWorker
         .register("/app/sw.js")
-        .then(res => console.log("service worker registered"))
-        .catch(err => console.log("service worker not registered", err))
+        .catch(erro => console.log(erro))
     })
 }
 
 //↓↓ TRILHA PARA INSTALAÇÃO DO PWA
 let promptDeInstalacaoPWA;
 
-let deferredPrompt;
+function instalarPWA() {
+    POPUPS.FECHAR('.popup')
+    promptDeInstalacaoPWA.prompt();
+    promptDeInstalacaoPWA.userChoice.then(async (choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]').style.display = 'none';
+
+            POPUPS.FECHAR('.popup')
+            await POPUPS.IMPORTAR('pwa_sucesso')
+            POPUPS.ABRIR('[data-popup="pwa_sucesso"]')
+
+            const FECHAR = () => {
+                POPUPS.FECHAR('.popup')
+
+                document.querySelector('[data-popup="pwa_sucesso"] .btn-acao_primaria').removeEventListener('click', FECHAR)
+            }
+
+            document.querySelector('[data-popup="pwa_sucesso"] .btn-acao_primaria').addEventListener('click', FECHAR)
+        } else {
+            POPUPS.FECHAR('.popup')
+        }
+
+        //LIMPA O PROMPT
+        promptDeInstalacaoPWA = null;
+    });
+  };
+
 window.addEventListener('beforeinstallprompt', (e) => {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        console.log('App is running as a standalone PWA');
-        return;
-    } else {
-        console.log('App is running in a regular browser');
+    if (!(window.matchMedia('(display-mode: standalone)').matches)) {
         e.preventDefault();
-        deferredPrompt = e;
+        promptDeInstalacaoPWA = e;
 
         document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]').style.display = 'flex';
-    }
-});
-const installButton = document.querySelector('[data-popup="pwa"] .btn-acao_primaria');
-installButton.addEventListener('click', () => {
-  // Show the prompt
-  deferredPrompt.prompt();
-  // Wait for the user to respond to the prompt
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted the install prompt');
+        document.querySelector('[data-popup="pwa"] .btn-acao_primaria').addEventListener('click', instalarPWA)
     } else {
-      console.log('User dismissed the install prompt');
+        return;
     }
-    // Clear the deferredPrompt variable
-    deferredPrompt = null;
-  });
-});
+})
 
 //↓↓ BOTÕES DO MENU
 function adicionarAcoesAosBotoesDoMenu() {
@@ -352,6 +361,7 @@ document.querySelector('[data-item="adicionar_item"]').addEventListener('click',
         const item_info = {
             nome: document.querySelector('[data-item="popup"] input[type="text"]').value
         }
+
         DATA_ITEM.SALVAR(item_info)
 
         document.querySelector('[data-item="popup"] .btn-acao_primaria').removeEventListener('click', COLETAR_INFO)
