@@ -240,8 +240,10 @@ const POPUPS = {
     ABRIR: (identificador_do_popup) => {
         document.querySelector(identificador_do_popup).style.animationName = 'abrir_popup';
         setTimeout(()=>{
-            document.querySelector(identificador_do_popup).style.display = 'grid'
-        }, 100)
+            document.querySelector(identificador_do_popup).style.display = 'grid';
+            document.querySelector(identificador_do_popup).scrollTo(0,0);
+        }, 100);
+        
     },
     FECHAR: (identificador_do_popup) => {
         document.querySelectorAll(identificador_do_popup).forEach(popup => {
@@ -263,6 +265,9 @@ const POPUPS = {
         const HTML = parser.parseFromString(popups, 'text/html');
         const POPUP = HTML.querySelector(`[data-popup="${identificador_do_popup}"]`);
         document.body.appendChild(POPUP)
+        
+        const FECHAR = ()=>{POPUPS.FECHAR('.popup')}
+        if(POPUP.querySelector('.btn-acao_secundaria')){POPUP.querySelector('.btn-acao_secundaria').addEventListener('click', FECHAR)}
     }
 };
 const DATA_ITEM_POPUP = {
@@ -326,6 +331,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
         promptDeInstalacaoPWA = e;
 
         document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]').style.display = 'flex';
+
+        POPUPS.IMPORTAR('pwa')
     } else {
         return;
     }

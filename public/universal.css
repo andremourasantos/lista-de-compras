@@ -76,3 +76,90 @@ button {
   'opsz' 24;
   font-size: 24px;
 }
+
+/*→ POPUPs ←*/
+section.popup {
+  display: none;
+  grid-gap: 24px;
+  height: fit-content;
+  max-height: 450px;
+  overflow-y: scroll;
+  max-width: 300px;
+  position: absolute;
+  margin: auto;
+  inset: 0 0 0 0;
+  background-color: var(--plano_de_fundo);
+  box-sizing: border-box;
+  padding: 24px;
+  border-radius: 24px;
+  box-shadow: var(--sombra_de_tela_inteira);
+  text-align: center;
+  animation: ease-in-out 100ms;
+  animation-name: abrir_popup;
+}
+
+  @keyframes abrir_popup {
+      0% {transform: scale(0.9); opacity: 0;}
+      100% {transform: scale(1); opacity: 1;}
+  }
+
+  @keyframes fechar_popup {
+      0% {transform: scale(1); opacity: 1;}
+      100% {transform: scale(0.9); opacity: 0;}
+  }
+
+section.popup img {
+  margin: auto;
+}
+
+section.popup h2 {
+  font-size: 20px;
+  margin-bottom: -20px;
+}
+
+section.popup .popup_conteudo p {
+  margin: 8px auto;
+  text-align: justify;
+}
+
+section.popup input {
+  height: 48px;
+  width: 100%;
+  background-color: var(--plano_de_fundo_colorido);
+  border: 2px solid var(--destaque);
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 8px;
+}
+
+section.popup div.container_btns_popup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  width: 100%;
+}
+
+section.popup div.container_btns_popup .btn-acao_primaria {
+  width: 100%;
+}
+
+section.popup div.container_btns_popup .btn-acao_secundaria .material-symbols-rounded {
+font-variation-settings:
+  'FILL' 0,
+  'wght' 200,
+  'GRAD' 200,
+  'opsz' 24 !important;
+}
+
+@media screen and (max-width: 768px) {
+  section.popup {
+    max-height: 80vh;
+  }
+
+  section.popup .popup_conteudo {
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+}
