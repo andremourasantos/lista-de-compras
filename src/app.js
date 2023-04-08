@@ -382,7 +382,7 @@ document.querySelector('[data-item="adicionar_item"]').addEventListener('click',
 
     const COLETAR_INFO = () => {
         const item_info = {
-            nome: document.querySelector('[data-item="popup"] input[type="text"]').value
+            nome: document.querySelector('[data-item="popup"] input[type="text"]').value.trim()
         }
 
         DATA_ITEM.SALVAR(item_info)
