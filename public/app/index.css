@@ -241,6 +241,9 @@ button[data-item="concluir_item"] .material-symbols-rounded {
 }
 
 #adicionar_item .material-symbols-rounded {
+    height: 24px;
+    width: 24px;
+    overflow: hidden;
     font-variation-settings:
     'FILL' 0,
     'wght' 200,

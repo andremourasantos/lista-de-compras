@@ -86,11 +86,10 @@ async function resgatarItensDaLista () {
         itens_da_lista.forEach(documento => {
             DATA_ITEM.ADICIONAR(documento)
         })
-
-        
     })
 };
 
+//↓↓ DESINSCREVE DO BANCO DE DADOS
 window.addEventListener('beforeunload', function (event) {
     this.localStorage.setItem('fechou',1)
     inscricaoNoBancoDeDados()
@@ -319,7 +318,7 @@ function instalarPWA() {
         //LIMPA O PROMPT
         promptDeInstalacaoPWA = null;
     });
-  };
+};
 
 window.addEventListener('beforeinstallprompt', (e) => {
     if (!(window.matchMedia('(display-mode: standalone)').matches)) {
@@ -327,7 +326,6 @@ window.addEventListener('beforeinstallprompt', (e) => {
         promptDeInstalacaoPWA = e;
 
         document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]').style.display = 'flex';
-        document.querySelector('[data-popup="pwa"] .btn-acao_primaria').addEventListener('click', instalarPWA)
     } else {
         return;
     }
@@ -352,6 +350,7 @@ function adicionarAcoesAosBotoesDoMenu() {
     })
 
     document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]').addEventListener('click', () => {
+        document.querySelector('[data-popup="pwa"] .btn-acao_primaria').addEventListener('click', instalarPWA)
         POPUPS.ABRIR('[data-popup="pwa"]');
     })
 }; adicionarAcoesAosBotoesDoMenu();
