@@ -21,6 +21,16 @@ module.exports = [
         },
         watch: true,
         devtool: "eval-source-map"
+    },
+    {
+        mode: "development",
+        entry: "./src/conta.js",
+        output: {
+            path: path.resolve(__dirname, "public/app/conta"),
+            filename: "conta.js"
+        },
+        watch: true,
+        devtool: "eval-source-map"
     }
 ]
 

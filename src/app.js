@@ -48,16 +48,16 @@ onAuthStateChanged(auth, async (usuario) => {
 });
 
 async function checarBancoDeDadosPorListaDoUsuario () {
-    if((await getDoc(USUARIO.DOC_REFERENCIA)).exists()){
-        resgatarItensDaLista();
-    } else {
+    if(!((await getDoc(USUARIO.DOC_REFERENCIA)).exists())){
         setDoc(USUARIO.DOC_REFERENCIA, {
             nome: USUARIO.NOME,
             email: USUARIO.EMAIL,
             criacao: serverTimestamp()
         });
-    }
-}
+    };
+
+    resgatarItensDaLista()
+};
 
 let inscricaoNoBancoDeDados
 
@@ -347,6 +347,10 @@ function adicionarAcoesAosBotoesDoMenu() {
     //Ações dos botões
     document.querySelector('[data-btn-cabecalho="sair_da_conta"]').addEventListener('click', ()=>{
         auth.signOut()
+    });
+
+    document.querySelector('[data-btn-cabecalho="conta"]').addEventListener('click', ()=>{
+        window.open('/app/conta/', '_self')
     });
 
     document.querySelector('[data-btn-cabecalho="novidades"]').addEventListener('click', ()=>{
