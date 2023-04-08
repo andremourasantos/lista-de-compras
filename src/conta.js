@@ -20,9 +20,13 @@ function adicionarInformacoesDoUsuario() {
     const nome = document.querySelector('[data-usuario="nome"]');
     const email = document.querySelector('[data-usuario="email"]');
 
-    foto_de_perfil.src = AUTENTICACAO.currentUser.photoURL
-    nome.textContent = AUTENTICACAO.currentUser.displayName
-    email.textContent = AUTENTICACAO.currentUser.email
+    foto_de_perfil.src = AUTENTICACAO.currentUser.photoURL;
+    nome.textContent = AUTENTICACAO.currentUser.displayName;
+    email.textContent = AUTENTICACAO.currentUser.email;
+
+    document.querySelectorAll('.esqueleto_de_carregamento_texto').forEach(elemento => {
+        elemento.classList.remove('esqueleto_de_carregamento_texto');
+    })
 };
 
 onAuthStateChanged(AUTENTICACAO, (usuario)=>{

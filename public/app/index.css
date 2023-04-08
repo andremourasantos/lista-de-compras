@@ -56,7 +56,7 @@ header button {
     justify-content: end;
     grid-gap: 8px;
     position: absolute;
-    top: calc(56px + 8px);
+    top: 56px;
     right: 16px;
     height: fit-content;
     width: fit-content;
