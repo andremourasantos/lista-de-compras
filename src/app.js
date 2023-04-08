@@ -347,12 +347,16 @@ function adicionarAcoesAosBotoesDoMenu() {
     //Ações dos botões
     document.querySelector('[data-btn-cabecalho="sair_da_conta"]').addEventListener('click', ()=>{
         auth.signOut()
-    })
+    });
+
+    document.querySelector('[data-btn-cabecalho="novidades"]').addEventListener('click', ()=>{
+        window.open('/app/novidades/', '_self')
+    });
 
     document.querySelector('[data-btn-cabecalho="atalho_na_tela_inicial"]').addEventListener('click', () => {
         document.querySelector('[data-popup="pwa"] .btn-acao_primaria').addEventListener('click', instalarPWA)
         POPUPS.ABRIR('[data-popup="pwa"]');
-    })
+    });
 }; adicionarAcoesAosBotoesDoMenu();
 
 //↓↓ BOTÃO DE ADICIONAR ITEM
