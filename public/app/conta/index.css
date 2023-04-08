@@ -24,7 +24,9 @@ main section {
     box-shadow: var(--sombra_leve);
 }
 
-main section h2 {font-size: 18px;}
+main section h2 {
+    font-size: 18px;
+}
 
 main section button {
     padding: 8px;
@@ -42,6 +44,11 @@ main section:first-of-type {
     box-shadow: unset;
     display: grid;
     justify-items: center;
+    text-align: center;
+}
+
+main section:first-of-type h2, main section:first-of-type p {
+    width: 100%;
 }
 
 main section:first-of-type img {
