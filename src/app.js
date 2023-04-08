@@ -59,10 +59,12 @@ async function checarBancoDeDadosPorListaDoUsuario () {
     }
 }
 
+let inscricaoNoBancoDeDados
+
 async function resgatarItensDaLista () {
     const CONSULTA = query(USUARIO.COLECAO_LISTA_DE_COMPRAS, orderBy('criacao', 'asc'))
 
-    onSnapshot(CONSULTA, (snapshot) => {
+    inscricaoNoBancoDeDados = onSnapshot(CONSULTA, (snapshot) => {
         let itens_da_lista = []
         
         //Filtro de itens já adicionados
@@ -84,8 +86,15 @@ async function resgatarItensDaLista () {
         itens_da_lista.forEach(documento => {
             DATA_ITEM.ADICIONAR(documento)
         })
+
+        
     })
-}
+};
+
+window.addEventListener('beforeunload', function (event) {
+    this.localStorage.setItem('fechou',1)
+    inscricaoNoBancoDeDados()
+});
 
 //↓↓ AÇÕES GERAIS
 const DATA_ITEM = {
