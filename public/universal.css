@@ -82,10 +82,24 @@ button {
 }
 
 /*→ ESQUELETO DE CARREGAMENTO ←*/
+.esqueleto_de_carregamento_foto {
+ background-color: var(--texto_carregando_cor);
+ animation: ease-in-out 1000ms infinite;
+ animation-name: esqueleto_de_carregamento;
+}
+
 .esqueleto_de_carregamento_texto {
   font-family: var(--texto_carregando);
   color: var(--texto_carregando_cor);
+  animation: ease-in-out 1000ms infinite;
+  animation-name: esqueleto_de_carregamento;
 }
+
+  @keyframes esqueleto_de_carregamento {
+    0% {opacity: 1;}
+    50% {opacity: 0.5;}
+    100% {opacity: 1;}
+  }
 
 /*→ POPUPs ←*/
 section.popup {

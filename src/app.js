@@ -33,6 +33,10 @@ const USUARIO = {
 
 onAuthStateChanged(auth, async (usuario) => {
     if(usuario){
+        document.querySelectorAll('header .esqueleto_de_carregamento_foto').forEach(elemento => {
+            elemento.classList.remove('esqueleto_de_carregamento_foto');
+        })
+
         document.querySelector('header img').src = usuario.photoURL;
 
         //INFORMAÇÕES DO USUÁRIO

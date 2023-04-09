@@ -24,6 +24,9 @@ function adicionarInformacoesDoUsuario() {
     nome.textContent = AUTENTICACAO.currentUser.displayName;
     email.textContent = AUTENTICACAO.currentUser.email;
 
+    document.querySelectorAll('#perfil .esqueleto_de_carregamento_foto').forEach(elemento => {
+        elemento.classList.remove('esqueleto_de_carregamento_foto');
+    })
     document.querySelectorAll('#perfil .esqueleto_de_carregamento_texto').forEach(elemento => {
         elemento.classList.remove('esqueleto_de_carregamento_texto');
     })
