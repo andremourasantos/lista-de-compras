@@ -3,6 +3,7 @@ const assets = [
   "/logo.png",
   "/universal.css",
   "/imagens/ilustracoes/lista_vazia.png",
+  "/imagens/esqueleto_de_carregamento.png",
   "/app",
   "/app/index.html",
   "/app/index.css",

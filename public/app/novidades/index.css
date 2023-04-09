@@ -5,8 +5,4 @@ main {
     display: grid;
     justify-content: center;
     align-items: center;
-    height: calc(100% - 56px);
-    width: 100%;
-    box-sizing: border-box;
-    padding: 32px 16px 16px 16px;
 }
