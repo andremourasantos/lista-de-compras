@@ -3,7 +3,7 @@
 /*→ GERAL ←*/
 body {
     height: 100vh; /*compatibilidade*/
-    height: 100dvh;
+    height: 100svh;
     width: 100%; /*compatibilidade*/
     width: 100dvw;
     background-color: var(--plano_de_fundo_escurecido);
