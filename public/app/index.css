@@ -277,6 +277,33 @@ button[data-item="concluir_item"] .material-symbols-rounded {
     color: var(--parágrafo_cor_clara);
 }
 
+/*→ POPUP DE ADICIONAR/EDITAR ITEM ←*/
+[data-item-popup="atributos_do_item"] {
+    display: grid;
+    gap: 8px;
+}
+
+[data-item-popup="atributos_do_item_quantidade"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+[data-item-popup="atributos_do_item_quantidade"] input {
+    width: 48px;
+}
+
+[data-item-popup="atributos_do_item_quantidade"] select {
+    width: 100%;
+    border: 2px solid var(--destaque);
+    border-radius: 8px;
+    background-color: var(--plano_de_fundo_colorido);
+    box-sizing: border-box;
+    padding: 8px;
+    height: 48px;
+}
+
 /*→ NOTIFICAÇÃO ←*/
 section.notificacao {
     display: none;

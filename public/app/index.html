@@ -79,7 +79,6 @@
         <template>
                 <p></p>
                 <section data-item="etiquetas">
-                    <div>1 Kg</div>
                 </section>
                 <section data-item="acoes">
                     <button data-item="deletar_item" title="Deletar item">
@@ -120,7 +119,21 @@
             <h2>Adicionar item</h2>
             <p>O que você vai adicionar?</p>
         </div>
-        <input type="text" id="nome_do_item" placeholder="Escreva o nome do item..." maxlength="30" autocomplete="off">
+        <section data-item-popup="atributos_do_item">
+            <input type="text" id="nome_do_item" placeholder="Escreva o nome do item..." maxlength="30" autocomplete="off">
+            <div data-item-popup="atributos_do_item_quantidade">
+                <p>Quantidade:</p>
+                <input type="number" min="1" max="99" data-item-atributo="quantidade_numero" title="Valor da quantidade do item.">
+                <select title="Unidade de medida da quantidade.">
+                    <option value="un" title="Unidade">Un.</option>
+                    <option value="Kg" title="Quilograma">Kg</option>
+                    <option value="g" title="gramas">g</option>
+                    <option value="L" title="Litro">L</option>
+                    <option value="ml" title="Mililitro">ml</option>
+                    <option value="Oz" title="Onça">oz.</option>
+                </select>
+            </div>
+        </section>
         <div class="container_btns_popup">
             <button class="btn-acao_secundaria" title="Voltar">
                 <span class="material-symbols-rounded">
