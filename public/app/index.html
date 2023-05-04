@@ -123,14 +123,14 @@
             <input type="text" id="nome_do_item" placeholder="Escreva o nome do item..." maxlength="30" autocomplete="off">
             <div data-item-popup="atributos_do_item_quantidade">
                 <p>Quantidade:</p>
-                <input type="number" min="1" max="99" data-item-atributo="quantidade_numero" title="Valor da quantidade do item.">
-                <select title="Unidade de medida da quantidade.">
-                    <option value="un" title="Unidade">Un.</option>
+                <input type="number" value="1" min="1" data-item-atributo="quantidade_numero" title="Valor da quantidade do item.">
+                <select data-item-atributo="quantidade_unidade" title="Unidade de medida da quantidade.">
+                    <option value="Un." title="Unidade">Un.</option>
                     <option value="Kg" title="Quilograma">Kg</option>
                     <option value="g" title="gramas">g</option>
                     <option value="L" title="Litro">L</option>
                     <option value="ml" title="Mililitro">ml</option>
-                    <option value="Oz" title="Onça">oz.</option>
+                    <option value="oz." title="Onça">oz.</option>
                 </select>
             </div>
         </section>
