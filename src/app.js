@@ -85,7 +85,11 @@ async function resgatarItensDaLista () {
             }
         })
 
-        if(itens_da_lista.length == 0){return}
+        if(itens_da_lista.length == 0){return} else {
+            document.querySelectorAll('article.item_da_lista.esqueleto_de_carregamento_foto').forEach(elemento => {
+                elemento.remove()
+            })
+        }
 
         itens_da_lista.forEach(documento => {
             DATA_ITEM.ADICIONAR(documento)

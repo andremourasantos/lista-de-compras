@@ -83,9 +83,9 @@ button {
 
 /*→ ESQUELETO DE CARREGAMENTO ←*/
 .esqueleto_de_carregamento_foto {
- background-color: var(--texto_carregando_cor);
- animation: ease-in-out 1000ms infinite;
- animation-name: esqueleto_de_carregamento;
+ background-color: var(--texto_carregando_cor) !important;
+ animation: ease-in-out 1000ms infinite !important;
+ animation-name: esqueleto_de_carregamento !important;
 }
 
 .esqueleto_de_carregamento_texto {
@@ -100,6 +100,10 @@ button {
     50% {opacity: 0.5;}
     100% {opacity: 1;}
   }
+
+article.item_da_lista.esqueleto_de_carregamento_foto {
+  height: 130px;
+}
 
 /*→ POPUPs ←*/
 section.popup {
