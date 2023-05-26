@@ -220,6 +220,7 @@ const DATA_ITEM_ICONES_DE_ACAO = {
     /*AÇÕES DOS BOTÕES NA SEÇÃO DE ÍCONES DO ITEM*/
     EDITAR: (elemento_de_item) => {
         elemento_de_item.querySelector('[data-item="editar_item"]').addEventListener('click', (e) => {
+            e.stopPropagation()
             const pai = DATA_ITEM.OBTER_ELEMENTO_PAI(e)
             const id = DATA_ITEM.OBTER_ID(pai)
             DATA_ITEM_POPUP.ACAO_EDITAR(pai)
