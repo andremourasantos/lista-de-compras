@@ -35,8 +35,6 @@ function adicionarInformacoesDoUsuario() {
 onAuthStateChanged(AUTENTICACAO, (usuario)=>{
     if(usuario) {
         adicionarInformacoesDoUsuario();
-    } else {
-        window.open('/', '_self')
     }
 })
 

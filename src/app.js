@@ -46,8 +46,6 @@ onAuthStateChanged(auth, async (usuario) => {
         USUARIO.DOC_REFERENCIA = doc(BANCO_DE_DADOS, 'lista-de-compras', USUARIO.UID)
         USUARIO.COLECAO_LISTA_DE_COMPRAS = collection(BANCO_DE_DADOS, 'lista-de-compras', USUARIO.UID, 'lista')
         checarBancoDeDadosPorListaDoUsuario();
-    } else {
-        window.open('/', '_self')
     }
 });
 
@@ -85,11 +83,9 @@ async function resgatarItensDaLista () {
             }
         })
 
-        if(itens_da_lista.length == 0){return} else {
-            document.querySelectorAll('article.item_da_lista.esqueleto_de_carregamento_foto').forEach(elemento => {
-                elemento.remove()
-            })
-        }
+        document.querySelectorAll('article.item_da_lista.esqueleto_de_carregamento_foto').forEach(elemento => {
+            elemento.remove()
+        })
 
         itens_da_lista.forEach(documento => {
             DATA_ITEM.ADICIONAR(documento)

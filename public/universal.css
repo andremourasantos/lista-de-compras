@@ -146,9 +146,24 @@ section.popup h2 {
   text-align: center;
 }
 
+section.popup h3 {
+  font-size: 18px;
+  margin: 16px 0px 8px 0px;
+  text-align: left;
+}
+
 section.popup .popup_conteudo p {
   margin: 8px auto;
   text-align: justify;
+}
+
+section.popup ul, ol {
+  list-style-position: inside;
+  text-align: justify;
+}
+
+section.popup li {
+  margin-bottom: 4px;
 }
 
 section.popup input {

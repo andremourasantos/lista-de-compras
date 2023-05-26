@@ -46,7 +46,39 @@
         <h1>Novidades</h1>
     </header>
     <main>
-        <p>Não há novidades para apresentar no momento.</p>
+        <template data-novidade="modelo">
+            <article class="novidade">
+                <section data-novidade="informacoes">
+                    <h2 data-novidade="titulo">Atualização na Política de Privacidade</h2>
+                    <p data-novidade="descricao">Confira as novas políticas do aplicativo.</p>
+                </section>
+                <section>
+                    <div>
+                        <button></button>
+                        <button></button>
+                    </div>
+                    <p data-novidade="data">27/05/2023</p>
+                </section>
+            </article>
+        </template>
+
+        <article class="novidade">
+            <section data-novidade="informacoes">
+                <h2 data-novidade="titulo">Atualização na Política de Privacidade</h2>
+                <p data-novidade="descricao">Confira as novas políticas do aplicativo.</p>
+            </section>
+            <section>
+                <div>
+                    <button class="btn-acao_primaria">
+                        <span class=".material-symbols-rounded">
+                            document
+                        </span> Ler
+                    </button>
+                    <button></button>
+                </div>
+                <p data-novidade="data">27/05/2023</p>
+            </section>
+        </article>
     </main>
 </body>
 </html>
