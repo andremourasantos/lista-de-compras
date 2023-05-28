@@ -46,7 +46,50 @@
         <h1>Novidades</h1>
     </header>
     <main>
-        <p>Não há novidades para apresentar no momento.</p>
+        <template data-novidade="modelo">
+            <article class="novidade">
+                <section data-novidade="informacoes">
+                    <h2 data-novidade="titulo">Atualização na Política de Privacidade</h2>
+                    <p data-novidade="descricao">Confira as novas políticas do aplicativo.</p>
+                </section>
+                <section>
+                    <div class="container_btns_popup">
+                        <button class="btn-acao_primaria"></button>
+                        <button class="btn-acao_secundaria"></button>
+                    </div>
+                    <p data-novidade="data">27/05/2023</p>
+                </section>
+            </article>
+        </template>
+
+        <article class="novidade" data-novidade-id="001">
+            <section data-novidade="informacoes">
+                <h2 data-novidade="titulo">Atualização na Política de Privacidade</h2>
+                <p data-novidade="descricao">Confira as novas políticas do aplicativo.</p>
+            </section>
+            <section data-novidade="rodape">
+                <div class="container_btns_popup">
+                    <button class="btn-acao_primaria">
+                        <span class="material-symbols-rounded">
+                            article
+                        </span> Ler
+                    </button>
+                </div>
+                <p data-novidade="data">27/05/2023</p>
+            </section>
+        </article>
+
+        <article class="novidade" data-novidade-id="002">
+            <section data-novidade="informacoes">
+                <h2 data-novidade="titulo">Novo atributo para os itens</h2>
+                <p data-novidade="descricao">O atributo <em>quantidade</em> foi adicionado aos itens da lista.</p>
+            </section>
+            <section data-novidade="rodape">
+                <div class="container_btns_popup">
+                </div>
+                <p data-novidade="data">27/05/2023</p>
+            </section>
+        </article>
     </main>
 </body>
 </html>

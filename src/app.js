@@ -46,8 +46,6 @@ onAuthStateChanged(auth, async (usuario) => {
         USUARIO.DOC_REFERENCIA = doc(BANCO_DE_DADOS, 'lista-de-compras', USUARIO.UID)
         USUARIO.COLECAO_LISTA_DE_COMPRAS = collection(BANCO_DE_DADOS, 'lista-de-compras', USUARIO.UID, 'lista')
         checarBancoDeDadosPorListaDoUsuario();
-    } else {
-        window.open('/', '_self')
     }
 });
 
@@ -85,7 +83,9 @@ async function resgatarItensDaLista () {
             }
         })
 
-        if(itens_da_lista.length == 0){return}
+        document.querySelectorAll('article.item_da_lista.esqueleto_de_carregamento_foto').forEach(elemento => {
+            elemento.remove()
+        })
 
         itens_da_lista.forEach(documento => {
             DATA_ITEM.ADICIONAR(documento)
@@ -121,7 +121,13 @@ const DATA_ITEM = {
 
         addDoc(USUARIO.COLECAO_LISTA_DE_COMPRAS, {
             nome: item_info.nome,
-            criacao: serverTimestamp()
+            criacao: serverTimestamp(),
+            etiquetas: {
+                quantidade: {
+                    numero: item_info.etiquetas.quantidade.numero,
+                    unidade: item_info.etiquetas.quantidade.unidade
+                }
+            }
         })
     },
     ADICIONAR: (item_info) => {
@@ -131,6 +137,17 @@ const DATA_ITEM = {
 
         //Adicionando informações
         item.querySelector('p').textContent = item_info.nome
+
+        //Adicionando etiquetas
+        if(!(item_info.etiquetas == null)){
+            const etiquetas = item.querySelector('[data-item="etiquetas"]');
+        
+            //Etiqueta de quantidade
+            const etiqueta_quantidade = document.createElement('div')
+            etiqueta_quantidade.setAttribute('data-item-etiqueta-tipo', 'quantidade')
+            etiqueta_quantidade.textContent = `${item_info.etiquetas.quantidade.numero} ${item_info.etiquetas.quantidade.unidade}`
+            etiquetas.appendChild(etiqueta_quantidade);
+        }
 
         const container = document.createElement('article')
         container.classList.add('item_da_lista')
@@ -155,10 +172,19 @@ const DATA_ITEM = {
     },
     EDITAR: (item_info) => {
         //Atualiza o item diretamente no banco de dados
-        updateDoc(doc(BANCO_DE_DADOS, `lista-de-compras/${USUARIO.UID}/lista`, item_info.id), {nome: item_info.nome})
+        updateDoc(doc(BANCO_DE_DADOS, `lista-de-compras/${USUARIO.UID}/lista`, item_info.id), {
+            nome: item_info.nome,
+            etiquetas: {
+                quantidade: {
+                    numero: item_info.etiquetas.quantidade.numero,
+                    unidade: item_info.etiquetas.quantidade.unidade
+                }
+            }
+        })
 
         //Atualiza o item na exibição atual do usuário
-        document.querySelector(`[data-item-id="${item_info.id}"] p`).textContent = item_info.nome
+        document.querySelector(`[data-item-id="${item_info.id}"] p`).textContent = item_info.nome;
+        document.querySelector(`[data-item-id="${item_info.id}"] [data-item-etiqueta-tipo="quantidade"]`).textContent = item_info.etiquetas.quantidade.numero + ' ' + item_info.etiquetas.quantidade.unidade;
 
         DATA_ITEM.NOTIFICAR('check_circle', `O item "${item_info.nomeAntigo}" foi alterado para "${item_info.nome}".`)
     },
@@ -190,6 +216,7 @@ const DATA_ITEM_ICONES_DE_ACAO = {
     /*AÇÕES DOS BOTÕES NA SEÇÃO DE ÍCONES DO ITEM*/
     EDITAR: (elemento_de_item) => {
         elemento_de_item.querySelector('[data-item="editar_item"]').addEventListener('click', (e) => {
+            e.stopPropagation()
             const pai = DATA_ITEM.OBTER_ELEMENTO_PAI(e)
             const id = DATA_ITEM.OBTER_ID(pai)
             DATA_ITEM_POPUP.ACAO_EDITAR(pai)
@@ -203,7 +230,13 @@ const DATA_ITEM_ICONES_DE_ACAO = {
             const item_info = {
                 id: id,
                 nome: '',
-                nomeAntigo: document.querySelector(`[data-item-id="${id}"] p`).textContent
+                nomeAntigo: document.querySelector(`[data-item-id="${id}"] p`).textContent,
+                etiquetas: {
+                    quantidade: {
+                        numero: document.querySelector('[data-item-atributo="quantidade_numero"]'),
+                        unidade: document.querySelector('[data-item-atributo="quantidade_unidade"]')
+                    }
+                }
             }
 
             const COLETAR_INFO = () => {
@@ -213,13 +246,11 @@ const DATA_ITEM_ICONES_DE_ACAO = {
                     document.querySelector('[data-item="popup"] .btn-acao_secundaria').click();
                     DATA_ITEM.NOTIFICAR('warning', 'Não é possível alterar o nome do item para um valor vazio.');
                     return;
-                } else if (nome === item_info.nomeAntigo){
-                    document.querySelector('[data-item="popup"] .btn-acao_secundaria').click();
-                    DATA_ITEM.NOTIFICAR('warning', 'Novo nome igual ao nome anterior, nada foi feito.');
-                    return;
                 }
 
                 item_info.nome = nome;
+                item_info.etiquetas.quantidade.numero = item_info.etiquetas.quantidade.numero.value
+                item_info.etiquetas.quantidade.unidade = item_info.etiquetas.quantidade.unidade.value
                 DATA_ITEM.EDITAR(item_info)
                 
                 document.querySelector(`[data-item-id="${id}"]`).classList.remove('editar_item')
@@ -286,6 +317,16 @@ const DATA_ITEM_POPUP = {
         document.querySelector('[data-item="popup"] h2').textContent = 'Editar item';
         document.querySelector('[data-item="popup"] p').textContent = 'O que você deseja alterar?';
         document.querySelector('[data-item="popup"] input[type="text"]').value = elemento_pai.querySelector('p').textContent;
+
+        //Etiquetas
+            //Quantidade
+            const etiqueta_quantidae = {
+                numero: elemento_pai.querySelector('[data-item-etiqueta-tipo="quantidade"]').textContent.split(' ')[0],
+                unidade: elemento_pai.querySelector('[data-item-etiqueta-tipo="quantidade"]').textContent.split(' ')[1]
+            }
+            document.querySelector('[data-item-atributo="quantidade_numero"]').value = etiqueta_quantidae.numero
+            document.querySelector('[data-item-atributo="quantidade_unidade"]').value = etiqueta_quantidae.unidade
+
         document.querySelector('[data-item="popup"] .btn-acao_primaria').textContent = 'Alterar';
     }
 };
@@ -386,7 +427,13 @@ document.querySelector('[data-item="adicionar_item"]').addEventListener('click',
 
     const COLETAR_INFO = () => {
         const item_info = {
-            nome: document.querySelector('[data-item="popup"] input[type="text"]').value.trim()
+            nome: document.querySelector('[data-item="popup"] input[type="text"]').value.trim(),
+            etiquetas: {
+                quantidade: {
+                    numero: document.querySelector('[data-item-atributo="quantidade_numero"]').value,
+                    unidade: document.querySelector('[data-item-atributo="quantidade_unidade"]').value
+                }
+            }
         }
 
         DATA_ITEM.SALVAR(item_info)

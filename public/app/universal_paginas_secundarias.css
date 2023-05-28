@@ -1,6 +1,10 @@
 @charset "UTF-8";
 
 /*→ GERAL ←*/
+html {
+    background-color: var(--plano_de_fundo_escurecido);
+}
+
 body {
     height: 100vh; /*compatibilidade*/
     height: 100svh;

@@ -83,9 +83,9 @@ button {
 
 /*→ ESQUELETO DE CARREGAMENTO ←*/
 .esqueleto_de_carregamento_foto {
- background-color: var(--texto_carregando_cor);
- animation: ease-in-out 1000ms infinite;
- animation-name: esqueleto_de_carregamento;
+ background-color: var(--texto_carregando_cor) !important;
+ animation: ease-in-out 1000ms infinite !important;
+ animation-name: esqueleto_de_carregamento !important;
 }
 
 .esqueleto_de_carregamento_texto {
@@ -100,6 +100,10 @@ button {
     50% {opacity: 0.5;}
     100% {opacity: 1;}
   }
+
+article.item_da_lista.esqueleto_de_carregamento_foto {
+  height: 130px;
+}
 
 /*→ POPUPs ←*/
 section.popup {
@@ -142,9 +146,24 @@ section.popup h2 {
   text-align: center;
 }
 
+section.popup h3 {
+  font-size: 18px;
+  margin: 16px 0px 8px 0px;
+  text-align: left;
+}
+
 section.popup .popup_conteudo p {
   margin: 8px auto;
   text-align: justify;
+}
+
+section.popup ul, ol {
+  list-style-position: inside;
+  text-align: justify;
+}
+
+section.popup li {
+  margin-bottom: 4px;
 }
 
 section.popup input {

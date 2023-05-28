@@ -101,7 +101,7 @@ main {
     width: 100%;
     overflow-y: scroll;
     grid-template-columns: repeat(auto-fill, minmax(140px,140px));
-    grid-template-rows: repeat(auto-fill, minmax(80px,80px));
+    grid-template-rows: repeat(auto-fill, minmax(132px,132px));
     justify-content: center;
     justify-items: center;
     grid-gap: 24px;
@@ -178,7 +178,26 @@ article.item_da_lista:last-child .popup:not([style*="display: none"]) {
 
 article.item_da_lista p {text-align: center;font-size: 20px; overflow: auto; white-space: nowrap; width: 90%;}
 
-article.item_da_lista section {
+article.item_da_lista section[data-item="etiquetas"] {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 32px;
+    width: 100%;
+}
+
+article.item_da_lista section[data-item="etiquetas"] > div {
+    font-size: 14px;
+    box-sizing: border-box;
+    padding: 4px 8px;
+    background-color: var(--plano_de_fundo_colorido);
+    border-radius: 32px;
+    line-height: calc(32px - 8px);
+}
+
+article.item_da_lista section[data-item="acoes"] {
     display: grid;
     align-content: center;
     justify-items: center;
@@ -187,10 +206,11 @@ article.item_da_lista section {
     width: fit-content;
     padding: 4px 16px;
     background-color: var(--plano_de_fundo_colorido);
+    border: 1px solid var(--destaque);
     border-radius: 8px;
 }
 
-article.item_da_lista section button {
+article.item_da_lista section[data-item="acoes"] button {
     display: none;
     height: 24px;
     width: 24px;
@@ -198,7 +218,7 @@ article.item_da_lista section button {
     background: none;
 }
 
-article.item_da_lista section button:hover {
+article.item_da_lista section[data-item="acoes"] button:hover {
     box-shadow: none;
     transform: scale(0.9);
 }
@@ -207,12 +227,12 @@ article.item_da_lista.editar_item {
     border: 2px solid var(--destaque);
 }
 
-article.item_da_lista.editar_item section {
+article.item_da_lista.editar_item section[data-item="acoes"] {
     padding: 4px 8px;
     grid-template-columns: repeat(3, 24px)
 }
 
-article.item_da_lista.editar_item section button {
+article.item_da_lista.editar_item section[data-item="acoes"] button {
     display: initial !important;
 }
 
@@ -255,6 +275,33 @@ button[data-item="concluir_item"] .material-symbols-rounded {
     'GRAD' 200,
     'opsz' 24 !important;
     color: var(--parágrafo_cor_clara);
+}
+
+/*→ POPUP DE ADICIONAR/EDITAR ITEM ←*/
+[data-item-popup="atributos_do_item"] {
+    display: grid;
+    gap: 8px;
+}
+
+[data-item-popup="atributos_do_item_quantidade"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+[data-item-popup="atributos_do_item_quantidade"] input {
+    width: 48px;
+}
+
+[data-item-popup="atributos_do_item_quantidade"] select {
+    width: 100%;
+    border: 2px solid var(--destaque);
+    border-radius: 8px;
+    background-color: var(--plano_de_fundo_colorido);
+    box-sizing: border-box;
+    padding: 8px;
+    height: 48px;
 }
 
 /*→ NOTIFICAÇÃO ←*/

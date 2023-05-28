@@ -35,8 +35,6 @@ function adicionarInformacoesDoUsuario() {
 onAuthStateChanged(AUTENTICACAO, (usuario)=>{
     if(usuario) {
         adicionarInformacoesDoUsuario();
-    } else {
-        window.open('/', '_self')
     }
 })
 
@@ -44,6 +42,25 @@ onAuthStateChanged(AUTENTICACAO, (usuario)=>{
 document.querySelector('header button').addEventListener('click', ()=>{
     window.open('/app/', '_self')
 });
+
+//↓↓ PARÂMETROS DA URL
+window.addEventListener('load', ()=>{
+    const procurarNaURL = new URLSearchParams(window.location.search);
+
+    //↓↓ Faz uma ação de acordo com cada parâmetro da URL.
+    if(procurarNaURL.get('abrir_popup') != null){
+        const identificador_do_popup = procurarNaURL.get('abrir_popup')
+        POPUPS.ABRIR(`[data-popup="${identificador_do_popup}"]`)
+
+        const FECHAR = ()=>{
+            POPUPS.FECHAR('[data-popup="politica_de_privacidade"]')
+            
+            document.querySelector('[data-popup="politica_de_privacidade"] .btn-acao_primaria').removeEventListener('click', FECHAR);
+        }
+
+        document.querySelector('[data-popup="politica_de_privacidade"] .btn-acao_primaria').addEventListener('click', FECHAR);
+    }
+})
 
 //↓↓ POPUPS
 const POPUPS = {
@@ -85,7 +102,6 @@ async function importarPopups(){
     await POPUPS.IMPORTAR('exclusao_de_conta');
     adicionarInteracoesNosBotoesDasSecoes();
 }; importarPopups();
-
 
 //↓↓ AÇÕES DA CONTA
 function adicionarInteracoesNosBotoesDasSecoes() {
