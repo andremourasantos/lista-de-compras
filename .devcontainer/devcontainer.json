@@ -5,5 +5,5 @@
     "ghcr.io/devcontainers-contrib/features/vue-cli:2": {},
     "ghcr.io/devcontainers-contrib/features/firebase-cli:2": {}
   },
-  "postCreateCommand": "npm install -g firebase-tools && firebase --version && firebase setup:emulators:database"
+  "postCreateCommand": "bun install -g firebase-tools && firebase && firebase init emulators"
 }
