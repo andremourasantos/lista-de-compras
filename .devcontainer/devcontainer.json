@@ -1,0 +1,9 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/shyim/devcontainers-features/bun:0": {},
+    "ghcr.io/devcontainers-contrib/features/vue-cli:2": {},
+    "ghcr.io/devcontainers-contrib/features/firebase-cli:2": {}
+  },
+  "postCreateCommand": "npm install -g firebase-tools && firebase --version && firebase setup:emulators:database"
+}
