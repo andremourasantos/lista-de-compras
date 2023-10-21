@@ -1,55 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <!--SEO-->
-  <meta property="og:url" content="https://lista-de-compras.andremourasantos.com.br/">
-  <meta property="og:title" content="Lista de compras, por André Moura Santos">
-  <meta name="description" content="Organize a sua lista de compra para todos os lugares em um só lugar!">
-  <meta property="og:description" content="Organize a sua lista de compra para todos os lugares em um só lugar!">
-  <meta property="og:image" content="https://lista-de-compras.andremourasantos.com.br/foto_de_capa.png">
-  <meta property="og:image:width" content="1280">
-  <meta property="og:image:height" content="720">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="pt_BR">
-
-  <!--LINKS-->
-  <link rel="stylesheet" href="universal.css">
-  <link rel="stylesheet" href="index.css">
-  <link rel="shortcut icon" href="logo.png" type="image/png">
-
-  <!--DESEMPENHO-->
-  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-
-  <!--SCRIPTS-->
-  <script defer src="index.js"></script>
-  
-  <!--OUTROS-->
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="author" content="André Moura Santos">
-  <meta name="application-name" content="Lista de compras">
-  <meta name="theme-color" content="#FFFFFF"/>
-
-  <title>Lista de compras</title>
-</head>
-<body>
-    <!--ATERRISSAGEM-->
-    <div id="forma_branca"></div>
-    <main>
-        <section id="apresentacao">
-            <section>
-                <img src="logo.png" alt="Ilustração de uma cesta de compras com itens de hortiftruti." height="100" width="100">
-                <h1>Lista de compras</h1>
-                <p>Organize a sua lista de compra para todos os lugares em um só lugar!</p>
-            </section>
-            <section>
-                <button data-btn-login="google"><img src="imagens/logos/google.png" height="20" width="20" alt="Logo do Google.">Continuar com o Google</button>
-            </section>
-        </section>
-    </main>
-    <footer>
-        <p>Desenvolvido por <a href="http://andremourasantos.com" target="_blank" rel="external" hreflang="pt-br" title="Acessar site">André Moura Santos</a>.<br>Versão de teste de maio de 2023.</p>
-    </footer>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.png">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
 </html>
