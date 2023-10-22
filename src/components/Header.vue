@@ -5,7 +5,7 @@
     </div>
     <div v-if="headerType === 'Secondary'" class="secondary">
       <button aria-label="Retroceder" @click="emitGoBack">
-        <ph-arrow-circle-left :size="24" />
+        <ph-arrow-circle-left :size="24" :color="'333333'" :weight="'thin'" />
         Voltar
       </button>
       <p>{{ headerTitle }}</p>
@@ -46,7 +46,7 @@ export default defineComponent({
 
 <style scoped>
 header {
-  height: 60px;
+  height: 56px;
   box-shadow: var(--heavy-shadow);
   border-radius: 24px;
   padding: 8px 16px;
@@ -62,7 +62,8 @@ header > div.secondary {
 }
 
 div.secondary button {
-  height: fit-content;
+  height: 32px;
+  width: 80px;
   font-size: 12px;
   background-color: var(--secondary-color);
   font-family: var(--font-header);
