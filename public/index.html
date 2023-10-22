@@ -1,17 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
+    <!--SEO-->
+    <meta property="og:url" content="XXXXXX">
+    <meta property="og:title" content="Sua nova lista de compras">
+    <meta name="description" content="XXXXXX">
+    <meta property="og:description" content="XXXXXX">
+    <meta property="og:image" content="XXXXXX/capa-do-site.png">
+    <meta property="og:image:width" content="1280">
+    <meta property="og:image:height" content="720">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
+    <meta name="keywords" content="XXXXXX">
+
+    <!--LINKS-->
+    <link rel="icon" href="<%= BASE_URL %>favicon.png">
+    <link rel="manifest" href="<%= BASE_URL %>manifest.json">
+        
+    <!--DESEMPENHO-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!--OUTROS-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="André Moura Santos">
+    <meta name="application-name" content="Lista de compras">
+    <meta name="theme-color" content="#FFFFFF"/>
+    <title>Lista de compras</title>  
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.png">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>Lista de compras</title>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
   </body>
 </html>
