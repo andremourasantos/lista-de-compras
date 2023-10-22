@@ -15,12 +15,14 @@
     </div>
   </main>
 
-  <Header v-if="showView !== 'Main'" :header-type="'Secondary'" :header-title="headerTitle" @go-back="showView = 'Main'"/>
+  <Header v-if="showView !== 'Main'" :header-type="'Secondary'" :header-title="headerTitle" @go-back="showView = 'Main'">
+    <HeaderNoti v-if="headerNotiText != ''" :notification-icon="headerNotiIcon" :notification-text="headerNotiText" />
+  </Header>
   <main v-if="showView === 'ThirdyParties'" class="loginView">
     <img src="@/assets/icons/conta-conectada.png" height="96" width="96" alt="Ilustração de presente.">
     <h1>Conecte a sua conta!</h1>
     <p>Você pode conectar a sua conta do Google para criar uma conta do tipo permanente. Contas permanentes tem acesso a mais funções, como a sincronização entre dispositivos!</p>
-    <Button :button-text="'Concetar conta'" :has-icon="'No'" @click=""/>
+    <Button :button-text="'Concetar conta'" :has-icon="'No'" @click="googleLogin"/>
   </main>
 
   <main v-if="showView === 'EmailLogin'" class="loginView">
@@ -47,7 +49,7 @@
     <img src="@/assets/icons/criar-conta.png" height="96" width="96" alt="Ilustração de presente.">
     <h1>Crie sua conta!</h1>
     <p>Insira um e-mail e senha para criar uma conta do tipo permanente. Contas permanentes tem acesso a mais funções, como a sincronização entre dispositivos!</p>
-    <p>Você terá que confirmar o e-mail em sua caixa de entrada.</p>
+    <p>Você precisará checar a sua caixa de entrada para confimar a sua conta.</p>
     <form class="emailCredentials" @submit.prevent="createAccount">
       <div>
         <label for="email">Email</label>
@@ -66,8 +68,8 @@
   <main v-if="showView === 'Anonymous'" class="loginView">
     <img src="@/assets/icons/presente.png" height="96" width="96" alt="Ilustração de presente.">
     <h1>Vamos começar!</h1>
-    <p>Com uma conta anônima, você pode testar a aplicação por um tempo limitado antes de decidir compartilhar suas informações pessoais para criar uma conta permanente.</p>
-    <p>Você pode não ter acesso a determinados recursos que requerem uma conta permanente, como a sincronização entre dispositivos, porém nos esforçaremos para tornar a sua experiência fluída.</p>
+    <p>Com uma conta anônima, você pode testar a aplicação por um tempo limitado antes de decidir criar uma conta permanente.</p>
+    <p>Você pode não ter acesso a determinados recursos que requerem uma conta permanente, como a sincronização entre dispositivos.</p>
     <Button :button-text="'Continuar'" :has-icon="'No'" @click="anonymousLogin"/>
   </main>
   
@@ -78,16 +80,17 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import { getAuth, signInAnonymously, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
+import { getAuth, signInAnonymously, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import router from '@/router';
 
 //components
 import LoginButton from '@/components/login/LoginButton.vue';
 import Button from '@/components/Button.vue';
 import Header from '@/components/Header.vue';
+import HeaderNoti from '@/components/HeaderNotification.vue';
 
 export default defineComponent({
-  components: {LoginButton, Button, Header},
+  components: {LoginButton, Button, Header, HeaderNoti},
   setup () {
     const showView = ref<'Main' | 'ThirdyParties'  | 'EmailLogin' | 'EmailSingIn' | 'Anonymous'>('Main');
     const headerTitle = ref<string>('');
@@ -114,42 +117,114 @@ export default defineComponent({
           headerTitle.value = '';
           break;
       }
+
+      headerNotiText.value = '';
+      userEmail.value = '';
+      userPassword.value = '';
     });
 
     //Login methods
     const auth = getAuth();
     const userEmail = ref<string>('');
     const userPassword = ref<string>('');
+    const headerNotiIcon = ref<'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'>('ph-bell-ringing');
+    const headerNotiText = ref<string>('');
 
     const googleLogin = ():void => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((results) => {
+          headerNotiIcon.value = 'ph-bell-ringing';
+          headerNotiText.value = 'Sucesso, vinculação concluída!';
 
-    };
-
-    const createAccount = ():void => {
-      createUserWithEmailAndPassword(auth, userEmail.value, userPassword.value)
-        .then(() => {
-          alert('usuário criado!')
-          router.push({name:'home'})
+          setTimeout(() => {
+            router.push({name:'home'});
+          }, 5000);
         })
-        .catch((error) => alert(error))
+        .catch((error) => {
+          headerNotiIcon.value = 'ph-seal-warning';
+          headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
+        })
     };
 
     const loginIntoAccount = ():void => {
       signInWithEmailAndPassword(auth, userEmail.value, userPassword.value)
         .then(() => {
-          alert('usuário logado!')
-          router.push({name:'home'})
+          headerNotiIcon.value = 'ph-bell-ringing';
+          headerNotiText.value = 'Sucesso, suas informações conferem!';
+
+          setTimeout(() => {
+            router.push({name:'home'});
+          }, 5000);
         })
-        .catch((error) => alert(error))
-    }
+        .catch((error) => {
+          headerNotiIcon.value = 'ph-seal-warning';
+          let msg:string;
+
+          switch (error.code) {
+            case 'auth/user-not-found':
+              msg = 'O email informado não está cadastrado.';
+              break;
+
+            case 'auth/wrong-password':
+              msg = 'Senha incorreta, tente novamente.';
+              break;
+          
+            default:
+              msg = 'Ocorreu um erro, tente novamente mais tarde.';
+              break;
+          }
+
+          headerNotiText.value = msg;
+        })
+    };
+
+    const createAccount = ():void => {
+      createUserWithEmailAndPassword(auth, userEmail.value, userPassword.value)
+        .then(() => {
+          headerNotiIcon.value = 'ph-bell-ringing';
+          headerNotiText.value = 'Sucesso, sua conta foi criada!';
+
+          setTimeout(() => {
+            router.push({name:'home'});
+          }, 5000);
+        })
+        .catch((error) => {
+          headerNotiIcon.value = 'ph-seal-warning';
+          let msg:string;
+
+          switch (error.code) {
+            case 'auth/email-already-exists':
+              msg = 'O email informado já está cadastrado.';
+              break;
+            
+            case 'auth/weak-password':
+              msg = 'Senha fraca, tente novamente.'
+              break;
+          
+            default:
+              msg = 'Ocorreu um erro, tente novamente.';
+              break;
+          }
+
+          headerNotiText.value = msg;
+        })
+    };
 
     const anonymousLogin = ():void => {
       signInAnonymously(auth)
         .then(() => {
-          router.push({name:'home'})
+          headerNotiIcon.value = 'ph-bell-ringing';
+          headerNotiText.value = 'Sucesso! Entrando na sua conta anônima.';
+
+          setTimeout(() => {
+            router.push({name:'home'});
+          }, 5000);
         })
         .catch((error) => {
           console.error(error);
+          headerNotiIcon.value = 'ph-seal-warning';
+          headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
         })
     };
 
@@ -158,6 +233,9 @@ export default defineComponent({
       headerTitle,
       userEmail,
       userPassword,
+      headerNotiIcon,
+      headerNotiText,
+      googleLogin,
       createAccount,
       loginIntoAccount,
       anonymousLogin

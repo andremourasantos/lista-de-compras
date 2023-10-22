@@ -1,5 +1,7 @@
 <template>
-  <h1>Home</h1>
+  <Header :header-type="'Main'">
+
+  </Header>
   <button @click="singUserOut">Log out</button>
 </template>
 
@@ -8,7 +10,11 @@ import { defineComponent } from 'vue';
 import { getAuth, signOut } from "firebase/auth";
 import router from '@/router';
 
+//Components
+import Header from '@/components/Header.vue';
+
 export default defineComponent({
+  components: {Header},
   setup () {
     const auth = getAuth();
 

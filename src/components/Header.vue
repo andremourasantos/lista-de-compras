@@ -1,21 +1,24 @@
 <template>
   <header>
-    <div v-if="headerType === 'Main'">
-      
+    <div v-if="headerType === 'Main'" class=primary>
+      <img src="@/assets/logo.png" height="30" width="30">
+      <button id="userButton">
+        <img src="@/assets/logo.png" height="30" width="30">
+      </button>
     </div>
     <div v-if="headerType === 'Secondary'" class="secondary">
       <button aria-label="Retroceder" @click="emitGoBack">
-        <ph-arrow-circle-left :size="24" :color="'333333'" :weight="'thin'" />
+        <ph-arrow-circle-left :size="24" :color="'333333'" :weight="'light'" />
         Voltar
       </button>
       <p>{{ headerTitle }}</p>
     </div>
   </header>
+  <slot></slot>
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, ref } from 'vue';
-import router from '@/router';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   props: {
@@ -48,8 +51,24 @@ export default defineComponent({
 header {
   height: 56px;
   box-shadow: var(--heavy-shadow);
-  border-radius: 24px;
+  border-radius: 16px;
   padding: 8px 16px;
+}
+
+header > div.primary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+#userButton {
+  border: none;
+  background: transparent;
+}
+
+#userButton img {
+  border-radius: 8px;
 }
 
 header > div.secondary {
