@@ -16,20 +16,22 @@
   </main>
 
   <Header v-if="showView !== 'Main'" :header-type="'Secondary'" :header-title="headerTitle" @go-back="showView = 'Main'">
-    <HeaderNoti v-if="headerNotiText != ''" :notification-icon="headerNotiIcon" :notification-text="headerNotiText" />
+    <transition name="headerNoti">
+      <HeaderNoti v-if="headerNotiText != ''" :notification-icon="headerNotiIcon" :notification-text="headerNotiText" />
+    </transition>
   </Header>
   <main v-if="showView === 'ThirdyParties'" class="loginView">
-    <img src="@/assets/icons/conta-conectada.png" height="96" width="96" alt="Ilustração de presente.">
+    <img src="@/assets/ilustrations/conectar-conta.gif" height="256" width="256" alt="Desenho de duas pessoas conectando blocos de quebra-cabeça.">
     <h1>Conecte a sua conta!</h1>
     <p>Você pode conectar a sua conta do Google para criar uma conta do tipo permanente. Contas permanentes tem acesso a mais funções, como a sincronização entre dispositivos!</p>
-    <Button :button-text="'Concetar conta'" :has-icon="'No'" @click="googleLogin"/>
+    <Button :button-text="'Concetar conta'" :has-icon="'No'" @click="loginWithGoogle"/>
   </main>
 
   <main v-if="showView === 'EmailLogin'" class="loginView">
-    <img src="@/assets/icons/email.png" height="96" width="96" alt="Ilustração de presente.">
+    <img src="@/assets/ilustrations/login.gif" height="256" width="256" alt="Desenho de uma pessoa conferindo uma longa lista de compras.">
     <h1>Faça login</h1>
-    <p>Insira as informações da sua conta para entrar na aplicação.</p>
-    <form class="emailCredentials" @submit.prevent>
+    <p>Insira as informações da sua conta para entrar.</p>
+    <form class="emailCredentials" @submit.prevent="loginWithEmail">
       <div>
         <label for="email">Email</label>
         <input id="email" type="email" placeholder="email@exemplo.com" v-model="userEmail">
@@ -40,17 +42,16 @@
       </div>
       <div>
         <Button :button-text="'Criar conta'" :button-type="'Secondary'" :has-icon="'No'" @click="showView = 'EmailSingIn'"/>
-        <Button :disabled="!userEmail || !userPassword" type="submit" :button-text="'Continuar'" :has-icon="'Yes-Right'" :icon-name="'ph-arrow-circle-right'" :icon-size="24" :icon-weight="'Regular'" @click="loginIntoAccount"/>
+        <Button :disabled="!userEmail || !userPassword" type="submit" :button-text="'Continuar'" :has-icon="'Yes-Right'" :icon-name="'ph-arrow-circle-right'" :icon-size="24" :icon-weight="'Regular'"/>
       </div>
     </form>
   </main>
 
   <main v-if="showView === 'EmailSingIn'" class="loginView">
-    <img src="@/assets/icons/criar-conta.png" height="96" width="96" alt="Ilustração de presente.">
+    <img src="@/assets/ilustrations/criar-conta.gif" height="256" width="256" alt="Desenho de uma pessoa inserindo suas informações em um telefone.">
     <h1>Crie sua conta!</h1>
     <p>Insira um e-mail e senha para criar uma conta do tipo permanente. Contas permanentes tem acesso a mais funções, como a sincronização entre dispositivos!</p>
-    <p>Você precisará checar a sua caixa de entrada para confimar a sua conta.</p>
-    <form class="emailCredentials" @submit.prevent="createAccount">
+    <form class="emailCredentials" @submit.prevent="createAnAccount">
       <div>
         <label for="email">Email</label>
         <input id="email" type="email" placeholder="email@exemplo.com" v-model="userEmail">
@@ -66,11 +67,11 @@
   </main>
   
   <main v-if="showView === 'Anonymous'" class="loginView">
-    <img src="@/assets/icons/presente.png" height="96" width="96" alt="Ilustração de presente.">
+    <img src="@/assets/ilustrations/conta-anonima.gif" height="256" width="256" alt="Desenho de uma pessoa criativa, com várias ideias projetadas em seus pensamentos.">
     <h1>Vamos começar!</h1>
     <p>Com uma conta anônima, você pode testar a aplicação por um tempo limitado antes de decidir criar uma conta permanente.</p>
     <p>Você pode não ter acesso a determinados recursos que requerem uma conta permanente, como a sincronização entre dispositivos.</p>
-    <Button :button-text="'Continuar'" :has-icon="'No'" @click="anonymousLogin"/>
+    <Button :button-text="'Continuar'" :has-icon="'No'" @click="loginAnonymously"/>
   </main>
   
   <footer v-if="showView === 'Main'">
@@ -130,7 +131,13 @@ export default defineComponent({
     const headerNotiIcon = ref<'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'>('ph-bell-ringing');
     const headerNotiText = ref<string>('');
 
-    const googleLogin = ():void => {
+    const wipeHeaderNoti = (type:'Error' | 'Success'):void => {
+      setTimeout(():void => {
+        headerNotiText.value = '';
+      }, type === 'Error' ? 5000 : 3000)
+    };
+
+    const loginWithGoogle = ():void => {
       const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
         .then((results) => {
@@ -144,10 +151,11 @@ export default defineComponent({
         .catch((error) => {
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
+          wipeHeaderNoti('Error');
         })
     };
 
-    const loginIntoAccount = ():void => {
+    const loginWithEmail = ():void => {
       signInWithEmailAndPassword(auth, userEmail.value, userPassword.value)
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
@@ -158,7 +166,8 @@ export default defineComponent({
           }, 5000);
         })
         .catch((error) => {
-          headerNotiIcon.value = 'ph-seal-warning';
+          console.log(error.code)
+          
           let msg:string;
 
           switch (error.code) {
@@ -175,11 +184,13 @@ export default defineComponent({
               break;
           }
 
+          headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = msg;
+          wipeHeaderNoti('Error');
         })
     };
 
-    const createAccount = ():void => {
+    const createAnAccount = ():void => {
       createUserWithEmailAndPassword(auth, userEmail.value, userPassword.value)
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
@@ -190,11 +201,12 @@ export default defineComponent({
           }, 5000);
         })
         .catch((error) => {
-          headerNotiIcon.value = 'ph-seal-warning';
+          console.log(error.code)
+          
           let msg:string;
 
           switch (error.code) {
-            case 'auth/email-already-exists':
+            case 'auth/email-already-in-use':
               msg = 'O email informado já está cadastrado.';
               break;
             
@@ -207,11 +219,13 @@ export default defineComponent({
               break;
           }
 
+          headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = msg;
+          wipeHeaderNoti('Error');
         })
     };
 
-    const anonymousLogin = ():void => {
+    const loginAnonymously = ():void => {
       signInAnonymously(auth)
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
@@ -225,6 +239,7 @@ export default defineComponent({
           console.error(error);
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
+          wipeHeaderNoti('Error');
         })
     };
 
@@ -235,10 +250,10 @@ export default defineComponent({
       userPassword,
       headerNotiIcon,
       headerNotiText,
-      googleLogin,
-      createAccount,
-      loginIntoAccount,
-      anonymousLogin
+      loginWithGoogle,
+      createAnAccount,
+      loginWithEmail,
+      loginAnonymously
     }
   }
 })
@@ -292,6 +307,7 @@ main.loginView {
   align-items: center;
   justify-content: flex-start;
   height: 100%;
+  padding: 0px 24px;
   overflow-y: scroll;
   margin-top: 32px;
   text-align: center;
@@ -311,6 +327,12 @@ main.loginView h1 {
 
 main.loginView p {
   margin-bottom: 8px;
+}
+
+main.loginView > button {
+  height: 52px;
+  width: 100%;
+  margin-top: 16px;
 }
 
 form.emailCredentials {
@@ -360,5 +382,17 @@ footer {
 
 footer p {
   font-size: 14px;
+}
+</style>
+
+<style>
+.headerNoti-enter-active,
+.headerNoti-leave-active {
+  transition: 250ms ease;
+}
+
+.headerNoti-enter-from,
+.headerNoti-leave-to {
+  opacity: 0;
 }
 </style>
