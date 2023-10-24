@@ -16,9 +16,11 @@
   </main>
 
   <Header v-if="showView !== 'Main'" :header-type="'Secondary'" :header-title="headerTitle" @go-back="showView = 'Main'">
-    <transition name="headerNoti">
-      <HeaderNoti v-if="headerNotiText != ''" :notification-icon="headerNotiIcon" :notification-text="headerNotiText" />
-    </transition>
+    <template #notification>
+      <transition name="headerNoti">
+        <HeaderNoti v-if="headerNotiText != ''" :notification-icon="headerNotiIcon" :notification-text="headerNotiText" />
+      </transition>
+    </template>
   </Header>
   <main v-if="showView === 'ThirdyParties'" class="loginView">
     <img src="@/assets/ilustrations/conectar-conta.gif" height="256" width="256" alt="Desenho de duas pessoas conectando blocos de quebra-cabeça.">
@@ -258,13 +260,6 @@ export default defineComponent({
   }
 })
 </script>
-
-<style>
-#app {
-  display: flex;
-  flex-direction: column;
-}
-</style>
 
 <style scoped>
 main.mainView {

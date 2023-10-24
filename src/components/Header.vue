@@ -1,20 +1,23 @@
 <template>
-  <header>
-    <div v-if="headerType === 'Main'" class=primary>
-      <img src="@/assets/logo.png" height="30" width="30">
-      <button id="userButton">
-        <img src="@/assets/logo.png" height="30" width="30">
-      </button>
-    </div>
-    <div v-if="headerType === 'Secondary'" class="secondary">
-      <button aria-label="Retroceder" @click="emitGoBack">
-        <ph-arrow-circle-left :size="24" :color="'333333'" :weight="'light'" />
-        Voltar
-      </button>
-      <p>{{ headerTitle }}</p>
-    </div>
-  </header>
-  <slot></slot>
+  <div>
+    <header>
+      <div v-if="headerType === 'Main'" class=primary>
+        <img src="@/assets/logo.png" height="30" width="30" alt="Ícone de sacola com frutas e legumes.">
+        <button id="userButton" aria-label="Abrir menu de opções" title="Abrir menu de opções" @click="emitToggleOptionsMenu">
+          <img src="@/assets/logo.png" height="30" width="30" alt="Foto de perfil.">
+        </button>
+      </div>
+      <div v-if="headerType === 'Secondary'" class="secondary">
+        <button aria-label="Retroceder" @click="emitGoBack">
+          <ph-arrow-circle-left :size="20" color="'#333333'" :weight="'light'" />
+          Voltar
+        </button>
+        <p>{{ headerTitle }}</p>
+      </div>
+    </header>
+    <slot name="notification"></slot>
+    <slot name="listCompanion"></slot>
+  </div>
 </template>
 
 <script lang="ts">
@@ -35,13 +38,19 @@ export default defineComponent({
       type: String
     }
   },
-  emits: ['goBack'],
+  emits: ['goBack', 'toggleOptionsMenu'],
   setup (props, {emit}) {
     const emitGoBack = ():void => {
       emit('goBack');
     }
+
+    const emitToggleOptionsMenu = ():void => {
+      emit('toggleOptionsMenu');
+    }
+
     return {
-      emitGoBack
+      emitGoBack,
+      emitToggleOptionsMenu
     }
   }
 })
