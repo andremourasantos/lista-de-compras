@@ -1,7 +1,7 @@
 <template>
   <Header :header-type="'Main'" @toggle-options-menu="showOptionsMenu = !showOptionsMenu">
     <template #notification>
-      <!-- <HeaderNotification :notification-icon="'ph-warning-circle'" :notification-text="'Verifique sua conta, cheque seu email!'" /> -->
+      <HeaderNotification v-if="showNotification" :notification-icon="'ph-warning-circle'" :notification-text="'Verifique sua conta, cheque seu email!'" />
     </template>
     <template #listCompanion>
       <ListCompanion />
@@ -25,6 +25,9 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 
+//Composables
+import { isUserEmailVerified, isUserAnonymous } from '@/composables/auth';
+
 //Components
 import Header from '@/components/Header.vue';
 import OptionsMenu from '@/components/app/OptionsMenu.vue';
@@ -38,6 +41,9 @@ export default defineComponent({
   setup () {
     const showOptionsMenu = ref<boolean>(false);
     const showPWAInstallButton = ref<boolean>(false);
+    const showNotification = ref<boolean>(false);
+    const showVerifyEmailWarning = ref<boolean | null>(isUserEmailVerified());
+    const showAnonymousUserWarning = ref<boolean>(isUserAnonymous());
 
     onMounted(() => {
       if(!(window.matchMedia('(display-mode: standalone)').matches)){
@@ -47,7 +53,8 @@ export default defineComponent({
 
     return {
       showOptionsMenu,
-      showPWAInstallButton
+      showPWAInstallButton,
+      showNotification
     }
   }
 })

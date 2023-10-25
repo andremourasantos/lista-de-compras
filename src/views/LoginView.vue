@@ -86,17 +86,25 @@ import { defineComponent, ref, watch } from 'vue';
 import { getAuth, signInAnonymously, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import router from '@/router';
 
-//components
+//Composables
+import { getUserData } from '@/composables/auth';
+import { createUserDoc } from '@/composables/data-base';
+
+//Components
 import LoginButton from '@/components/login/LoginButton.vue';
 import Button from '@/components/Button.vue';
 import Header from '@/components/Header.vue';
 import HeaderNoti from '@/components/HeaderNotification.vue';
+
+//Stores
+import userInfo from '@/store/user-info';
 
 export default defineComponent({
   components: {LoginButton, Button, Header, HeaderNoti},
   setup () {
     const showView = ref<'Main' | 'ThirdyParties'  | 'EmailLogin' | 'EmailSingIn' | 'Anonymous'>('Main');
     const headerTitle = ref<string>('');
+    const userData = ref<userInfo>(userInfo);
 
     watch(showView, (newValue) => {
       switch (newValue) {
@@ -145,6 +153,8 @@ export default defineComponent({
         .then((results) => {
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso, vinculação concluída!';
+          getUserData();
+          createUserDoc(userData.value);
 
           setTimeout(() => {
             router.push({name:'home'});
@@ -162,6 +172,7 @@ export default defineComponent({
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso, suas informações conferem!';
+          getUserData();
 
           setTimeout(() => {
             router.push({name:'home'});
@@ -197,6 +208,8 @@ export default defineComponent({
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso, sua conta foi criada!';
+          getUserData();
+          createUserDoc(userData.value);
 
           setTimeout(() => {
             router.push({name:'home'});
@@ -232,6 +245,7 @@ export default defineComponent({
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso! Entrando na sua conta anônima.';
+          getUserData();
 
           setTimeout(() => {
             router.push({name:'home'});

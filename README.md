@@ -35,7 +35,7 @@ _*Atualizado em outubro de 2023._
 
 Veja abaixo a árvore de componentes do VueJs e também o fluxograma de lógica da aplicação, assim, você poderá ter um bom entendimento de como o projeto foi estruturado desde o começo para permitir uma fácil manutenção e adição de funcionalidades.
 
-<img title="Fluxograma de lógica de autenticação da aplicação" src="data/rotuer-fluxogram.png">
+<img title="Fluxograma de lógica de autenticação da aplicação" src="data/router-fluxogram.png">
 
 ---
 
@@ -49,6 +49,6 @@ _*Atualizado em outubro de 2023._
 
 _*Atualizado em outubro de 2023._
 
-O desempenho do site pode ser visto a partir de testes do [PageSpeed Insights 🡥](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Flista-de-compras.andremourasantos.com.br%2F)
+O desempenho do site pode ser visto a partir de testes do [PageSpeed Insights 🡥](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Flista-de-compras.andremourasantos.com.br%2F).
 
 ---
