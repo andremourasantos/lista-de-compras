@@ -56,12 +56,12 @@ button {
   align-items: center;
   justify-content: center;
   background-color: var(--primary-color);
-  height: 42px;
+  height: 50px;
   width: fit-content;
   border: none;
   border-radius: 16px;
   padding: 8px 16px;
-  gap: 4px;
+  gap: 8px;
   font-family: var(--font-header);
   font-weight: 500;
   font-size: 16px;

@@ -15,6 +15,8 @@
     <div id="list" v-show="false">
 
     </div>
+    <AddItemModal ref="addItemModalEl" v-if="showItemModal" @dialog-closed="showItemModal = false"/>
+    <Button id="addItem" :disabled="appStatus !== 'Success' && appStatus !== 'Success & Empty'" :button-text="'Adicionar item'" :has-icon="'Yes-Right'" :icon-name="'ph-shopping-cart'" :icon-weight="'Light'" :icon-size="20" @click="showItemModal = true"/>
   </main>
 </template>
 
@@ -33,17 +35,16 @@ import ListCompanion from '@/components/ListCompanion.vue';
 import HeaderNotification from '@/components/HeaderNotification.vue';
 import Button from '@/components/Button.vue';
 import WelcomeMessage from '@/components/app/WelcomeMessage.vue';
+import AddItemModal from '@/components/app/AddItemModal.vue';
 
 export default defineComponent({
-  components: {Header, OptionsMenu, OptionsMenuItem, ListCompanion, HeaderNotification, WelcomeMessage, Button},
+  components: {Header, OptionsMenu, OptionsMenuItem, ListCompanion, HeaderNotification, WelcomeMessage, Button, AddItemModal},
   setup () {
     const showOptionsMenu = ref<boolean>(false);
     const appStatus = ref<'Loading' | 'Success' | 'Success & Empty' | 'Error'>('Loading');
     const showPWAInstallButton = ref<boolean>(false);
     const showNotification = ref<boolean>(false);
-    const showVerifyEmailWarning = ref<boolean | null>(isUserEmailVerified());
-    const showAnonymousUserWarning = ref<boolean>(isUserAnonymous());
-    
+    const showItemModal = ref<boolean>(false);
 
     onMounted(() => {
       console.log('Recolhendo informações...');
@@ -66,7 +67,8 @@ export default defineComponent({
       showOptionsMenu,
       appStatus,
       showPWAInstallButton,
-      showNotification
+      showNotification,
+      showItemModal
     }
   }
 })
@@ -74,9 +76,16 @@ export default defineComponent({
 
 <style scoped>
 main:has(#welcomeMessage) {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+#addItem {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
 }
 </style>

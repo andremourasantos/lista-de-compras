@@ -43,7 +43,7 @@
         <input id="password" type="password" placeholder="********" v-model="userPassword">
       </div>
       <div>
-        <Button :button-text="'Criar conta'" :button-type="'Secondary'" :has-icon="'No'" @click="showView = 'EmailSingIn'"/>
+        <Button type="button" :button-text="'Criar conta'" :button-type="'Secondary'" :has-icon="'No'" @click="showView = 'EmailSingIn'"/>
         <Button :disabled="!userEmail || !userPassword" type="submit" :button-text="'Continuar'" :has-icon="'Yes-Right'" :icon-name="'ph-arrow-circle-right'" :icon-size="24" :icon-weight="'Regular'"/>
       </div>
     </form>

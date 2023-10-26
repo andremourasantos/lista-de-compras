@@ -78,7 +78,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--font-header-color);
 }
 
-p {
+p, label {
   font-size: var(--font-size);
   font-weight: 300;
   color: var(--font-paragraph-color);

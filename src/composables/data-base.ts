@@ -15,7 +15,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore();
-if(window.location.hostname === '127.0.0.1'){
+if(window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'){
   console.log('Conenctando no banco de dados local...')
   try {
     connectFirestoreEmulator(db, '127.0.0.1', 8080);
