@@ -13,14 +13,15 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore();
-if(window.location.hostname === 'localhost'){
-  console.log('Conenctando no banco de dados local.')
+if(window.location.hostname === '127.0.0.1'){
+  console.log('Conenctando no banco de dados local...')
   try {
-    connectFirestoreEmulator(db, 'localhost', 8080);
-    console.log('Conexão bem-sucedida');
+    connectFirestoreEmulator(db, '127.0.0.1', 8080);
+    console.log('Conexão bem-sucedida.');
   } catch (error) {
-    console.log('Conexão mal-sucedida', error);
+    console.log('Conexão mal-sucedida.', error);
   }
 } else {
   console.log('Conectando no banco de dados da produção.')
@@ -29,13 +30,13 @@ if(window.location.hostname === 'localhost'){
 //Stores
 import userInfo from '@/store/user-info';
 
-const userUID = ref<string | null>(userInfo.uid);
+const userData = ref<userInfo>(userInfo);
 
 export const createUserDoc = async (userInfo:userInfo):Promise<void> => {
   const userAlreadyExists:boolean = (await getDoc(doc(db,`usuarios/${userInfo.uid}`))).exists();
 
   return new Promise<void>((resolve, reject) => {
-    if(userAlreadyExists){return resolve()}
+    if(userAlreadyExists){return resolve();}
 
     try {
       setDoc(doc(db, `usuarios/${userInfo.uid}`), {
@@ -52,16 +53,18 @@ export const createUserDoc = async (userInfo:userInfo):Promise<void> => {
 }
 
 export const getUserGroceriesList = ():Promise<void> => {
-  const q = query(collection(db, `usuarios/${userUID}/lista-de-compras`), orderBy('creationDate', 'asc'));
+  const q = query(collection(db, `usuarios/${userData.value.uid}/lista-de-compras`), orderBy('creationDate', 'asc'));
 
   return new Promise(async (resolve, reject) => {
-    if(userUID === null){return reject('O ID do usuário é null')};
+    if(userData.value.uid === null){return reject('O ID do usuário é null')};
 
-    const getList = await getDocs(q);
-    console.log(getList.empty, getList.size);
-    getList.forEach(item => {
-      console.log(item.id, " => ", item.data())
-    });
-    resolve();
+    await getDocs(q)
+      .then((list) => {
+        list.forEach(item => {
+          console.log(item.id, item.data())
+        });
+        resolve();
+      })
+      .catch((error) => {throw new Error(error);})
   })
 };

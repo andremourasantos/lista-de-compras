@@ -215,9 +215,7 @@ export default defineComponent({
             router.push({name:'home'});
           }, 5000);
         })
-        .catch((error) => {
-          console.log(error.code)
-          
+        .catch((error) => {          
           let msg:string;
 
           switch (error.code) {
@@ -246,6 +244,7 @@ export default defineComponent({
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso! Entrando na sua conta anônima.';
           getUserData();
+          createUserDoc(userData.value);
 
           setTimeout(() => {
             router.push({name:'home'});

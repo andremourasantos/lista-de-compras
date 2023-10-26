@@ -23,7 +23,7 @@ const userData = ref<userInfo>(userInfo);
 export const getUserData = ():Promise<void> => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if(user === null){return reject('O Firebase não foi iniciado corretamente')};
+      if(user === null){return resolve()};
 
         unsubscribe();
         userData.value.fullName = user.displayName;
@@ -32,8 +32,6 @@ export const getUserData = ():Promise<void> => {
         userData.value.isAnonymous = user.isAnonymous;
         userData.value.isEmailVerified = user.emailVerified;
         userData.value.uid = user.uid;
-        
-        console.log(userData.value);
         return resolve();
     })
   })
