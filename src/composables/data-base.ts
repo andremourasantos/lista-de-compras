@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { initializeApp } from "firebase/app";
-import { getFirestore, connectFirestoreEmulator, collection, query, orderBy, getDocs, getDoc, addDoc, setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, collection, query, orderBy, getDocs, getDoc, addDoc, setDoc, doc, serverTimestamp, deleteDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -98,4 +98,22 @@ const saveItemOnClient = (itemInfo:itemInfo, idString:string):void => {
   if(userData.value.userList === null){userData.value.userList = []};
   
   userData.value.userList.push(newObj);
+}
+
+export const deleteDocFromList = (docId:string):Promise<void> => {
+  const uid = userData.value.uid;
+
+  return new Promise(async (resolve, reject) => {
+    await deleteDoc(doc(db, `usuarios/${uid}/lista-de-compras`, docId))
+      .then(() => {resolve(); deleteItemFromClient(docId);})
+      .catch((error) => {reject(error)})
+  })
+}
+
+const deleteItemFromClient = (itemID:string) => {
+  if(userData.value.userList === null){return console.warn('A propriedade "userList" do usuário é "null".')};
+
+  console.log(userData.value.userList)
+  userData.value.userList = userData.value.userList.filter(obj => {return obj.id !== itemID})
+  console.log(userData.value.userList)
 }

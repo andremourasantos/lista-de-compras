@@ -83,8 +83,8 @@ button.accent {
 }
 
 button:disabled {
-  background-color: var(--disabled-color);
-  cursor: not-allowed;
+  background-color: var(--disabled-color) !important;
+  cursor: not-allowed !important;
 }
 
 button.iconOnLeft {

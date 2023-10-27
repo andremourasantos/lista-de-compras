@@ -109,10 +109,10 @@ main #list {
   flex-direction: row;
   flex-wrap: wrap;
   align-content: flex-start;
-  justify-content: space-evenly;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  gap: 16px;
+  gap: 32px;
   overflow-y: scroll;
   padding: 24px 0px 72px 0px;
 }

@@ -1,17 +1,22 @@
 <template>
-  <div>
+  <div :class="{
+    editItem: elementStatus === 'Edit'
+  }" @click="editItem($event, 'oi')">
     <p>{{ itemObject.name }}</p>
     <section class="tags">
       <p>{{ itemObject.tags.quantity }} {{ itemObject.tags.quantityMetric }}</p>
       <p>R$ {{itemObject.tags.price}}</p>
     </section>
-    <Button :button-text="''" :button-type="'Accent'" :has-icon="'Yes-Right'" :icon-name="'ph-check-circle'" :icon-size="24" :icon-color="'#333333'"/>
+    <Button aria-label="Remover item" :disabled="buttonStatus === 'Loading'" :button-text="''" :button-type="'Accent'" :has-icon="'Yes-Right'" :icon-name="'ph-check-circle'" :icon-size="24" :icon-color="'#333333'" @click="deleteItem($event, itemObject.id)" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import Button from '@/components/Button.vue';
+
+//Composables
+import { deleteDocFromList } from '@/composables/data-base';
 
 export default defineComponent({
   components: {Button},
@@ -21,9 +26,36 @@ export default defineComponent({
       type: Object as () => itemInfoClient
     }
   },
-  setup (props) {
+  emits: ['editItem'],
+  setup (props, ctx) {
+    const elementStatus = ref<'Standby' | 'Edit'>('Standby')
+    const buttonStatus = ref<'Standby' | 'Loading'>('Standby');
 
-    return {}
+    const deleteItem = (event:Event, itemId:string):void => {
+      event.stopPropagation();
+      buttonStatus.value = 'Loading';
+
+      deleteDocFromList(itemId)
+        .catch(() => {
+          buttonStatus.value = 'Standby';
+        });
+    }
+
+    const editItem = (event:Event, newItemInfo:string):void => {
+      event.stopPropagation();
+
+      if(elementStatus.value === 'Edit'){elementStatus.value = 'Standby'; return;}
+      elementStatus.value = 'Edit';
+      
+      ctx.emit('editItem');
+    }
+
+    return {
+      deleteItem,
+      editItem,
+      elementStatus,
+      buttonStatus
+    }
   }
 })
 </script>
@@ -36,12 +68,17 @@ div {
   flex-wrap: nowrap;
   justify-content: center;
   gap: 8px;
-  width: 160px;
+  width: 150px;
   height: fit-content;
   padding: 16px;
   box-shadow: var(--light-shadow);
   border-radius: 32px;
   cursor: pointer;
+  border: 0px solid white;
+}
+
+div.editItem {
+  border: 2px solid var(--accent-color);
 }
 
 div > p:first-of-type {
