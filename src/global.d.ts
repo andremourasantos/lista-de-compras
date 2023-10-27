@@ -11,9 +11,11 @@ declare global {
     userList:itemInfoClient[] | null
   }
 
+  type quantityMetrics = 'un' | 'kg' | 'g' | 'l' | 'ml' | 'oz'
+
   type typeItemTags = {
     quantity:number,
-    quantityMetric: 'un' | 'kg' | 'g' | 'l' | 'ml' | 'oz',
+    quantityMetric:quantityMetrics,
     price:number
   }
 
@@ -26,5 +28,16 @@ declare global {
     name:string,
     tags:typeItemTags,
     id:string
+  }
+
+  interface addDocToCloud {
+    name:string,
+    tags:typeItemTags,
+    createAt:any
+  }
+
+  interface updateDocOnCloud {
+    name:string,
+    tags:typeItemTags
   }
 }

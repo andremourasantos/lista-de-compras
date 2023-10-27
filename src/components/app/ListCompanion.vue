@@ -12,10 +12,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
+
+//Stores
+import userInfo from '@/store/user-info';
 
 export default defineComponent({
   setup () {
+    const userData = ref<userInfo>(userInfo);
     const totalCost = ref<number>(0.00);
     const totalItems = ref<number>(0);
     const styledTotalCost:string = Intl.NumberFormat().format(totalCost.value);

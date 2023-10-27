@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, inject, Ref, watch } from 'vue';
 import Button from '@/components/Button.vue';
 
 //Composables
@@ -28,8 +28,9 @@ export default defineComponent({
   },
   emits: ['editItem'],
   setup (props, ctx) {
-    const elementStatus = ref<'Standby' | 'Edit'>('Standby')
+    const elementStatus = ref<'Standby' | 'Edit'>('Standby');
     const buttonStatus = ref<'Standby' | 'Loading'>('Standby');
+    const modalStatus = inject('modalStatus') as Ref<boolean | undefined>;
 
     const deleteItem = (event:Event, itemId:string):void => {
       event.stopPropagation();
@@ -50,9 +51,15 @@ export default defineComponent({
       ctx.emit('editItem');
     }
 
+    watch(modalStatus, (newValue) => {
+      if(newValue === false){
+        elementStatus.value = 'Standby';
+      }
+    })
+
     return {
       deleteItem,
-      editItem,
+      editItem, 
       elementStatus,
       buttonStatus
     }

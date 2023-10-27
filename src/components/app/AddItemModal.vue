@@ -1,10 +1,14 @@
 <template>
   <dialog ref="modalEl">
-    <div>
+    <div v-if="modalAction === 'AddItem'">
       <h1>Adicionar item</h1>
       <p>O que você vai adicionar?</p>
     </div>
-    <form @submit.prevent="addItem">
+    <div v-if="modalAction === 'EditItem'">
+      <h1>Editar item</h1>
+      <p>O que você vai alterar?</p>
+    </div>
+    <form @submit.prevent="modalAction === 'AddItem' ? addItem() : editItem()">
       <div id="etiquetas">
         <input required type="text" inputmode="text" placeholder="Escreva o nome do item..." v-model="itemName">
         <div>
@@ -27,24 +31,37 @@
         </div>
       </div>
       <div>
-        <Button type="button" aria-label="Fechar popup" :button-text="'Voltar'" :has-icon="'No'" :button-type="'Secondary'" @click="closeDialog"/>
-        <Button aria-label="Adicionar item à lista" :disabled="addButtonState !== 'Standby'" id="adicionarItem" :button-text="addButtonState !== 'Loading' ? 'Adicionar' : 'Adicionando...'" :has-icon="'No'"/>
+        <Button type="button" aria-label="Fechar popup" :disabled="addButtonState !== 'Standby'" :button-text="'Voltar'" :has-icon="'No'" :button-type="'Secondary'" @click="closeDialog"/>
+
+        <Button v-if="modalAction !== 'EditItem'" aria-label="Adicionar item à lista" :disabled="addButtonState !== 'Standby'" id="adicionarItem" :button-text="addButtonState !== 'Loading' ? 'Adicionar' : 'Adicionando...'" :has-icon="'No'"/>
+
+        <Button v-if="modalAction === 'EditItem'" aria-label="Editar item da lista" :disabled="addButtonState !== 'Standby'" id="editarItem" :button-text="addButtonState !== 'Loading' ? 'Editar' : 'Salvando...'" :has-icon="'No'"/>
+
       </div>
     </form>
   </dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
+import { defineComponent, ref, Ref, onMounted, onBeforeUnmount, inject } from 'vue';
 
 //Composables
-import { addDocToList } from '@/composables/data-base';
+import { addDocToList, editDocFromList } from '@/composables/data-base';
 
 //Components
 import Button from '@/components/Button.vue';
 
+//Store
+import userInfo from '@/store/user-info';
+
 export default defineComponent({
   components: {Button},
+  props: {
+    modalAction: {
+      required: true,
+      type: String as () => 'AddItem' | 'EditItem'
+    }
+  },
   emits: ['dialogClosed'],
   setup (props, {emit}) {
     const modalEl = ref<HTMLDialogElement | null>(null);
@@ -52,7 +69,10 @@ export default defineComponent({
     const itemQuantity = ref<number | null>(null);
     const itemQuantityMetric = ref<'un' | 'kg' | 'g' | 'l' | 'ml' | 'oz' | null>(null);
     const itemPrice = ref<number | null>(null);
+
     const addButtonState = ref<'Standby' | 'Loading' | 'Disabled'>('Standby');
+    const itemIdForEditAction = inject('itemId') as Ref<string | undefined>;
+    const userData = ref<userInfo>(userInfo);
 
     const observeOpenAttribute = ():void => {
       if(!(modalEl.value instanceof HTMLDialogElement)){return}
@@ -100,13 +120,39 @@ export default defineComponent({
         .catch((error) => {alert(error)})
     }
 
+    const editItem = ():void => {
+      if(itemName.value === null || itemQuantity.value === null || itemQuantityMetric.value === null || itemPrice.value === null || itemIdForEditAction.value === undefined){return alert('Ocorreu um erro.')}
+      addButtonState.value = 'Loading';
+
+      const changesObj:updateDocOnCloud = {
+        name: itemName.value,
+        tags: {
+          quantity: itemQuantity.value,
+          quantityMetric: itemQuantityMetric.value,
+          price: itemPrice.value
+        }
+      }
+
+      editDocFromList(itemIdForEditAction.value, changesObj)
+        .then(() => {closeDialog();})
+        .catch((error) => {alert(error)})
+    }
+
     onMounted(() => {
       if(!(modalEl.value instanceof HTMLDialogElement)){return}
 
       const el = modalEl.value;
+      if(props.modalAction === 'EditItem' && userData.value.userList !== null){
+        const itemObj = userData.value.userList.filter(obj => {return obj.id === itemIdForEditAction.value});
+
+        itemName.value = itemObj[0].name;
+        itemQuantity.value = itemObj[0].tags.quantity;
+        itemQuantityMetric.value = itemObj[0].tags.quantityMetric;
+        itemPrice.value = itemObj[0].tags.price;
+      }
 
       el.showModal();
-      observeOpenAttribute()
+      observeOpenAttribute();
     })
 
     return {
@@ -117,7 +163,8 @@ export default defineComponent({
       itemPrice,
       addButtonState,
       closeDialog,
-      addItem
+      addItem,
+      editItem
     }
   }
 })
@@ -183,7 +230,7 @@ form > div:last-of-type {
 }
 
 
-#adicionarItem {
+#adicionarItem, #editarItem {
   width: 100%;
 }
 </style>

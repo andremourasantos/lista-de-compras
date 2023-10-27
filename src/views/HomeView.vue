@@ -14,16 +14,16 @@
     <WelcomeMessage id="welcomeMessage" v-if="appStatus !== 'Success'" :message-status="appStatus"/>
 
     <div id="list" v-show="appStatus === 'Success'">
-      <ListItem v-for="item in userData.userList" :key="item.id" :item-object="item"/>
+      <ListItem v-for="item in userData.userList" :key="item.id" :item-object="item" @edit-item="editItemAction(item.id)"/>
     </div>
 
-    <AddItemModal ref="addItemModalEl" v-if="showItemModal" @dialog-closed="showItemModal = false"/>
-    <Button id="addItem" :disabled="appStatus !== 'Success' && appStatus !== 'Success & Empty'" :button-text="'Adicionar item'" :has-icon="'Yes-Right'" :icon-name="'ph-shopping-cart'" :icon-weight="'Light'" :icon-size="20" @click="showItemModal = true"/>
+    <AddItemModal ref="addItemModalEl" v-if="showItemModal" :modal-action="modalAction" @dialog-closed="dialogClosed"/>
+    <Button id="addItem" :disabled="appStatus !== 'Success' && appStatus !== 'Success & Empty'" :button-text="'Adicionar item'" :has-icon="'Yes-Right'" :icon-name="'ph-shopping-cart'" :icon-weight="'Light'" :icon-size="20" @click="addItemAction"/>
   </main>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch } from 'vue';
+import { defineComponent, ref, onMounted, watch, provide, inject } from 'vue';
 
 //Composables
 import { isUserEmailVerified, isUserAnonymous } from '@/composables/auth';
@@ -33,7 +33,7 @@ import { getUserGroceriesList } from '@/composables/data-base';
 import Header from '@/components/Header.vue';
 import OptionsMenu from '@/components/app/OptionsMenu.vue';
 import OptionsMenuItem from '@/components/app/OptionsMenuItem.vue';
-import ListCompanion from '@/components/ListCompanion.vue';
+import ListCompanion from '@/components/app/ListCompanion.vue';
 import HeaderNotification from '@/components/HeaderNotification.vue';
 import Button from '@/components/Button.vue';
 import WelcomeMessage from '@/components/app/WelcomeMessage.vue';
@@ -51,6 +51,8 @@ export default defineComponent({
     const showPWAInstallButton = ref<boolean>(false);
     const showNotification = ref<boolean>(false);
     const showItemModal = ref<boolean>(false);
+    const modalAction = ref<'AddItem' | 'EditItem'>('AddItem');
+    const itemIdForEditAction = ref<string>('');
     const userData = ref<userInfo>(userInfo);
 
     onMounted(() => {
@@ -74,13 +76,37 @@ export default defineComponent({
       newValue.userList !== null ? appStatus.value = 'Success' : '';
     })
 
+    const addItemAction = ():void => {
+      modalAction.value = 'AddItem';
+      showItemModal.value = true;
+    }
+
+    const editItemAction = (itemId:string):void => {
+      modalAction.value = 'EditItem';
+      showItemModal.value = true;
+
+      itemIdForEditAction.value = itemId;
+    }
+
+    const dialogClosed = ():void => {
+      showItemModal.value = false;
+
+    }
+
+    provide('itemId', itemIdForEditAction);
+    provide('modalStatus', showItemModal);
+
     return {
       showOptionsMenu,
       appStatus,
       showPWAInstallButton,
       showNotification,
       showItemModal,
-      userData
+      modalAction,
+      userData,
+      addItemAction,
+      editItemAction,
+      dialogClosed
     }
   }
 })
