@@ -1,8 +1,26 @@
 <template>
   <div>
-    <img :src="require(`@/assets/icons/${img}.png`)" height="96" width="96">
-    <h1>{{ title }}</h1>
-    <p>{{ message }}</p>
+    <transition>
+      <div v-if="messageStatus === 'Loading'">
+        <img src="@/assets/icons/retriving.png" height="96" width="96">
+        <h1>Recolhendo lista</h1>
+        <p>Aguarde enquanto coletamos suas informações.</p>
+      </div>
+    </transition>
+    <transition>
+      <div v-if="messageStatus === 'Success & Empty'">
+        <img src="@/assets/icons/welcome.png" height="96" width="96">
+        <h1>Lista vazia</h1>
+        <p>Adicione um item para começar.</p>
+      </div>
+    </transition>
+    <transition>
+      <div v-if="messageStatus === 'Error'">
+        <img src="@/assets/icons/error.png" height="96" width="96">
+        <h1>Ocorreu um erro</h1>
+        <p>Tente novamente mais tarde.</p>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -16,45 +34,9 @@ export default defineComponent({
       type: String as () => 'Loading' | 'Success' | 'Success & Empty' | 'Error'
     }
   },
-  setup(props) {
-    const img = ref<string>('retriving');
-    const title = ref<string>('Recolhendo lista');
-    const message = ref<string>('Aguarde enquanto a sua lista de compras está carregando.');
-
-    watch(()=>props.messageStatus, (newValue) => {
-      let imgName:string;
-      let titleMsg:string;
-      let msg:string;
-
-      switch (newValue) {
-        case 'Loading':
-          imgName = 'retriving'
-          titleMsg = 'Recolhendo lista';
-          msg = 'Aguarde enquanto a sua lista de compras está carregando.';
-          break;
-
-        case 'Error':
-          imgName = 'error';
-          titleMsg = 'Ocorreu um erro';
-          msg = 'Tente novamente mais tarde.';
-          break;
-
-        default:
-          imgName = 'welcome';
-          titleMsg = 'Lista vazia';
-          msg = 'Adicione um item para começar.';
-          break;
-      }
-
-      img.value = imgName;
-      title.value = titleMsg;
-      message.value = msg;
-    })
+  setup() {
 
     return {
-      img,
-      title,
-      message
     }
   },
 })
@@ -63,13 +45,15 @@ export default defineComponent({
 
 <style scoped>
 div {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 230px;
+  width: 250px;
   text-align: center;
   opacity: 0.5;
+  background-color: var(--background);
 }
 
 img {
@@ -77,6 +61,18 @@ img {
 }
 
 h1 {
-  font-size: 28px;
+  font-size: 26px;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 300ms ease-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+  scale: 0.90;
+  translate: 0px -20px;
+  opacity: 0;
 }
 </style>

@@ -10,7 +10,7 @@
         <div>
           <label for="quantidade">Quantidade:</label>
           <div class="multiInputs">
-            <input required id="quantidade" inputmode="numeric" min="1" max="99" placeholder="6" v-model="itemQuantity">
+            <input required id="quantidade" inputmode="numeric" type="number" min="1" max="99" step="1" placeholder="Ex.: 6" v-model="itemQuantity">
             <select required aria-label="Selecionar unidade" v-model="itemQuantityMetric">
               <option value="un" title="Unidade">Un.</option>
               <option value="kg" title="Quilograma">Kg</option>
@@ -23,19 +23,22 @@
         </div>
         <div>
           <label for="preco" style="width: 150px;">Preço (R$):</label>
-          <input id="preco" required placeholder="12,90" inputmode="numeric" min="0.00" max="999.99" step="1" v-model="itemPrice">
+          <input id="preco" required placeholder="Ex.: 12,90" inputmode="numeric" type="number" min="0.00" max="999.99" step="0.01" v-model="itemPrice">
         </div>
       </div>
       <div>
         <Button type="button" aria-label="Fechar popup" :button-text="'Voltar'" :has-icon="'No'" :button-type="'Secondary'" @click="closeDialog"/>
-        <Button aria-label="Adicionar item à lista" :disabled="enableButton" id="adicionarItem" :button-text="'Adicionar'" :has-icon="'No'"/>
+        <Button aria-label="Adicionar item à lista" :disabled="addButtonState !== 'Standby'" id="adicionarItem" :button-text="addButtonState !== 'Loading' ? 'Adicionar' : 'Adicionando...'" :has-icon="'No'"/>
       </div>
     </form>
   </dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
+
+//Composables
+import { addDocToList } from '@/composables/data-base';
 
 //Components
 import Button from '@/components/Button.vue';
@@ -49,14 +52,7 @@ export default defineComponent({
     const itemQuantity = ref<number | null>(null);
     const itemQuantityMetric = ref<'un' | 'kg' | 'g' | 'l' | 'ml' | 'oz' | null>(null);
     const itemPrice = ref<number | null>(null);
-
-    const enableButton = computed(():boolean => {
-      if(itemName.value !== null && itemQuantity.value !== null && itemQuantityMetric.value !== null && itemPrice.value !== null){
-        return false;
-      } else{
-        return true;
-      }
-    })
+    const addButtonState = ref<'Standby' | 'Loading' | 'Disabled'>('Standby');
 
     const observeOpenAttribute = ():void => {
       if(!(modalEl.value instanceof HTMLDialogElement)){return}
@@ -87,7 +83,21 @@ export default defineComponent({
     }
 
     const addItem = ():void => {
-      alert('ok')
+      if(itemName.value === null || itemQuantity.value === null || itemQuantityMetric.value === null || itemPrice.value === null ){return alert('Ocorreu um erro.')}
+      addButtonState.value = 'Loading';
+
+      const itemInfo:itemInfo = {
+        name: itemName.value.trim(),
+        tags: {
+          quantity: itemQuantity.value,
+          quantityMetric: itemQuantityMetric.value,
+          price: itemPrice.value
+        }
+      }
+
+      addDocToList(itemInfo)
+        .then(() => {closeDialog()})
+        .catch((error) => {alert(error)})
     }
 
     onMounted(() => {
@@ -105,7 +115,7 @@ export default defineComponent({
       itemQuantity,
       itemQuantityMetric,
       itemPrice,
-      enableButton,
+      addButtonState,
       closeDialog,
       addItem
     }

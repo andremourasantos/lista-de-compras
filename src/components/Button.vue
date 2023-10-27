@@ -1,7 +1,8 @@
 <template>
   <button :class="{
     iconOnLeft: hasIcon === 'Yes-Left',
-    secondary: buttonType === 'Secondary'
+    secondary: buttonType === 'Secondary',
+    accent: buttonType === 'Accent'
   }">
     {{ buttonText }}
     <component :is="iconName" :size="iconSize" />
@@ -19,7 +20,7 @@ export default defineComponent({
     },
     buttonType: {
       required: false,
-      type: String as () => 'Primary' | 'Secondary'
+      type: String as () => 'Primary' | 'Secondary' | 'Accent'
     },
     hasIcon: {
       required: true,
@@ -71,8 +72,14 @@ button {
 
 button.secondary {
   background-color: var(--secondary-color) !important;
-  border-radius: 8px !important;
   color: var(--font-paragraph-color) !important;
+  border-radius: 8px !important;
+}
+
+button.accent {
+  background-color: var(--accent-color) !important;
+  color: var(--font-paragraph-color) !important;
+  border-radius: 100px !important;
 }
 
 button:disabled {

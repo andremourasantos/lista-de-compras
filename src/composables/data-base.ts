@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { initializeApp } from "firebase/app";
-import { getFirestore, connectFirestoreEmulator, collection, query, orderBy, getDocs, getDoc, setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, collection, query, orderBy, getDocs, getDoc, addDoc, setDoc, doc, serverTimestamp } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -24,7 +24,7 @@ if(window.location.hostname === '127.0.0.1' || window.location.hostname === 'loc
     console.log('Conexão mal-sucedida.', error);
   }
 } else {
-  console.log('Conectando no banco de dados da produção.')
+  console.log('Conectando no banco de dados da produção.');
 }
 
 //Stores
@@ -53,18 +53,49 @@ export const createUserDoc = async (userInfo:userInfo):Promise<void> => {
 }
 
 export const getUserGroceriesList = ():Promise<void> => {
-  const q = query(collection(db, `usuarios/${userData.value.uid}/lista-de-compras`), orderBy('creationDate', 'asc'));
+  const q = query(collection(db, `usuarios/${userData.value.uid}/lista-de-compras`), orderBy('createAt', 'asc'));
 
   return new Promise(async (resolve, reject) => {
     if(userData.value.uid === null){return reject('O ID do usuário é null')};
 
     await getDocs(q)
       .then((list) => {
-        list.forEach(item => {
-          console.log(item.id, item.data())
+        list.forEach(item => {          
+          saveItemOnClient(item.data() as itemInfo, item.id)
         });
+
+        console.log(userData.value.userList)
         resolve();
       })
       .catch((error) => {throw new Error(error);})
   })
-};
+}
+
+export const addDocToList = (itemInfo:itemInfo):Promise<void> => {
+  const uid = userData.value.uid;
+
+  return new Promise((resolve, reject) => {
+    addDoc(collection(db, `usuarios/${uid}/lista-de-compras`), {
+      name: itemInfo.name,
+      tags: {
+        quantity: itemInfo.tags.quantity,
+        quantityMetric: itemInfo.tags.quantityMetric,
+        price: itemInfo.tags.price
+      },
+      createAt: serverTimestamp()
+    })
+      .then((doc) => {resolve(); saveItemOnClient(itemInfo,doc.id);})
+      .catch((error) => reject(error))
+  })
+}
+
+const saveItemOnClient = (itemInfo:itemInfo, idString:string):void => {
+  const newObj = {
+    ...itemInfo,
+    id:idString
+  }
+
+  if(userData.value.userList === null){userData.value.userList = []};
+  
+  userData.value.userList.push(newObj);
+}

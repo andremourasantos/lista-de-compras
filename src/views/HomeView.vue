@@ -12,16 +12,18 @@
   </OptionsMenu>
   <main>
     <WelcomeMessage id="welcomeMessage" v-if="appStatus !== 'Success'" :message-status="appStatus"/>
-    <div id="list" v-show="false">
 
+    <div id="list" v-show="appStatus === 'Success'">
+      <ListItem v-for="item in userData.userList" :key="item.id" :item-object="item"/>
     </div>
+
     <AddItemModal ref="addItemModalEl" v-if="showItemModal" @dialog-closed="showItemModal = false"/>
     <Button id="addItem" :disabled="appStatus !== 'Success' && appStatus !== 'Success & Empty'" :button-text="'Adicionar item'" :has-icon="'Yes-Right'" :icon-name="'ph-shopping-cart'" :icon-weight="'Light'" :icon-size="20" @click="showItemModal = true"/>
   </main>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, watch } from 'vue';
 
 //Composables
 import { isUserEmailVerified, isUserAnonymous } from '@/composables/auth';
@@ -36,21 +38,26 @@ import HeaderNotification from '@/components/HeaderNotification.vue';
 import Button from '@/components/Button.vue';
 import WelcomeMessage from '@/components/app/WelcomeMessage.vue';
 import AddItemModal from '@/components/app/AddItemModal.vue';
+import ListItem from '@/components/app/ListItem.vue';
+
+//Stores
+import userInfo from '@/store/user-info';
 
 export default defineComponent({
-  components: {Header, OptionsMenu, OptionsMenuItem, ListCompanion, HeaderNotification, WelcomeMessage, Button, AddItemModal},
+  components: {Header, OptionsMenu, OptionsMenuItem, ListCompanion, HeaderNotification, WelcomeMessage, Button, AddItemModal, ListItem},
   setup () {
     const showOptionsMenu = ref<boolean>(false);
     const appStatus = ref<'Loading' | 'Success' | 'Success & Empty' | 'Error'>('Loading');
     const showPWAInstallButton = ref<boolean>(false);
     const showNotification = ref<boolean>(false);
     const showItemModal = ref<boolean>(false);
+    const userData = ref<userInfo>(userInfo);
 
     onMounted(() => {
       console.log('Recolhendo informações...');
       getUserGroceriesList()
         .then(() => {
-          appStatus.value = 'Success & Empty';
+          userData.value.userList === null ? appStatus.value = 'Success & Empty' : appStatus.value = 'Success';
           console.log('Sucesso!')
         })
         .catch((error) => {
@@ -63,12 +70,17 @@ export default defineComponent({
       };
     })
 
+    watch(userData.value, (newValue) => {
+      newValue.userList !== null ? appStatus.value = 'Success' : '';
+    })
+
     return {
       showOptionsMenu,
       appStatus,
       showPWAInstallButton,
       showNotification,
-      showItemModal
+      showItemModal,
+      userData
     }
   }
 })
@@ -81,6 +93,28 @@ main:has(#welcomeMessage) {
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+main #list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+  gap: 16px;
+  overflow-y: scroll;
+  padding: 24px 0px 72px 0px;
 }
 
 #addItem {

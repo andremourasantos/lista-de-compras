@@ -6,7 +6,8 @@ const userInfo:userInfo = {
   imageURL:null,
   isAnonymous:false,
   isEmailVerified:false,
-  uid:null
+  uid:null,
+  userList:null
 }
 
 export default userInfo;
