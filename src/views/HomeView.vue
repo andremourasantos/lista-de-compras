@@ -8,7 +8,7 @@
     </template>
   </Header>
   <OptionsMenu v-if="showOptionsMenu">
-    <OptionsMenuItem v-if="showPWAInstallButton" :option-icon-name="'ph-download-simple'" :option-text="'Adicionar à tela inicial'" :option-aria-label="'Adicionar lista de compras à tela incial do dispositivo'" :option-redirect-to="'/conta/pwa'" />
+    <OptionsMenuItem v-if="showPWAInstallButton" :option-icon-name="'ph-download-simple'" :option-text="'Adicionar à tela inicial'" :option-aria-label="'Adicionar lista de compras à tela incial do dispositivo'" :option-redirect-to="'AccViewPwa'" />
   </OptionsMenu>
   <main>
     <WelcomeMessage id="welcomeMessage" v-if="appStatus !== 'Success'" :message-status="appStatus"/>
@@ -59,8 +59,13 @@ export default defineComponent({
       console.log('Recolhendo informações...');
       getUserGroceriesList()
         .then(() => {
-          userData.value.userList === null ? appStatus.value = 'Success & Empty' : appStatus.value = 'Success';
-          console.log('Sucesso!')
+          if(userData.value.userList === null || userData.value.userList.length === 0){
+            appStatus.value = 'Success & Empty';
+          } else {
+            appStatus.value = 'Success';
+          }
+
+          console.log('Sucesso!');
         })
         .catch((error) => {
           appStatus.value = 'Error';

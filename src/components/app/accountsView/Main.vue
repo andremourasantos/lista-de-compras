@@ -7,7 +7,7 @@
     <div>
       <h1>{{ nameToShow }}</h1>
       <p>{{ identificationToShow }}</p>
-      <p>Membro desde {{ memberSince }}</p>
+      <p v-if="memberSince !== ''">Membro desde {{ memberSince }}</p>
     </div>
   </section>
 
@@ -16,11 +16,11 @@
 
     <AccountLinkOptions :option-icon="'ph-sparkle'" :option-name="'Novidades'" :option-description="'Veja as últimas atualizações.'" :option-go="'AccViewAbout'"/>
 
-    <AccountLinkOptions :option-icon="'ph-link'" :option-name="'Vincular conta'" :option-description="'Crie uma conta permanente.'" :option-go="'AccViewAbout'"/>
+    <AccountLinkOptions v-if="showLinkAccountOption" :option-icon="'ph-link'" :option-name="'Vincular conta'" :option-description="'Crie uma conta permanente.'" :option-go="'AccViewAbout'"/>
 
-    <AccountLinkOptions :option-icon="'ph-envelope'" :option-name="'Verificar email'" :option-description="'Confirme sua conta.'" :option-go="'AccViewAbout'"/>
+    <AccountLinkOptions v-if="showVerifyEmailOption" :option-icon="'ph-envelope'" :option-name="'Verificar email'" :option-description="'Confirme sua conta.'" :option-go="'AccViewAbout'"/>
 
-    <AccountLinkOptions :option-icon="'ph-download-simple'" :option-name="'Adicionar à tela inicial'" :option-description="'Tenha acesso instantâneo.'" :option-go="'AccViewPwa'"/>
+    <AccountLinkOptions v-if="showPwaOption" :option-icon="'ph-download-simple'" :option-name="'Adicionar à tela inicial'" :option-description="'Tenha acesso instantâneo.'" :option-go="'AccViewPwa'"/>
 
     <AccountLinkOptions :option-icon="'ph-shield-check'" :option-name="'Política de privacidade'" :option-description="'Revise a política de privacidade do aplicativo.'" :option-go="'pp'"/>
 
@@ -31,6 +31,9 @@
 <script lang="ts">
 import { defineComponent, ref, Ref, inject } from 'vue';
 
+//Compsables
+import { getUserObject } from '@/composables/auth';
+
 //Components
 import AccountLinkOptions from './AccountLinkOptions.vue';
 
@@ -40,18 +43,20 @@ import userInfo from '@/store/user-info';
 export default defineComponent({
   components: {AccountLinkOptions},
   setup () {
+    //Related to AccountView.vue
     const headerTitle = inject('headerTitle') as Ref<string>;
     const goBackAction = inject('goBackAction') as Ref<'goBackToApp' | 'goBackToMainView'>;
 
     headerTitle.value = 'Conta';
     goBackAction.value = 'goBackToApp';
 
+    //Related to #userInfo
     const userData = ref<userInfo>(userInfo);
     const accountImageToShow = ref<'userProfilePicture' | 'userIcon' | 'anonymousIcon'>('userIcon');
     const userProfilePicture = userData.value.imageURL;
     const nameToShow = ref<string>('');
     const identificationToShow = ref<string>('');
-    const memberSince = ref<string>('01/01/2024');
+    const memberSince = ref<string>('');
 
     if(userData.value.isAnonymous){
       accountImageToShow.value = 'anonymousIcon';
@@ -64,16 +69,45 @@ export default defineComponent({
       nameToShow.value = userData.value.fullName as NonNullable<null>;
       identificationToShow.value = userData.value.email as NonNullable<null>;
     } else {
-      nameToShow.value = 'Nome não informado';
+      nameToShow.value = userData.value.fullName as NonNullable<null>;
       identificationToShow.value = userData.value.email as NonNullable<null>;
     }
+
+    getUserObject()
+      .then((res) => {
+        const date = new Intl.DateTimeFormat('pt-BR').format(new Date(res.metadata.creationTime as NonNullable<undefined>));
+        memberSince.value = date;
+      })
+      .catch(() => {
+        memberSince.value = '';
+      })
+
+    //Related to #accountOptions
+    const showPwaOption = ref<boolean>(false);
+    const showVerifyEmailOption = ref<boolean>(false);
+    const showLinkAccountOption = ref<boolean>(false);
+
+    if(!(window.matchMedia('(display-mode: standalone)').matches)){
+      showPwaOption.value = true;
+    };
+
+    if(!userData.value.isAnonymous && userData.value.isEmailVerified === false){
+      showVerifyEmailOption.value = true;
+    };
+
+    if(userData.value.isAnonymous === true){
+      showLinkAccountOption.value = true;
+    };
 
     return {
       accountImageToShow,
       userProfilePicture,
       nameToShow,
       identificationToShow,
-      memberSince
+      memberSince,
+      showPwaOption,
+      showVerifyEmailOption,
+      showLinkAccountOption
     }
   }
 })
@@ -108,7 +142,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: 16px;
   margin-top: 16px;
   overflow-y: scroll;
 }

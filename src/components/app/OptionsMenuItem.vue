@@ -31,7 +31,7 @@ export default defineComponent({
   setup (props) {
     const goToPage = ():void => {
       setTimeout(() => {
-        router.push(props.optionRedirectTo);
+        router.push({name: props.optionRedirectTo});
       }, 250);
     }
 

@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, connectAuthEmulator } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signInAnonymously, connectAuthEmulator, User } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -32,7 +32,90 @@ import userInfo from '@/store/user-info';
 
 const userData = ref<userInfo>(userInfo);
 
-export const getUserData = ():Promise<void> => {
+//Login & create account methods
+//Composables
+import { createUserDoc } from './data-base';
+
+export const loginWithGoogle = ():Promise<void> => {
+  const provider = new GoogleAuthProvider();
+  return new Promise((resolve, reject) => {
+    signInWithPopup(auth, provider)
+    .then(async (res) => {
+      await saveUserData();
+      createUserDoc(userData.value);
+      resolve();
+    })
+    .catch((error) => {
+      reject(error);
+    })
+  })
+};
+
+export const loginWithEmail = (email:string, password:string):Promise<void> => {
+  return new Promise((resolve, reject) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async () => {
+        await saveUserData();
+        createUserDoc(userData.value);
+        resolve();
+      })
+      .catch((error) => {
+        reject(error.code);
+      })
+  })
+};
+
+export const createAnAccount = (email:string, password:string, name:string):Promise<void> => {
+  return new Promise((resolve, reject) => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        updateProfile(res.user, {
+          displayName: name
+        })
+          .then(async() => {
+            await saveUserData();
+            createUserDoc(userData.value);
+            resolve();
+          })
+          .catch((error) => {reject(error)})
+      })
+      .catch((error) => {
+        reject(error.code);
+      })
+  })
+};
+
+export const loginAnonymously = ():Promise<void> => {
+  return new Promise((resolve, reject) => {
+    signInAnonymously(auth)
+      .then(async () => {
+        await saveUserData();
+        createUserDoc(userData.value);
+        resolve();
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      })
+  })
+}
+
+//Get user info
+export const getUserObject = ():Promise<User> => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+
+      if(user){
+        resolve(user);
+      } else {
+        reject();
+      }
+    })
+  })
+};
+
+export const saveUserData = ():Promise<void> => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if(user === null){return resolve()};

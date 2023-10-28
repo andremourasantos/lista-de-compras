@@ -1,11 +1,13 @@
 <template>
-  <div :class="{
+  <div class="item" :class="{
     editItem: elementStatus === 'Edit'
   }" @click="editItem($event, 'oi')">
-    <p>{{ itemObject.name }}</p>
+    <p class="itemName">{{ itemObject.name }}</p>
     <section class="tags">
-      <p>{{ itemObject.tags.quantity }} {{ itemObject.tags.quantityMetric }}</p>
-      <p>{{Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL', minimumFractionDigits:2}).format(itemObject.tags.price)}}</p>
+      <div>
+        <p>{{ itemObject.tags.quantity }} {{ itemObject.tags.quantityMetric }}</p>
+        <p>{{Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL', minimumFractionDigits:2}).format(itemObject.tags.price)}}</p>
+      </div>
     </section>
     <Button aria-label="Remover item" :disabled="buttonStatus === 'Loading'" :button-text="''" :button-type="'Accent'" :has-icon="'Yes-Right'" :icon-name="'ph-check-circle'" :icon-size="24" :icon-color="'#333333'" @click="deleteItem($event, itemObject.id)" />
   </div>
@@ -68,7 +70,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-div {
+div.item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,13 +84,14 @@ div {
   border-radius: 32px;
   cursor: pointer;
   border: 0px solid white;
+  overflow: hidden;
 }
 
 div.editItem {
   border: 2px solid var(--accent-color);
 }
 
-div > p:first-of-type {
+p.itemName {
   font-family: var(--font-header);
   font-weight: 600;
   font-size: 20px;
@@ -97,10 +100,22 @@ div > p:first-of-type {
 section.tags {
   display: flex;
   flex-wrap: nowrap;
-  overflow-x: scroll;
-  gap: 8px;
   align-items: center;
+  justify-content: center;
+  height: fit-content;
+  width: 100%;
+  overflow-x: auto;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+section.tags > div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: flex-start;
+  gap: 8px;
+  overflow-x: auto;
 }
 
 button {

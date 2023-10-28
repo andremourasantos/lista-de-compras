@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-import { getUserData } from '@/composables/auth';
+import { saveUserData } from '@/composables/auth';
 
 import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
@@ -22,14 +22,13 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/conta',
-    name: 'accountPage',
     component: Account,
     meta: {
       requiresAuth: true
     },
     children: [
       {
-        path: '',
+        path: '/conta',
         name: 'AccViewMain',
         component: AccViewMain
       },
@@ -88,7 +87,7 @@ router.beforeEach(async (to, from, next) => {
   if(to.meta.requiresAuth && !userAuth){
     next({name:'login'})
   } else{
-    getUserData();
+    saveUserData();
     next();
   }
 })

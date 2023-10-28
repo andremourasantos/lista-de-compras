@@ -6,13 +6,13 @@
 import { defineComponent, ref, onMounted } from 'vue';
 
 //Composables
-import { getUserData } from '@/composables/auth';
+import { saveUserData } from '@/composables/auth';
 
 export default defineComponent({
   setup () {
   
     onMounted(() => {
-      getUserData();
+      saveUserData();
     })
 
     return {}

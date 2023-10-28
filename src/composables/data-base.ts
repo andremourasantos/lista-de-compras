@@ -30,10 +30,14 @@ if(window.location.hostname === '127.0.0.1' || window.location.hostname === 'loc
 //Stores
 import userInfo from '@/store/user-info';
 
+//Composables
+import { getUserObject } from './auth';
+
 const userData = ref<userInfo>(userInfo);
 
 export const createUserDoc = async (userInfo:userInfo):Promise<void> => {
   const userAlreadyExists:boolean = (await getDoc(doc(db,`usuarios/${userInfo.uid}`))).exists();
+  const userCreationDate = (await getUserObject()).metadata.creationTime;
 
   return new Promise<void>((resolve, reject) => {
     if(userAlreadyExists){return resolve();}
@@ -42,7 +46,7 @@ export const createUserDoc = async (userInfo:userInfo):Promise<void> => {
       setDoc(doc(db, `usuarios/${userInfo.uid}`), {
         name: userInfo.fullName,
         email: userInfo.email,
-        createAt: serverTimestamp()
+        createAt: userCreationDate
       })
 
       resolve();
@@ -60,6 +64,8 @@ export const getUserGroceriesList = ():Promise<void> => {
 
     await getDocs(q)
       .then((list) => {
+        userData.value.userList = [];
+        
         list.forEach(item => {
           saveItemOnClient(item.data() as itemInfo, item.id)
         });

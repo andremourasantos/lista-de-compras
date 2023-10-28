@@ -26,14 +26,14 @@
     <img src="@/assets/ilustrations/conectar-conta.gif" height="256" width="256" alt="Desenho de duas pessoas conectando blocos de quebra-cabeça.">
     <h1>Conecte a sua conta!</h1>
     <p>Você pode conectar a sua conta do Google para criar uma conta do tipo permanente. Contas permanentes tem acesso a mais funções, como a sincronização entre dispositivos!</p>
-    <Button :button-text="'Concetar conta'" :has-icon="'No'" @click="loginWithGoogle"/>
+    <Button :button-text="'Concetar conta'" :has-icon="'No'" @click="googleLogin"/>
   </main>
 
   <main v-if="showView === 'EmailLogin'" class="loginView">
     <img src="@/assets/ilustrations/login.gif" height="256" width="256" alt="Desenho de uma pessoa conferindo uma longa lista de compras.">
     <h1>Faça login</h1>
     <p>Insira as informações da sua conta para entrar.</p>
-    <form class="emailCredentials" @submit.prevent="loginWithEmail">
+    <form class="emailCredentials" @submit.prevent="emailSingIn">
       <div>
         <label for="email">Email</label>
         <input id="email" type="email" placeholder="email@exemplo.com" v-model="userEmail">
@@ -43,17 +43,21 @@
         <input id="password" type="password" placeholder="********" v-model="userPassword">
       </div>
       <div>
-        <Button type="button" :button-text="'Criar conta'" :button-type="'Secondary'" :has-icon="'No'" @click="showView = 'EmailSingIn'"/>
+        <Button type="button" :button-text="'Criar conta'" :button-type="'Secondary'" :has-icon="'No'" @click="showView = 'EmailSingUp'"/>
         <Button :disabled="!userEmail || !userPassword" type="submit" :button-text="'Continuar'" :has-icon="'Yes-Right'" :icon-name="'ph-arrow-circle-right'" :icon-size="24" :icon-weight="'Regular'"/>
       </div>
     </form>
   </main>
 
-  <main v-if="showView === 'EmailSingIn'" class="loginView">
+  <main v-if="showView === 'EmailSingUp'" class="loginView">
     <img src="@/assets/ilustrations/criar-conta.gif" height="256" width="256" alt="Desenho de uma pessoa inserindo suas informações em um telefone.">
     <h1>Crie sua conta!</h1>
     <p>Insira um e-mail e senha para criar uma conta do tipo permanente. Contas permanentes tem acesso a mais funções, como a sincronização entre dispositivos!</p>
-    <form class="emailCredentials" @submit.prevent="createAnAccount">
+    <form class="emailCredentials" @submit.prevent="emailSingUp">
+      <div>
+        <label for="name">Nome</label>
+        <input id="name" type="text" placeholder="Seu nome..." v-model="userName">
+      </div>
       <div>
         <label for="email">Email</label>
         <input id="email" type="email" placeholder="email@exemplo.com" v-model="userEmail">
@@ -73,7 +77,7 @@
     <h1>Vamos começar!</h1>
     <p>Com uma conta anônima, você pode testar a aplicação por um tempo limitado antes de decidir criar uma conta permanente.</p>
     <p>Você pode não ter acesso a determinados recursos que requerem uma conta permanente, como a sincronização entre dispositivos.</p>
-    <Button :button-text="'Continuar'" :has-icon="'No'" @click="loginAnonymously"/>
+    <Button :button-text="'Continuar'" :has-icon="'No'" @click="anonymousLogin"/>
   </main>
   
   <footer v-if="showView === 'Main'">
@@ -83,12 +87,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import { getAuth, signInAnonymously, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import router from '@/router';
 
 //Composables
-import { getUserData } from '@/composables/auth';
-import { createUserDoc } from '@/composables/data-base';
+import { loginWithGoogle, loginWithEmail, createAnAccount, loginAnonymously } from '@/composables/auth';
 
 //Components
 import LoginButton from '@/components/login/LoginButton.vue';
@@ -96,15 +98,11 @@ import Button from '@/components/Button.vue';
 import Header from '@/components/Header.vue';
 import HeaderNoti from '@/components/HeaderNotification.vue';
 
-//Stores
-import userInfo from '@/store/user-info';
-
 export default defineComponent({
   components: {LoginButton, Button, Header, HeaderNoti},
   setup () {
-    const showView = ref<'Main' | 'ThirdyParties'  | 'EmailLogin' | 'EmailSingIn' | 'Anonymous'>('Main');
+    const showView = ref<'Main' | 'ThirdyParties'  | 'EmailLogin' | 'EmailSingUp' | 'Anonymous'>('Main');
     const headerTitle = ref<string>('');
-    const userData = ref<userInfo>(userInfo);
 
     watch(showView, (newValue) => {
       switch (newValue) {
@@ -116,7 +114,7 @@ export default defineComponent({
           headerTitle.value = 'Login por email';
           break;
 
-        case 'EmailSingIn':
+        case 'EmailSingUp':
           headerTitle.value = 'Crie sua conta';
           break;
 
@@ -130,14 +128,17 @@ export default defineComponent({
       }
 
       headerNotiText.value = '';
+      userName.value = '';
       userEmail.value = '';
       userPassword.value = '';
     });
 
-    //Login methods
-    const auth = getAuth();
+    //Login inputs refs 
+    const userName = ref<string>('');
     const userEmail = ref<string>('');
     const userPassword = ref<string>('');
+
+    //Notification refs
     const headerNotiIcon = ref<'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'>('ph-bell-ringing');
     const headerNotiText = ref<string>('');
 
@@ -147,14 +148,13 @@ export default defineComponent({
       }, type === 'Error' ? 5000 : 3000)
     };
 
-    const loginWithGoogle = ():void => {
-      const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider)
-        .then((results) => {
+    //TODO: WHERE TO PLACE THE CREATEUSERDOC FUNCITON?
+
+    const googleLogin = ():void => {
+      loginWithGoogle()
+        .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso, vinculação concluída!';
-          getUserData();
-          createUserDoc(userData.value);
 
           setTimeout(() => {
             router.push({name:'app'});
@@ -167,23 +167,20 @@ export default defineComponent({
         })
     };
 
-    const loginWithEmail = ():void => {
-      signInWithEmailAndPassword(auth, userEmail.value, userPassword.value)
+    const emailSingIn = ():void => {
+      loginWithEmail(userEmail.value, userPassword.value)
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso, suas informações conferem!';
-          getUserData();
 
           setTimeout(() => {
             router.push({name:'app'});
           }, 5000);
         })
         .catch((error) => {
-          console.log(error.code)
-          
           let msg:string;
 
-          switch (error.code) {
+          switch (error) {
             case 'auth/user-not-found':
               msg = 'O email informado não está cadastrado.';
               break;
@@ -194,6 +191,7 @@ export default defineComponent({
           
             default:
               msg = 'Ocorreu um erro, tente novamente mais tarde.';
+              console.error(error);
               break;
           }
 
@@ -203,22 +201,20 @@ export default defineComponent({
         })
     };
 
-    const createAnAccount = ():void => {
-      createUserWithEmailAndPassword(auth, userEmail.value, userPassword.value)
+    const emailSingUp = ():void => {
+      createAnAccount(userEmail.value, userPassword.value, userName.value.trim())
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso, sua conta foi criada!';
-          getUserData();
-          createUserDoc(userData.value);
 
           setTimeout(() => {
             router.push({name:'app'});
           }, 5000);
         })
-        .catch((error) => {          
+        .catch((error) => {
           let msg:string;
 
-          switch (error.code) {
+          switch (error) {
             case 'auth/email-already-in-use':
               msg = 'O email informado já está cadastrado.';
               break;
@@ -229,6 +225,7 @@ export default defineComponent({
           
             default:
               msg = 'Ocorreu um erro, tente novamente.';
+              console.error(error);
               break;
           }
 
@@ -238,20 +235,17 @@ export default defineComponent({
         })
     };
 
-    const loginAnonymously = ():void => {
-      signInAnonymously(auth)
+    const anonymousLogin = ():void => {
+      loginAnonymously()
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso! Entrando na sua conta anônima.';
-          getUserData();
-          createUserDoc(userData.value);
 
           setTimeout(() => {
             router.push({name:'app'});
           }, 5000);
         })
         .catch((error) => {
-          console.error(error);
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
           wipeHeaderNoti('Error');
@@ -261,14 +255,15 @@ export default defineComponent({
     return {
       showView,
       headerTitle,
+      userName,
       userEmail,
       userPassword,
       headerNotiIcon,
       headerNotiText,
-      loginWithGoogle,
-      createAnAccount,
-      loginWithEmail,
-      loginAnonymously
+      googleLogin,
+      emailSingIn,
+      emailSingUp,
+      anonymousLogin
     }
   }
 })
@@ -372,8 +367,8 @@ form.emailCredentials div:has(button) button {
   width: 100%;
 }
 
-form.emailCredentials input[type="email"],
-form.emailCredentials input[type="password"] {
+
+form.emailCredentials input[type="text"], form.emailCredentials input[type="email"], form.emailCredentials input[type="password"] {
   height: 42px;
   width: 100%;
   border-radius: 16px;

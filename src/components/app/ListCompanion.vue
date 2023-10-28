@@ -23,17 +23,28 @@ export default defineComponent({
   setup () {
     const userData = ref<userInfo>(userInfo);
     const totalCost = ref<string>('0');
-    const totalItems = ref<number>(0);
+    const totalItems = ref<string>('0');
     const styledItemsString = ref<'item' | 'itens'>('itens');
     const appStatus = inject('appStatus') as Ref<'Loading' | 'Success' | 'Success & Empty' | 'Error' | undefined>;
     
     watch(userData.value, (newValue) => {
       if(newValue.userList === null){return}
-      totalItems.value = newValue.userList.length;
+
+      if(newValue.userList.length > 99){
+        totalItems.value = '99+';
+      } else {
+        totalItems.value = newValue.userList.length.toString();
+      };
 
       newValue.userList.length === 1 ? styledItemsString.value = 'item' : styledItemsString.value = 'itens';
       const priceList = newValue.userList.map(obj => {return obj.tags.price}).reduce((acc, price) => acc + price, 0);
-      const styledNumber = new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 2}).format(priceList)
+      let styledNumber:string
+      if(priceList > 999){
+        styledNumber = '999,00+';
+      } else {
+        styledNumber = new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 2}).format(priceList)
+      }
+      
       totalCost.value = styledNumber;
     })
 
