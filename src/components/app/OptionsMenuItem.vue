@@ -1,7 +1,7 @@
 <template>
     <button :aria-label="optionAriaLabel" :title="optionAriaLabel" @click="goToPage">
       {{ optionText }}
-      <component :is="optionIconName" :size="24" color="#333333" weight="light"/>
+      <component :is="optionIconName" :size="29" color="#333333" weight="light"/>
     </button>
 </template>
 
@@ -51,11 +51,11 @@ export default defineComponent({
     justify-content: center;
     align-items: center;
     gap: 8px;
-    padding: 4px 8px;
+    padding: 8px;
     background: transparent;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 18px;
   }
 
   button:hover, button:active {

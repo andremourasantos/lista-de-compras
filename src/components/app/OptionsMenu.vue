@@ -45,7 +45,7 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 4px;
+    gap: 0px;
     background-color: var(--background);
     width: fit-content;
     top: 64px;

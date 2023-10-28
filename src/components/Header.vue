@@ -4,7 +4,8 @@
       <div v-if="headerType === 'Main'" class=primary>
         <img src="@/assets/logo.png" height="30" width="30" alt="Ícone de sacola com frutas e legumes.">
         <button id="userButton" aria-label="Abrir menu de opções" title="Abrir menu de opções" @click="emitToggleOptionsMenu">
-          <img src="@/assets/logo.png" height="30" width="30" alt="Foto de perfil.">
+          <img v-if="showProfilePic === true" :src="userProfilePic" height="40" width="40" alt="Foto de perfil do usuário.">
+          <ph-user-circle-gear v-if="showProfilePic === false" :size="40" color="#333333" weight="light" />
         </button>
       </div>
       <div v-if="headerType === 'Secondary'" class="secondary">
@@ -21,7 +22,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
+
+//Stores
+import userInfo from '@/store/user-info';
 
 export default defineComponent({
   props: {
@@ -40,6 +44,15 @@ export default defineComponent({
   },
   emits: ['goBack', 'toggleOptionsMenu'],
   setup (props, {emit}) {
+    const userData = ref<userInfo>(userInfo);
+    const showProfilePic = ref<boolean>(false);
+    const userProfilePic = ref<string>('');
+
+    if(userData.value.imageURL !== null){
+      showProfilePic.value = true;
+      userProfilePic.value = userData.value.imageURL;
+    }
+
     const emitGoBack = ():void => {
       emit('goBack');
     }
@@ -49,6 +62,8 @@ export default defineComponent({
     }
 
     return {
+      showProfilePic,
+      userProfilePic,
       emitGoBack,
       emitToggleOptionsMenu
     }
@@ -72,12 +87,14 @@ header > div.primary {
 }
 
 #userButton {
+  height: 40px;
+  width: 40px;
   border: none;
   background: transparent;
 }
 
 #userButton img {
-  border-radius: 8px;
+  border-radius: 16px;
 }
 
 header > div.secondary {
