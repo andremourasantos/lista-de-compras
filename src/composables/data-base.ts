@@ -67,7 +67,7 @@ export const getUserGroceriesList = ():Promise<void> => {
         console.log(userData.value.userList)
         resolve();
       })
-      .catch((error) => {throw new Error(error);})
+      .catch((error) => {reject(error)})
   })
 }
 

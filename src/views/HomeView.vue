@@ -73,7 +73,9 @@ export default defineComponent({
     })
 
     watch(userData.value, (newValue) => {
-      newValue.userList !== null ? appStatus.value = 'Success' : '';
+      if(newValue.userList === null){return} else if (newValue.userList.length > 0){appStatus.value = 'Success'} else {
+        appStatus.value = 'Success & Empty';
+      };
     })
 
     const addItemAction = ():void => {
@@ -95,6 +97,7 @@ export default defineComponent({
 
     provide('itemId', itemIdForEditAction);
     provide('modalStatus', showItemModal);
+    provide('appStatus', appStatus);
 
     return {
       showOptionsMenu,

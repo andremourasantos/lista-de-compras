@@ -33,6 +33,7 @@ export default defineComponent({
   --font-paragraph-color: #333333;
   --font-footer-color: #707070;
   --font-loading: 'Flow Circular', sans-serif;
+  --font-loading-color: #808080;
   --font-size: 16px;
 
   /*COLORS*/

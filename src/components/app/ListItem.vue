@@ -5,7 +5,7 @@
     <p>{{ itemObject.name }}</p>
     <section class="tags">
       <p>{{ itemObject.tags.quantity }} {{ itemObject.tags.quantityMetric }}</p>
-      <p>R$ {{itemObject.tags.price}}</p>
+      <p>{{Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL', minimumFractionDigits:2}).format(itemObject.tags.price)}}</p>
     </section>
     <Button aria-label="Remover item" :disabled="buttonStatus === 'Loading'" :button-text="''" :button-type="'Accent'" :has-icon="'Yes-Right'" :icon-name="'ph-check-circle'" :icon-size="24" :icon-color="'#333333'" @click="deleteItem($event, itemObject.id)" />
   </div>

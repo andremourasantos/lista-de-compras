@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, connectAuthEmulator } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -13,11 +13,23 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+
+// if(window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'){
+//   console.log('Conenctando ao Auth local...')
+//   try {
+//     connectAuthEmulator(auth,'http://127.0.0.1:9090');
+//     console.log('Conexão bem-sucedida (auth).');
+//   } catch (error) {
+//     console.log('Conexão mal-sucedida (auth).', error);
+//   }
+// } else {
+//   console.log('Conectando ao Auth da produção.');
+// }
 
 //Stores
 import userInfo from '@/store/user-info';
 
-const auth = getAuth();
 const userData = ref<userInfo>(userInfo);
 
 export const getUserData = ():Promise<void> => {

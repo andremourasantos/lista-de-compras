@@ -8,13 +8,13 @@ module.exports = defineConfig({
     name: 'Lista de compras',
     start_url: '/',
     display: 'standalone',
-    themeColor: '#4DBA87',
+    themeColor: '#FFFFFF',
     msTileColor: '#000000',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
-    workboxPluginMode: 'InjectManifest',
+    workboxPluginMode: 'GenerateSW',
     workboxOptions: {
-      swSrc: 'dev/sw.js',
+      
     }
   }
 })

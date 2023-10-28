@@ -14,7 +14,7 @@
         <div>
           <label for="quantidade">Quantidade:</label>
           <div class="multiInputs">
-            <input required id="quantidade" inputmode="numeric" type="number" min="1" max="99" step="1" placeholder="Ex.: 6" v-model="itemQuantity">
+            <input required id="quantidade" inputmode="numeric" type="number" min="1" max="9999" step="1" placeholder="Ex.: 6" v-model="itemQuantity">
             <select required aria-label="Selecionar unidade" v-model="itemQuantityMetric">
               <option value="un" title="Unidade">Un.</option>
               <option value="kg" title="Quilograma">Kg</option>
