@@ -60,7 +60,7 @@ export const getUserGroceriesList = ():Promise<void> => {
 
     await getDocs(q)
       .then((list) => {
-        list.forEach(item => {          
+        list.forEach(item => {
           saveItemOnClient(item.data() as itemInfo, item.id)
         });
 

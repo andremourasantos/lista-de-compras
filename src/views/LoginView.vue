@@ -157,7 +157,7 @@ export default defineComponent({
           createUserDoc(userData.value);
 
           setTimeout(() => {
-            router.push({name:'home'});
+            router.push({name:'app'});
           }, 5000);
         })
         .catch((error) => {
@@ -175,7 +175,7 @@ export default defineComponent({
           getUserData();
 
           setTimeout(() => {
-            router.push({name:'home'});
+            router.push({name:'app'});
           }, 5000);
         })
         .catch((error) => {
@@ -212,7 +212,7 @@ export default defineComponent({
           createUserDoc(userData.value);
 
           setTimeout(() => {
-            router.push({name:'home'});
+            router.push({name:'app'});
           }, 5000);
         })
         .catch((error) => {          
@@ -247,7 +247,7 @@ export default defineComponent({
           createUserDoc(userData.value);
 
           setTimeout(() => {
-            router.push({name:'home'});
+            router.push({name:'app'});
           }, 5000);
         })
         .catch((error) => {
