@@ -1,17 +1,18 @@
 <template>
   <article>
-    <img src="@/assets/ilustrations/pwa.gif" height="256" width="256">
+    <img src="@/assets/ilustrations/verificar-email.gif" height="256" width="256">
     <div id="content">
-      <h2>Sua lista sempre com você</h2>
-      <p>Você pode adicionar a sua lista de compras à tela inicial do seu dispositivo facilmente, ganhando acesso instantâneo ao aplicativo, sem precisar digitar a URL ou abrir o navegador.</p>
-      <p>Além de facilitar o acesso ao aplicativo, você pode colocá-lo em um local especial para sempre lembrar de conferir a sua lista antes de sair para o mercado!</p>
+      <h2>Verificação de email</h2>
+      <p>Para contas criadas com email e senha é necessário confirmar o endereço de email fornecido.</p>
+      <p>Após criar a sua conta, um email foi automaticamente enviado para a sua caixa de entrada — mas verifique também o spam — confira-o e siga as intruções fornecidas para confirmar a sua conta.</p>
+      <p>Caso não tenha conseguido encontrar o email, você podesolicitar um novo envio pelo botão abaixo.</p>
     </div>
-    <Button :button-text="'Adicionar à tela inicial'" :has-icon="'No'" @click="handleInstallation"/>
+    <Button :button-text="'Reenviar email de autenticação'" :has-icon="'No'" @click="handleButtonClick"/>
   </article>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, inject, onMounted } from 'vue';
+import { defineComponent, ref, Ref, inject } from 'vue';
 
 //Components
 import Button from '@/components/Button.vue';
@@ -23,15 +24,15 @@ export default defineComponent({
     const headerTitle = inject('headerTitle') as Ref<string>;
     const goBackAction = inject('goBackAction') as Ref<'goBackToApp' | 'goBackToMainView'>;
 
-    headerTitle.value = 'Adiconar à tela inicial';
+    headerTitle.value = 'Verificar email';
     goBackAction.value = 'goBackToMainView';
 
     //Notification related
     const notificationIcon = inject('notificationIcon') as Ref<notificationHeaderIcon>;
     const notificationText = inject('notificationText') as Ref<string>;
 
-    //PWA installation related
-    const handleInstallation = ():void => {
+
+    const handleButtonClick = ():void => {
       notificationIcon.value = 'ph-warning-circle';
       notificationText.value = 'Funcionalidade não operacional no momento.';
 
@@ -42,12 +43,12 @@ export default defineComponent({
     }
 
     return {
-      handleInstallation
+      handleButtonClick
     }
   }
 })
 </script>
 
 <style scoped>
-  
+
 </style>

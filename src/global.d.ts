@@ -11,6 +11,8 @@ declare global {
     userList:itemInfoClient[] | null
   }
 
+  type notificationHeaderIcon = 'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'
+
   type quantityMetrics = 'un' | 'kg' | 'g' | 'l' | 'ml' | 'oz'
 
   type typeItemTags = {

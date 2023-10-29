@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signInAnonymously, connectAuthEmulator, User } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signInAnonymously, signOut, connectAuthEmulator, User } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -98,6 +98,21 @@ export const loginAnonymously = ():Promise<void> => {
         reject(error);
       })
   })
+};
+
+//SingOut
+export const singUserOut = ():void => {
+  userData.value = {
+    fullName:null,
+    email:null,
+    imageURL:null,
+    isAnonymous:false,
+    isEmailVerified:null,
+    uid:null,
+    userList:null
+  };
+  
+  signOut(auth);
 }
 
 //Get user info

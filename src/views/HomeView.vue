@@ -1,7 +1,7 @@
 <template>
   <Header :header-type="'Main'" @toggle-options-menu="showOptionsMenu = !showOptionsMenu">
     <template #notification>
-      <HeaderNotification v-if="showNotification" :notification-icon="'ph-warning-circle'" :notification-text="'Verifique sua conta, cheque seu email!'" />
+      <HeaderNotification v-if="showNotification" :notification-icon="notificationIcon" :notification-text="notificationText" />
     </template>
     <template #listCompanion>
       <ListCompanion />
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch, provide, inject } from 'vue';
+import { defineComponent, ref, onMounted, watch, provide } from 'vue';
 
 //Composables
 import { isUserEmailVerified, isUserAnonymous } from '@/composables/auth';
@@ -49,11 +49,15 @@ export default defineComponent({
     const showOptionsMenu = ref<boolean>(false);
     const appStatus = ref<'Loading' | 'Success' | 'Success & Empty' | 'Error'>('Loading');
     const showPWAInstallButton = ref<boolean>(false);
-    const showNotification = ref<boolean>(false);
     const showItemModal = ref<boolean>(false);
     const modalAction = ref<'AddItem' | 'EditItem'>('AddItem');
     const itemIdForEditAction = ref<string>('');
     const userData = ref<userInfo>(userInfo);
+
+    //Notification related
+    const showNotification = ref<boolean>(false);
+    const notificationIcon = ref<notificationHeaderIcon>('ph-bell-ringing');
+    const notificationText = ref<string>('');
 
     onMounted(() => {
       console.log('Recolhendo informações...');
@@ -75,6 +79,18 @@ export default defineComponent({
       if(!(window.matchMedia('(display-mode: standalone)').matches)){
         showPWAInstallButton.value = true;
       };
+
+      //Notification check chain
+      if(isUserAnonymous()){
+        showNotification.value = true;
+        notificationIcon.value = 'ph-warning-circle';
+        notificationText.value = 'Você está utilizando uma conta anônima.';
+
+      } else if(!isUserEmailVerified()){
+        showNotification.value = true;
+        notificationIcon.value = 'ph-warning-circle';
+        notificationText.value = 'Verifique sua conta, cheque seu email!';
+      }
     })
 
     watch(userData.value, (newValue) => {
@@ -109,6 +125,8 @@ export default defineComponent({
       appStatus,
       showPWAInstallButton,
       showNotification,
+      notificationIcon,
+      notificationText,
       showItemModal,
       modalAction,
       userData,

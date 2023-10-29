@@ -46,6 +46,8 @@ export const createUserDoc = async (userInfo:userInfo):Promise<void> => {
       setDoc(doc(db, `usuarios/${userInfo.uid}`), {
         name: userInfo.fullName,
         email: userInfo.email,
+        isEmailVerified: userInfo.isEmailVerified,
+        isAnonymous: userInfo.isAnonymous,
         createAt: userCreationDate
       })
 

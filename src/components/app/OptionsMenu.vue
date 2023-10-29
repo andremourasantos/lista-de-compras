@@ -2,13 +2,15 @@
   <dialog ref="optionsMenuEl">
     <OptionsMenuItems :option-icon-name="'ph-user-circle'" :option-text="'Conta'" :option-aria-label="'Ir para conta do usuário'" :option-redirect-to="'AccViewMain'"/>
     <slot></slot>
-    <OptionsMenuItems :option-icon-name="'ph-x'" :option-text="'Sair'" :option-aria-label="'Sair da conta e volta à tela de login'" :option-redirect-to="'login'" @click="singUserOut"/>
+    <OptionsMenuItems :option-icon-name="'ph-x'" :option-text="'Sair'" :option-aria-label="'Sair da conta e volta à tela de login'" :option-redirect-to="'login'" @click="handleSingOut"/>
   </dialog>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
-import { getAuth, signOut } from 'firebase/auth';
+
+//Composables
+import { singUserOut } from '@/composables/auth';
 
 //Components
 import OptionsMenuItems from './OptionsMenuItem.vue';
@@ -16,7 +18,6 @@ import OptionsMenuItems from './OptionsMenuItem.vue';
 export default defineComponent({
   components: {OptionsMenuItems},
   setup () {
-    const auth = getAuth();
     const optionsMenuEl = ref<HTMLDialogElement | null>(null);
 
     onMounted(() => {
@@ -26,13 +27,13 @@ export default defineComponent({
       el.show();
     });
 
-    const singUserOut = ():void => {
-      signOut(auth);
+    const handleSingOut = ():void => {
+      singUserOut();
     }
 
     return {
       optionsMenuEl,
-      singUserOut
+      handleSingOut
     }
   }
 })

@@ -14,11 +14,11 @@
   <section id="accountOptions">
     <AccountLinkOptions :option-icon="'ph-info'" :option-name="'Sobre'" :option-description="'Sobre o aplicativo.'" :option-go="'AccViewAbout'"/>
 
-    <AccountLinkOptions :option-icon="'ph-sparkle'" :option-name="'Novidades'" :option-description="'Veja as últimas atualizações.'" :option-go="'AccViewAbout'"/>
+    <AccountLinkOptions v-if="false" :option-icon="'ph-sparkle'" :option-name="'Novidades'" :option-description="'Veja as últimas atualizações.'" :option-go="'AccViewAbout'"/>
 
     <AccountLinkOptions v-if="showLinkAccountOption" :option-icon="'ph-link'" :option-name="'Vincular conta'" :option-description="'Crie uma conta permanente.'" :option-go="'AccViewAbout'"/>
 
-    <AccountLinkOptions v-if="showVerifyEmailOption" :option-icon="'ph-envelope'" :option-name="'Verificar email'" :option-description="'Confirme sua conta.'" :option-go="'AccViewAbout'"/>
+    <AccountLinkOptions v-if="showVerifyEmailOption" :option-icon="'ph-envelope'" :option-name="'Verificar email'" :option-description="'Confirme sua conta.'" :option-go="'AccViewVerifyEmail'"/>
 
     <AccountLinkOptions v-if="showPwaOption" :option-icon="'ph-download-simple'" :option-name="'Adicionar à tela inicial'" :option-description="'Tenha acesso instantâneo.'" :option-go="'AccViewPwa'"/>
 

@@ -1,7 +1,7 @@
 <template>
   <Header :header-type="'Secondary'" :header-title="headerTitle" @go-back="handleGoBackAction">
     <template #notification>
-      <HeaderNotification v-if="false" :notification-icon="'ph-warning-circle'" :notification-text="'Verifique sua conta, cheque seu email!'" />
+      <HeaderNotification v-if="showNotification" :notification-icon="notificationIcon" :notification-text="notificationText" />
     </template>
   </Header>
   <main id="content">
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, provide } from 'vue';
+import { defineComponent, ref, provide, watch } from 'vue';
 import router from '@/router';
 
 //Components
@@ -20,6 +20,7 @@ import HeaderNotification from '@/components/HeaderNotification.vue';
 export default defineComponent({
   components: {Header, HeaderNotification},
   setup () {
+    //AccountView related
     const headerTitle = ref<string>('Conta');
     const goBackAction = ref<'goBackToApp' | 'goBackToMainView'>('goBackToApp');
     provide('goBackAction', goBackAction);
@@ -33,9 +34,28 @@ export default defineComponent({
       }
     }
 
+    //Notification related
+    const showNotification = ref<boolean>(false);
+    const notificationIcon = ref<notificationHeaderIcon>('ph-bell-ringing');
+    const notificationText = ref<string>('');
+
+    provide('notificationIcon', notificationIcon);
+    provide('notificationText', notificationText);
+
+    watch(notificationText, (newValue) => {
+      if(newValue !== ''){
+        showNotification.value = true;
+      } else {
+        showNotification.value = false;
+      }
+    })
+
     return {
       headerTitle,
-      handleGoBackAction
+      handleGoBackAction,
+      showNotification,
+      notificationIcon,
+      notificationText
     }
   }
 })
@@ -45,5 +65,37 @@ export default defineComponent({
   #content {
     height: 100%;
     overflow-y: scroll;
+  }
+
+  main >>> article:has(div#content) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 32px;
+    margin-top: 16px;
+    padding: 0px 32px 32px 32px;
+  }
+
+  main >>> article > div#content:has(h2, p) {
+    text-align: center;
+  }
+
+  main >>> article > div#content > h2 {
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  main >>> article > div#content > p {
+    margin-bottom: 8px;
+    text-align: justify;
+  }
+
+  main >>> article > div#content > p:last-of-type {
+    margin-bottom: 0px;
+  }
+
+  main >>> article > button {
+    width: 100%;
   }
 </style>

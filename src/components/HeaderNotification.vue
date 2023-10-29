@@ -15,7 +15,7 @@ export default defineComponent({
   props: {
     notificationIcon: {
       required: true,
-      type: String as () => 'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'
+      type: String as () => notificationHeaderIcon
     },
     notificationText: {
       required: true,

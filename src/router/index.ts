@@ -8,6 +8,7 @@ import Login from '../views/LoginView.vue';
 import Account from '../views/AccountView.vue';
   import AccViewMain from '../components/app/accountsView/Main.vue';
   import AccViewAbout from '../components/app/accountsView/About.vue';
+  import AccViewVerifyEmail from '../components/app/accountsView/VerifyEmail.vue';
   import AccViewPwa from '../components/app/accountsView/InstallPwa.vue';
   import AccViewDelete from '../components/app/accountsView/DeleteAccount.vue';
 
@@ -36,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'sobre',
         name: 'AccViewAbout',
         component: AccViewAbout
+      },
+      {
+        path: 'verificar-email',
+        name: 'AccViewVerifyEmail',
+        component: AccViewVerifyEmail
       },
       {
         path: 'pwa',
@@ -69,7 +75,10 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return {top:0}
+  }
 })
 
 const isUserAuthenticated = (): Promise<boolean> => {
