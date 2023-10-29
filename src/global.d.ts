@@ -11,6 +11,15 @@ declare global {
     userList:itemInfoClient[] | null
   }
 
+  type userInfoOnCloud = {
+    name:string,
+    email:string,
+    isEmailVerified:boolean,
+    isAnonymous:boolean,
+    createAt:Date,
+    emailVerificationSent:Date
+  }
+
   type notificationHeaderIcon = 'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'
 
   type quantityMetrics = 'un' | 'kg' | 'g' | 'l' | 'ml' | 'oz'

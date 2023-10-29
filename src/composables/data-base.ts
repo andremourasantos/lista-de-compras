@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { initializeApp } from "firebase/app";
-import { getFirestore, connectFirestoreEmulator, collection, query, orderBy, getDocs, getDoc, addDoc, setDoc, doc, serverTimestamp, deleteDoc, updateDoc } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, collection, query, orderBy, getDocs, getDoc, addDoc, setDoc, doc, serverTimestamp, deleteDoc, updateDoc, DocumentData } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -146,4 +146,34 @@ const editDocFromCliente = (itemId:string, changesObj:updateDocOnCloud) => {
   userData.value.userList[itemIndex].tags.quantity = changesObj.tags.quantity;
   userData.value.userList[itemIndex].tags.quantityMetric = changesObj.tags.quantityMetric;
   userData.value.userList[itemIndex].tags.price = changesObj.tags.price;
+}
+
+export const setCustomInfoOnUserCollection = (userId:string, infoName:string, infoValue:any):Promise<void> => {
+  return new Promise((resolve, reject) => {
+    setDoc(doc(db, `usuarios`, userId), {
+      [infoName]: infoValue
+    })
+      .then(() => {
+        console.log('Infomação personalizada adicionada com sucesso!')
+        resolve();
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error)
+      })
+  })
+}
+
+export const getCustomInfoOnUserCollection = (userId:string, infoName:string):Promise<any> => {
+  return new Promise((resolve, reject) => {
+    getDoc(doc(db, 'usuarios', userId))
+      .then((res) => {
+        const data = res.data() as DocumentData;
+        resolve(data[infoName]);
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      })
+  })
 }

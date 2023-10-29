@@ -34,11 +34,6 @@ export default defineComponent({
     const handleInstallation = ():void => {
       notificationIcon.value = 'ph-warning-circle';
       notificationText.value = 'Funcionalidade não operacional no momento.';
-
-      //Wipe notification
-      setTimeout(() => {
-        notificationText.value = '';
-      }, 5000);
     }
 
     return {

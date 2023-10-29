@@ -29,10 +29,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, inject } from 'vue';
+import { defineComponent, ref, Ref, inject, onBeforeUnmount } from 'vue';
 
 //Compsables
 import { getUserObject } from '@/composables/auth';
+
+//Composables
+import { isUserAnonymous, isUserEmailVerified } from '@/composables/auth';
 
 //Components
 import AccountLinkOptions from './AccountLinkOptions.vue';
@@ -49,6 +52,23 @@ export default defineComponent({
 
     headerTitle.value = 'Conta';
     goBackAction.value = 'goBackToApp';
+
+    //Notification related
+    const notificationIcon = inject('notificationIcon') as Ref<notificationHeaderIcon>;
+    const notificationText = inject('notificationText') as Ref<string>;
+
+    //Notification check chain
+    if(isUserAnonymous()){
+      notificationIcon.value = 'ph-warning-circle';
+      notificationText.value = 'Você está utilizando uma conta anônima.';
+    } else if(!isUserEmailVerified()){
+      notificationIcon.value = 'ph-warning-circle';
+      notificationText.value = 'Verifique sua conta, cheque seu email!';
+    }
+
+    // onBeforeUnmount(() => {
+    //   notificationText.value = '';
+    // })
 
     //Related to #userInfo
     const userData = ref<userInfo>(userInfo);

@@ -16,6 +16,7 @@ import router from '@/router';
 //Components
 import Header from '@/components/Header.vue';
 import HeaderNotification from '@/components/HeaderNotification.vue';
+import { onBeforeRouteUpdate } from 'vue-router';
 
 export default defineComponent({
   components: {Header, HeaderNotification},
@@ -39,8 +40,17 @@ export default defineComponent({
     const notificationIcon = ref<notificationHeaderIcon>('ph-bell-ringing');
     const notificationText = ref<string>('');
 
+    const wipeNotification = (pageHeader:string, timeDelay:string):void => {
+      setTimeout(() => {
+        if(headerTitle.value === 'Verificar email'){
+          notificationText.value = '';
+        } else {return}
+      }, 5000);
+    }
+
     provide('notificationIcon', notificationIcon);
     provide('notificationText', notificationText);
+    provide('notificationWipeFunction', wipeNotification);
 
     watch(notificationText, (newValue) => {
       if(newValue !== ''){
@@ -48,6 +58,10 @@ export default defineComponent({
       } else {
         showNotification.value = false;
       }
+    })
+
+    onBeforeRouteUpdate(() => {
+      notificationText.value = '';
     })
 
     return {

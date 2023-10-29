@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signInAnonymously, signOut, connectAuthEmulator, User } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInAnonymously, signOut, connectAuthEmulator, User } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -34,7 +34,7 @@ const userData = ref<userInfo>(userInfo);
 
 //Login & create account methods
 //Composables
-import { createUserDoc } from './data-base';
+import { createUserDoc, getCustomInfoOnUserCollection } from './data-base';
 
 export const loginWithGoogle = ():Promise<void> => {
   const provider = new GoogleAuthProvider();
@@ -69,6 +69,7 @@ export const createAnAccount = (email:string, password:string, name:string):Prom
   return new Promise((resolve, reject) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((res) => {
+        sendEmailVerification(res.user);
         updateProfile(res.user, {
           displayName: name
         })
@@ -81,6 +82,25 @@ export const createAnAccount = (email:string, password:string, name:string):Prom
       })
       .catch((error) => {
         reject(error.code);
+      })
+  })
+};
+
+export const sendEmailToVerifyAccount = async ():Promise<'already-verified' | 'sended-successfully' | Error> => {
+  const currentUser = auth.currentUser as NonNullable<null>;
+  const userInfo = await getCustomInfoOnUserCollection(userData.value.uid as NonNullable<null>, 'createAt');
+  console.log(userInfo);
+
+  return new Promise((resolve, reject) => {
+    if(auth.currentUser?.emailVerified === true){return resolve('already-verified')};
+
+    sendEmailVerification(currentUser)
+      .then(() => {
+        resolve('sended-successfully');
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
       })
   })
 };
