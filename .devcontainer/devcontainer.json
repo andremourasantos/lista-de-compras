@@ -1,14 +1,18 @@
 {
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   "features": {
-    "ghcr.io/devcontainers-contrib/features/vue-cli:2": {
-      "startCommand": "npm run serve"
-    },
-    "ghcr.io/devcontainers-contrib/features/firebase-cli:2": {
-      "startCommand": "firebase emulators:start"
-    }
+    "ghcr.io/devcontainers-contrib/features/vue-cli:2": {},
+    "ghcr.io/devcontainers-contrib/features/firebase-cli:2": {}
   },
-  "postCreateCommand": "npm install && firebase login && firebase init emulators",
-  "remoteUser": "vscode",
-  "shutdownAction": "stopContainer"
+  "postCreateCommand": "npm install",
+"shutdownAction": "stopContainer",
+"customizations": {
+	"vscode": {
+		"extensions": [
+			"Vue.volar",
+			"sdras.vue-vscode-snippets",
+			"mattpocock.ts-error-translator"
+		]
+	}
+}
 }

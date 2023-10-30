@@ -32,17 +32,31 @@ import userInfo from '@/store/user-info';
 
 const userData = ref<userInfo>(userInfo);
 
+export const getUserObject = ():Promise<User | null> => {
+  return new Promise((resolve, reject) => {
+    if(auth.currentUser === null){reject} else{resolve(auth.currentUser)}
+  })
+}
+
 //Login & create account methods
 //Composables
-import { createUserDoc, getCustomInfoOnUserCollection } from './data-base';
+import { createUserDoc, setCustomInfoOnUserCollection, getCustomInfoOnUserCollection } from './data-base';
+import { Timestamp } from 'firebase/firestore';
 
 export const loginWithGoogle = ():Promise<void> => {
   const provider = new GoogleAuthProvider();
   return new Promise((resolve, reject) => {
     signInWithPopup(auth, provider)
     .then(async (res) => {
-      await saveUserData();
-      createUserDoc(userData.value);
+      await createUserDoc({
+        fullName: res.user.displayName,
+        email: res.user.email,
+        imageURL: res.user.photoURL,
+        isAnonymous: res.user.isAnonymous,
+        isEmailVerified: res.user.emailVerified,
+        uid: res.user.uid,
+        userList: null
+      });
       resolve();
     })
     .catch((error) => {
@@ -54,9 +68,16 @@ export const loginWithGoogle = ():Promise<void> => {
 export const loginWithEmail = (email:string, password:string):Promise<void> => {
   return new Promise((resolve, reject) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then(async () => {
-        await saveUserData();
-        createUserDoc(userData.value);
+      .then(async (res) => {
+        await createUserDoc({
+          fullName: res.user.displayName,
+          email: res.user.email,
+          imageURL: res.user.photoURL,
+          isAnonymous: res.user.isAnonymous,
+          isEmailVerified: res.user.emailVerified,
+          uid: res.user.uid,
+          userList: null
+        });
         resolve();
       })
       .catch((error) => {
@@ -69,13 +90,24 @@ export const createAnAccount = (email:string, password:string, name:string):Prom
   return new Promise((resolve, reject) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((res) => {
-        sendEmailVerification(res.user);
         updateProfile(res.user, {
           displayName: name
         })
           .then(async() => {
-            await saveUserData();
-            createUserDoc(userData.value);
+            userData.value.fullName = name;
+
+            await createUserDoc({
+              fullName: res.user.displayName,
+              email: res.user.email,
+              imageURL: res.user.photoURL,
+              isAnonymous: res.user.isAnonymous,
+              isEmailVerified: res.user.emailVerified,
+              uid: res.user.uid,
+              userList: null
+            });
+
+            sendEmailVerification(res.user);
+            setCustomInfoOnUserCollection(res.user.uid, 'lastEmailVerificationSent', new Date());
             resolve();
           })
           .catch((error) => {reject(error)})
@@ -86,16 +118,21 @@ export const createAnAccount = (email:string, password:string, name:string):Prom
   })
 };
 
-export const sendEmailToVerifyAccount = async ():Promise<'already-verified' | 'sended-successfully' | Error> => {
-  const currentUser = auth.currentUser as NonNullable<null>;
-  const userInfo = await getCustomInfoOnUserCollection(userData.value.uid as NonNullable<null>, 'createAt');
-  console.log(userInfo);
+export const sendEmailToVerifyAccount = async ():Promise<'wait-timeout' | 'already-verified' | 'sended-successfully' | Error> => {
+  const currentUser = auth.currentUser as NonNullable<User>;
+  const lastEmailSent = await getCustomInfoOnUserCollection(userData.value.uid as NonNullable<null>, 'lastEmailVerificationSent') as Timestamp;
+
+  //Timeout of 5 minutes
+  if((new Date().getTime() - lastEmailSent.toMillis()) / (1000 * 60) < 5){
+    return ('wait-timeout');
+  }
 
   return new Promise((resolve, reject) => {
-    if(auth.currentUser?.emailVerified === true){return resolve('already-verified')};
+    if(currentUser.emailVerified === true){return resolve('already-verified')};
 
     sendEmailVerification(currentUser)
       .then(() => {
+        setCustomInfoOnUserCollection(currentUser.uid, 'lastEmailVerificationSent', new Date());
         resolve('sended-successfully');
       })
       .catch((error) => {
@@ -108,9 +145,16 @@ export const sendEmailToVerifyAccount = async ():Promise<'already-verified' | 's
 export const loginAnonymously = ():Promise<void> => {
   return new Promise((resolve, reject) => {
     signInAnonymously(auth)
-      .then(async () => {
-        await saveUserData();
-        createUserDoc(userData.value);
+      .then(async (res) => {
+        await createUserDoc({
+          fullName: res.user.displayName,
+          email: res.user.email,
+          imageURL: res.user.photoURL,
+          isAnonymous: res.user.isAnonymous,
+          isEmailVerified: res.user.emailVerified,
+          uid: res.user.uid,
+          userList: null
+        });
         resolve();
       })
       .catch((error) => {
@@ -136,41 +180,10 @@ export const singUserOut = ():void => {
 }
 
 //Get user info
-export const getUserObject = ():Promise<User> => {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      unsubscribe();
-
-      if(user){
-        resolve(user);
-      } else {
-        reject();
-      }
-    })
-  })
+export const isUserEmailVerified = ():boolean | undefined => {
+  return auth.currentUser?.emailVerified;
 };
 
-export const saveUserData = ():Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if(user === null){return resolve()};
-
-        unsubscribe();
-        userData.value.fullName = user.displayName;
-        userData.value.email = user.email;
-        userData.value.imageURL = user.photoURL;
-        userData.value.isAnonymous = user.isAnonymous;
-        userData.value.isEmailVerified = user.emailVerified;
-        userData.value.uid = user.uid;
-        return resolve();
-    })
-  })
-};
-
-export const isUserEmailVerified = ():boolean | null => {
-  return userData.value.isEmailVerified
-};
-
-export const isUserAnonymous = ():boolean => {
-  return userData.value.isAnonymous;
+export const isUserAnonymous = ():boolean | undefined => {
+  return auth.currentUser?.isAnonymous;
 };

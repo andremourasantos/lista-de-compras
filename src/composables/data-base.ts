@@ -26,23 +26,25 @@ if(window.location.hostname === '127.0.0.1' || window.location.hostname === 'loc
 } else {
   console.log('Conectando no banco de dados da produção.');
 }
-
-//Stores
-import userInfo from '@/store/user-info';
+//↑↑ Firesbase configuration
 
 //Composables
 import { getUserObject } from './auth';
 
+//Stores
+import userInfo from '@/store/user-info';
+
+//User information
 const userData = ref<userInfo>(userInfo);
 
-export const createUserDoc = async (userInfo:userInfo):Promise<void> => {
-  const userAlreadyExists:boolean = (await getDoc(doc(db,`usuarios/${userInfo.uid}`))).exists();
-  const userCreationDate = (await getUserObject()).metadata.creationTime;
-
-  return new Promise<void>((resolve, reject) => {
-    if(userAlreadyExists){return resolve();}
-
+export const createUserDoc = (userInfo:userInfo):Promise<void> => {
+  return new Promise<void>(async (resolve, reject) => {
     try {
+      const userAlreadyExists:boolean = (await getDoc(doc(db,`usuarios/${userInfo.uid}`))).exists();
+      const userCreationDate = await getUserObject().then(res => {return res?.metadata.creationTime});
+
+      if(userAlreadyExists){return resolve();}
+      if(userInfo.uid === null){return reject(`The user uid is null in: ${userInfo}`)}
       setDoc(doc(db, `usuarios/${userInfo.uid}`), {
         name: userInfo.fullName,
         email: userInfo.email,
@@ -54,7 +56,7 @@ export const createUserDoc = async (userInfo:userInfo):Promise<void> => {
       resolve();
     } catch (error) {
       reject(`Ocorreu um erro: ${error}`);
-    }
+    }    
   })
 }
 
@@ -72,7 +74,6 @@ export const getUserGroceriesList = ():Promise<void> => {
           saveItemOnClient(item.data() as itemInfo, item.id)
         });
 
-        console.log(userData.value.userList)
         resolve();
       })
       .catch((error) => {reject(error)})
@@ -150,7 +151,7 @@ const editDocFromCliente = (itemId:string, changesObj:updateDocOnCloud) => {
 
 export const setCustomInfoOnUserCollection = (userId:string, infoName:string, infoValue:any):Promise<void> => {
   return new Promise((resolve, reject) => {
-    setDoc(doc(db, `usuarios`, userId), {
+    updateDoc(doc(db, `usuarios`, userId), {
       [infoName]: infoValue
     })
       .then(() => {

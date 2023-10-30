@@ -40,17 +40,25 @@ export default defineComponent({
     const handleButtonClick = ():void => {
       sendEmailToVerifyAccount()
         .then((res) => {
+          let icon:notificationHeaderIcon = 'ph-bell-ringing';
+          let msg:string = '';
+
           if(res === 'sended-successfully'){
-            notificationIcon.value = 'ph-bell-ringing';
-            notificationText.value = 'Um novo email foi enviado com sucesso!';
+            msg = 'Um novo email foi enviado com sucesso!';
           } else if (res === 'already-verified'){
-            notificationIcon.value = 'ph-bell-ringing';
-            notificationText.value = 'Você já tem seu email verificado!';
+            msg = 'Você já tem seu email verificado!';
+          } else if (res === 'wait-timeout'){
+            icon = 'ph-warning-circle';
+            msg = 'Aguarde, parece que um email já foi enviado recentemente.';
           }
 
+          notificationIcon.value = icon;
+          notificationText.value = msg;
           buttonDisabled.value = true;
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(error);
+          
           notificationIcon.value = 'ph-seal-warning';
           notificationText.value = 'Ocorreu um erro ao enviar um novo email.';
 

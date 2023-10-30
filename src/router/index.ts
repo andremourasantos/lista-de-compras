@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-import { saveUserData } from '@/composables/auth';
-
 import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
 import Account from '../views/AccountView.vue';
@@ -96,7 +94,6 @@ router.beforeEach(async (to, from, next) => {
   if(to.meta.requiresAuth && !userAuth){
     next({name:'login'})
   } else{
-    saveUserData();
     next();
   }
 })

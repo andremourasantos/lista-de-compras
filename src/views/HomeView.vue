@@ -81,12 +81,12 @@ export default defineComponent({
       };
 
       //Notification check chain
-      if(isUserAnonymous()){
+      if(isUserAnonymous() === true){
         showNotification.value = true;
         notificationIcon.value = 'ph-warning-circle';
         notificationText.value = 'Você está utilizando uma conta anônima.';
 
-      } else if(!isUserEmailVerified()){
+      } else if(isUserEmailVerified() === false){
         showNotification.value = true;
         notificationIcon.value = 'ph-warning-circle';
         notificationText.value = 'Verifique sua conta, cheque seu email!';
@@ -113,7 +113,6 @@ export default defineComponent({
 
     const dialogClosed = ():void => {
       showItemModal.value = false;
-
     }
 
     provide('itemId', itemIdForEditAction);

@@ -17,7 +17,7 @@ declare global {
     isEmailVerified:boolean,
     isAnonymous:boolean,
     createAt:Date,
-    emailVerificationSent:Date
+    lastEmailVerificationSent:Date
   }
 
   type notificationHeaderIcon = 'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'

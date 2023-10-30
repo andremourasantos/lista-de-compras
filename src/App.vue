@@ -4,15 +4,25 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-//Composables
-import { saveUserData } from '@/composables/auth';
+//Stores
+import userInfo from '@/store/user-info';
 
 export default defineComponent({
   setup () {
-  
-    onMounted(() => {
-      saveUserData();
+    const auth = getAuth();
+    const userData = ref<userInfo>(userInfo);
+
+    onAuthStateChanged(auth, user => {
+      if(!user){console.log('no user'); return;}
+
+      userData.value.fullName = user.displayName;
+      userData.value.email = user.email;
+      userData.value.imageURL = user.photoURL;
+      userData.value.isAnonymous = user.isAnonymous;
+      userData.value.isEmailVerified = user.emailVerified;
+      userData.value.uid = user.uid;
     })
 
     return {}

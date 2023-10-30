@@ -81,7 +81,7 @@ export default defineComponent({
     overflow-y: scroll;
   }
 
-  main >>> article:has(div#content) {
+  main :deep(article:has(div#content)) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -91,25 +91,25 @@ export default defineComponent({
     padding: 0px 32px 32px 32px;
   }
 
-  main >>> article > div#content:has(h2, p) {
+  main :deep(article > div#content:has(h2, p)) {
     text-align: center;
   }
 
-  main >>> article > div#content > h2 {
+  main :deep(article > div#content > h2) {
     text-align: center;
     margin-bottom: 4px;
   }
 
-  main >>> article > div#content > p {
+  main :deep(article > div#content > p) {
     margin-bottom: 8px;
     text-align: justify;
   }
 
-  main >>> article > div#content > p:last-of-type {
+  main :deep(article > div#content > p:last-of-type) {
     margin-bottom: 0px;
   }
 
-  main >>> article > button {
+  main :deep(article > button) {
     width: 100%;
   }
 </style>

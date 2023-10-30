@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, inject, onBeforeUnmount } from 'vue';
+import { defineComponent, ref, Ref, inject, onBeforeUnmount, onMounted } from 'vue';
 
 //Compsables
 import { getUserObject } from '@/composables/auth';
@@ -58,17 +58,15 @@ export default defineComponent({
     const notificationText = inject('notificationText') as Ref<string>;
 
     //Notification check chain
-    if(isUserAnonymous()){
-      notificationIcon.value = 'ph-warning-circle';
-      notificationText.value = 'Você está utilizando uma conta anônima.';
-    } else if(!isUserEmailVerified()){
-      notificationIcon.value = 'ph-warning-circle';
-      notificationText.value = 'Verifique sua conta, cheque seu email!';
-    }
-
-    // onBeforeUnmount(() => {
-    //   notificationText.value = '';
-    // })
+    onMounted(() => {
+      if(isUserAnonymous() === true){
+        notificationIcon.value = 'ph-warning-circle';
+        notificationText.value = 'Você está utilizando uma conta anônima.';
+      } else if(isUserEmailVerified() === false){
+        notificationIcon.value = 'ph-warning-circle';
+        notificationText.value = 'Verifique sua conta, cheque seu email!';
+      }
+    })
 
     //Related to #userInfo
     const userData = ref<userInfo>(userInfo);
@@ -78,29 +76,26 @@ export default defineComponent({
     const identificationToShow = ref<string>('');
     const memberSince = ref<string>('');
 
-    if(userData.value.isAnonymous){
-      accountImageToShow.value = 'anonymousIcon';
-      nameToShow.value = 'Usuário anônimo';
-      identificationToShow.value = userData.value.uid as NonNullable<null>;
-      
-    } else if (userData.value.imageURL !== null){
-      
-      accountImageToShow.value = 'userProfilePicture';
-      nameToShow.value = userData.value.fullName as NonNullable<null>;
-      identificationToShow.value = userData.value.email as NonNullable<null>;
-    } else {
-      nameToShow.value = userData.value.fullName as NonNullable<null>;
-      identificationToShow.value = userData.value.email as NonNullable<null>;
-    }
+    onMounted(async () => {
+      if(userData.value.isAnonymous){
+        accountImageToShow.value = 'anonymousIcon';
+        nameToShow.value = 'Usuário anônimo';
+        identificationToShow.value = userData.value.uid as NonNullable<null>;
+        
+      } else if (userData.value.imageURL !== null){
+        
+        accountImageToShow.value = 'userProfilePicture';
+        nameToShow.value = userData.value.fullName as NonNullable<null>;
+        identificationToShow.value = userData.value.email as NonNullable<null>;
+      } else {
+        nameToShow.value = userData.value.fullName as NonNullable<null>;
+        identificationToShow.value = userData.value.email as NonNullable<null>;
+      }
+        const userAccCreation = await getUserObject().then((res) => {return res})
 
-    getUserObject()
-      .then((res) => {
-        const date = new Intl.DateTimeFormat('pt-BR').format(new Date(res.metadata.creationTime as NonNullable<undefined>));
+        const date = new Intl.DateTimeFormat('pt-BR').format(new Date(userAccCreation?.metadata.creationTime as NonNullable<undefined>));
         memberSince.value = date;
-      })
-      .catch(() => {
-        memberSince.value = '';
-      })
+    })
 
     //Related to #accountOptions
     const showPwaOption = ref<boolean>(false);

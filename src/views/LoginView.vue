@@ -148,8 +148,6 @@ export default defineComponent({
       }, type === 'Error' ? 5000 : 3000)
     };
 
-    //TODO: WHERE TO PLACE THE CREATEUSERDOC FUNCITON?
-
     const googleLogin = ():void => {
       loginWithGoogle()
         .then(() => {

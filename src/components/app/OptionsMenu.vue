@@ -2,7 +2,7 @@
   <dialog ref="optionsMenuEl">
     <OptionsMenuItems :option-icon-name="'ph-user-circle'" :option-text="'Conta'" :option-aria-label="'Ir para conta do usuário'" :option-redirect-to="'AccViewMain'"/>
     <slot></slot>
-    <OptionsMenuItems :option-icon-name="'ph-x'" :option-text="'Sair'" :option-aria-label="'Sair da conta e volta à tela de login'" :option-redirect-to="'login'" @click="handleSingOut"/>
+    <OptionsMenuItems :option-icon-name="'ph-sign-out'" :option-text="'Sair'" :option-aria-label="'Sair da conta e volta à tela de login'" :option-redirect-to="'login'" @click="handleSingOut"/>
   </dialog>
 </template>
 
