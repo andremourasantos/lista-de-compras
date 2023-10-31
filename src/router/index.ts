@@ -4,11 +4,11 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
 import Account from '../views/AccountView.vue';
-  import AccViewMain from '../components/app/accountsView/Main.vue';
-  import AccViewAbout from '../components/app/accountsView/About.vue';
-  import AccViewVerifyEmail from '../components/app/accountsView/VerifyEmail.vue';
-  import AccViewPwa from '../components/app/accountsView/InstallPwa.vue';
-  import AccViewDelete from '../components/app/accountsView/DeleteAccount.vue';
+  import AccViewMain from '../components/app/accountView/Main.vue';
+  import AccViewAbout from '../components/app/accountView/About.vue';
+  import AccViewVerifyEmail from '../components/app/accountView/VerifyEmail.vue';
+  import AccViewPwa from '../components/app/accountView/InstallPwa.vue';
+  import AccViewDelete from '../components/app/accountView/DeleteAccount.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {

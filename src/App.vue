@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, provide } from 'vue';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 //Stores
@@ -15,7 +15,7 @@ export default defineComponent({
     const userData = ref<userInfo>(userInfo);
 
     onAuthStateChanged(auth, user => {
-      if(!user){console.log('no user'); return;}
+      if(!user){return;}
 
       userData.value.fullName = user.displayName;
       userData.value.email = user.email;
@@ -24,6 +24,19 @@ export default defineComponent({
       userData.value.isEmailVerified = user.emailVerified;
       userData.value.uid = user.uid;
     })
+
+    //PWA installation related
+    const pwaPrompt = ref<BeforeInstallPromptEvent | null>(null);
+
+    onMounted(() => {
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+
+        pwaPrompt.value = e as BeforeInstallPromptEvent;
+      })
+    })
+
+    provide('pwaPrompt', pwaPrompt);
 
     return {}
   }

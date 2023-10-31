@@ -6,7 +6,7 @@
       <p>Você pode adicionar a sua lista de compras à tela inicial do seu dispositivo facilmente, ganhando acesso instantâneo ao aplicativo, sem precisar digitar a URL ou abrir o navegador.</p>
       <p>Além de facilitar o acesso ao aplicativo, você pode colocá-lo em um local especial para sempre lembrar de conferir a sua lista antes de sair para o mercado!</p>
     </div>
-    <Button :button-text="'Adicionar à tela inicial'" :has-icon="'No'" @click="handleInstallation"/>
+    <Button :disabled="disableButton" :button-text="'Adicionar à tela inicial'" :has-icon="'No'" @click="handleInstallation"/>
   </article>
 </template>
 
@@ -31,13 +31,37 @@ export default defineComponent({
     const notificationText = inject('notificationText') as Ref<string>;
 
     //PWA installation related
-    const handleInstallation = ():void => {
-      notificationIcon.value = 'ph-warning-circle';
-      notificationText.value = 'Funcionalidade não operacional no momento.';
+    const disableButton = ref<boolean>(false);
+    const pwaPrompt = inject('pwaPrompt') as Ref<BeforeInstallPromptEvent>;
+
+    const handleInstallation = async ():Promise<void> => {
+      try {
+        disableButton.value = true;
+
+        pwaPrompt.value.prompt();
+
+        const { outcome } = await pwaPrompt.value.userChoice;
+
+        if(outcome === 'accepted'){
+          notificationIcon.value = 'ph-bell-ringing';
+          notificationText.value = 'Sucesso, agora sua lista estará sempre com você!';
+        } else {
+          disableButton.value = false;
+          notificationIcon.value = 'ph-warning-circle';
+          notificationText.value = 'Você recusou a instalação, mas pode tentar novamente.';
+        }
+      } catch (error) {
+        console.error(error);
+        disableButton.value = true;
+
+        notificationIcon.value = 'ph-seal-warning';
+        notificationText.value = 'Ocorreu um erro inesperado.';
+      }
     }
 
     return {
-      handleInstallation
+      handleInstallation,
+      disableButton
     }
   }
 })

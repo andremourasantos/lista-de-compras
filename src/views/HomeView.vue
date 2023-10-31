@@ -8,7 +8,7 @@
     </template>
   </Header>
   <OptionsMenu v-if="showOptionsMenu">
-    <OptionsMenuItem v-if="showPWAInstallButton" :option-icon-name="'ph-download-simple'" :option-text="'Adicionar à tela inicial'" :option-aria-label="'Adicionar lista de compras à tela incial do dispositivo'" :option-redirect-to="'AccViewPwa'" />
+    <OptionsMenuItem v-if="showPWAInstallButton" :option-icon-name="'ph-download-simple'" :option-text="'Adicionar à tela inicial'" :option-aria-label="'Adicionar lista de compras à tela incial do dispositivo'" :option-redirect-to="'AccViewPwa'"/>
   </OptionsMenu>
   <main>
     <WelcomeMessage id="welcomeMessage" v-if="appStatus !== 'Success'" :message-status="appStatus"/>
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch, provide } from 'vue';
+import { defineComponent, ref, Ref, onMounted, watch, provide, inject } from 'vue';
 
 //Composables
 import { isUserEmailVerified, isUserAnonymous } from '@/composables/auth';
@@ -76,6 +76,7 @@ export default defineComponent({
           return console.error('Ocorreu um erro.', error)
       })
 
+      //PWA installation reletaed
       if(!(window.matchMedia('(display-mode: standalone)').matches)){
         showPWAInstallButton.value = true;
       };
