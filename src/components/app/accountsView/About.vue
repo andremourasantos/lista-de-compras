@@ -3,7 +3,7 @@
     <img src="@/assets/ilustrations/sobre.gif" height="256" width="256">
     <div id="content">
       <h2>Sobre este projeto</h2>
-      <p>Este projeto de lista de compras foi desenvolvido inteiramente por André Moura Santos, como forma de desmonstrar as capacidades de criação de ferramentas intuitivas e visualmente atraentes.</p>
+      <p>Este projeto de lista de compras foi desenvolvido inteiramente por André Moura Santos, como forma de demonstrar as capacidades de criação de ferramentas úteis, intuitivas e visualmente atraentes.</p>
     </div>
     <div id="externalLinks">
       <a href="https://github.com/andremourasantos/lista-de-compras" rel="external" target="_blank">

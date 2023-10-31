@@ -95,6 +95,7 @@ p.itemName {
   font-family: var(--font-header);
   font-weight: 600;
   font-size: 20px;
+  text-align: center;
 }
 
 section.tags {

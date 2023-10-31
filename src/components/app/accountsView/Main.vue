@@ -64,7 +64,7 @@ export default defineComponent({
         notificationText.value = 'Você está utilizando uma conta anônima.';
       } else if(isUserEmailVerified() === false){
         notificationIcon.value = 'ph-warning-circle';
-        notificationText.value = 'Verifique sua conta, cheque seu email!';
+        notificationText.value = 'Verifique sua conta, confira a sua caixa de entrada!';
       }
     })
 

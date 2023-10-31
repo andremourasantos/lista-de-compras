@@ -4,8 +4,8 @@
     <div id="content">
       <h2>Verificação de email</h2>
       <p>Para contas criadas com email e senha é necessário confirmar o endereço de email fornecido.</p>
-      <p>Após criar a sua conta, um email foi automaticamente enviado para a sua caixa de entrada — mas verifique também o spam — confira-o e siga as intruções fornecidas para confirmar a sua conta.</p>
-      <p>Caso não tenha conseguido encontrar o email, você podesolicitar um novo envio pelo botão abaixo.</p>
+      <p>Após criar a sua conta, um email foi automaticamente enviado para a sua caixa de entrada (verifique também o spam), confira-o e siga as instruções fornecidas para confirmar a sua conta.</p>
+      <p>Caso não tenha conseguido encontrar o email, você pode solicitar um novo envio pelo botão abaixo.</p>
     </div>
     <Button :disabled="buttonDisabled" :button-text="'Reenviar email de autenticação'" :has-icon="'No'" @click="handleButtonClick"/>
   </article>

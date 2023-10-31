@@ -26,7 +26,7 @@
     <img src="@/assets/ilustrations/conectar-conta.gif" height="256" width="256" alt="Desenho de duas pessoas conectando blocos de quebra-cabeça.">
     <h1>Conecte a sua conta!</h1>
     <p>Você pode conectar a sua conta do Google para criar uma conta do tipo permanente. Contas permanentes tem acesso a mais funções, como a sincronização entre dispositivos!</p>
-    <Button :button-text="'Concetar conta'" :has-icon="'No'" @click="googleLogin"/>
+    <Button :disabled="userActionButton" :button-text="'Concetar conta'" :has-icon="'No'" @click="googleLogin"/>
   </main>
 
   <main v-if="showView === 'EmailLogin'" class="loginView">
@@ -43,8 +43,8 @@
         <input id="password" type="password" placeholder="********" v-model="userPassword">
       </div>
       <div>
-        <Button type="button" :button-text="'Criar conta'" :button-type="'Secondary'" :has-icon="'No'" @click="showView = 'EmailSingUp'"/>
-        <Button :disabled="!userEmail || !userPassword" type="submit" :button-text="'Continuar'" :has-icon="'Yes-Right'" :icon-name="'ph-arrow-circle-right'" :icon-size="24" :icon-weight="'Regular'"/>
+        <Button :disabled="userActionButton" type="button" :button-text="'Criar conta'" :button-type="'Secondary'" :has-icon="'No'" @click="showView = 'EmailSingUp'"/>
+        <Button :disabled="!userEmail || !userPassword || userActionButton" type="submit" :button-text="'Continuar'" :has-icon="'Yes-Right'" :icon-name="'ph-arrow-circle-right'" :icon-size="24" :icon-weight="'Regular'"/>
       </div>
     </form>
   </main>
@@ -67,7 +67,7 @@
         <input id="password" type="password" placeholder="********" v-model="userPassword">
       </div>
       <div>
-        <Button :disabled="!userEmail || !userPassword" type="submit" :button-text="'Criar conta'" :has-icon="'No'"/>
+        <Button :disabled="!userEmail || !userPassword || userActionButton" type="submit" :button-text="'Criar conta'" :has-icon="'No'"/>
       </div>
     </form>
   </main>
@@ -77,7 +77,7 @@
     <h1>Vamos começar!</h1>
     <p>Com uma conta anônima, você pode testar a aplicação por um tempo limitado antes de decidir criar uma conta permanente.</p>
     <p>Você pode não ter acesso a determinados recursos que requerem uma conta permanente, como a sincronização entre dispositivos.</p>
-    <Button :button-text="'Continuar'" :has-icon="'No'" @click="anonymousLogin"/>
+    <Button :disabled="userActionButton" :button-text="'Continuar'" :has-icon="'No'" @click="anonymousLogin"/>
   </main>
   
   <footer v-if="showView === 'Main'">
@@ -137,6 +137,7 @@ export default defineComponent({
     const userName = ref<string>('');
     const userEmail = ref<string>('');
     const userPassword = ref<string>('');
+    const userActionButton = ref<boolean>(false);
 
     //Notification refs
     const headerNotiIcon = ref<'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'>('ph-bell-ringing');
@@ -149,6 +150,8 @@ export default defineComponent({
     };
 
     const googleLogin = ():void => {
+      userActionButton.value = true;
+
       loginWithGoogle()
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
@@ -162,10 +165,13 @@ export default defineComponent({
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
           wipeHeaderNoti('Error');
+          userActionButton.value = false;
         })
     };
 
     const emailSingIn = ():void => {
+      userActionButton.value = true;
+
       loginWithEmail(userEmail.value, userPassword.value)
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
@@ -196,10 +202,13 @@ export default defineComponent({
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = msg;
           wipeHeaderNoti('Error');
+          userActionButton.value = false;
         })
     };
 
     const emailSingUp = ():void => {
+      userActionButton.value = true;
+
       createAnAccount(userEmail.value, userPassword.value, userName.value.trim())
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
@@ -230,10 +239,13 @@ export default defineComponent({
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = msg;
           wipeHeaderNoti('Error');
+          userActionButton.value = false;
         })
     };
 
     const anonymousLogin = ():void => {
+      userActionButton.value = true;
+
       loginAnonymously()
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
@@ -247,6 +259,7 @@ export default defineComponent({
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
           wipeHeaderNoti('Error');
+          userActionButton.value = false;
         })
     };
 
@@ -256,6 +269,7 @@ export default defineComponent({
       userName,
       userEmail,
       userPassword,
+      userActionButton,
       headerNotiIcon,
       headerNotiText,
       googleLogin,

@@ -89,7 +89,7 @@ export default defineComponent({
       } else if(isUserEmailVerified() === false){
         showNotification.value = true;
         notificationIcon.value = 'ph-warning-circle';
-        notificationText.value = 'Verifique sua conta, cheque seu email!';
+        notificationText.value = 'Verifique sua conta, confira sua caixa de entrada!';
       }
     })
 
