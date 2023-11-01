@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInAnonymously, signOut, connectAuthEmulator, User } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInAnonymously, signOut, connectAuthEmulator, User, deleteUser } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -187,3 +187,20 @@ export const isUserEmailVerified = ():boolean | undefined => {
 export const isUserAnonymous = ():boolean | undefined => {
   return auth.currentUser?.isAnonymous;
 };
+
+//Delte user account
+export const deleteUserAccount =():Promise<void> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await getUserObject().then(res => {return res});
+
+      if(user === null){throw new Error('Usuário é null.');};
+
+      deleteUser(user)
+        .then(() => resolve())
+        .catch((error) => {throw new Error(error)});
+    } catch (error) {
+      reject(error);
+    }
+  })
+}

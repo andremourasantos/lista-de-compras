@@ -5,7 +5,7 @@ module.exports = defineConfig({
     port: 5500
   },
   pwa: {
-    assetsVersion: 'b-1.2',
+    assetsVersion: 'b-1.3',
     manifestOptions: {
       "name": "Lista de compras",
       "short_name": "Lista de compras",

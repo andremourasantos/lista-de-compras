@@ -178,3 +178,21 @@ export const getCustomInfoOnUserCollection = (userId:string, infoName:string):Pr
       })
   })
 }
+
+export const deleteUserCollection = (userId:string):Promise<void> => {
+  const q = query(collection(db, `usuarios/${userData.value.uid}/lista-de-compras`), orderBy('createAt', 'asc'));
+
+  return new Promise(async (resolve, reject) => {
+    getDocs(q)
+      .then(async (res) => {
+        if(!res.empty){reject('delete-user-list'); return;}
+
+        await deleteDoc(doc(db, `usuarios`, userId))
+          .then(() => resolve())
+          .catch((error) => reject(error))
+        })
+      .catch((error) => {
+        reject(error);
+      })
+  })
+}

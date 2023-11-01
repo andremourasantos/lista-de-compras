@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, watch, onMounted } from 'vue';
 import router from '@/router';
 
 //Composables
@@ -97,6 +97,7 @@ import LoginButton from '@/components/login/LoginButton.vue';
 import Button from '@/components/Button.vue';
 import Header from '@/components/Header.vue';
 import HeaderNoti from '@/components/HeaderNotification.vue';
+import { RouteRecordName } from 'vue-router';
 
 export default defineComponent({
   components: {LoginButton, Button, Header, HeaderNoti},
@@ -149,6 +150,22 @@ export default defineComponent({
       }, type === 'Error' ? 5000 : 3000)
     };
 
+    //Redirect related
+    const redirectTo = ref<RouteRecordName>('app');
+
+    const redirectUser = ():void => {
+      setTimeout(() => {
+        router.push({name: redirectTo.value});
+      }, 5000);
+    }
+
+    //Deleting user account related
+    onMounted(() => {
+      if(router.currentRoute.value.query.redirecionar === 'AccViewDelete'){
+        redirectTo.value = 'AccViewDelete';
+      }
+    })
+
     const googleLogin = ():void => {
       userActionButton.value = true;
 
@@ -157,9 +174,7 @@ export default defineComponent({
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso, vinculação concluída!';
 
-          setTimeout(() => {
-            router.push({name:'app'});
-          }, 5000);
+          redirectUser();
         })
         .catch((error) => {
           headerNotiIcon.value = 'ph-seal-warning';
@@ -177,9 +192,7 @@ export default defineComponent({
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso, suas informações conferem!';
 
-          setTimeout(() => {
-            router.push({name:'app'});
-          }, 5000);
+          redirectUser();
         })
         .catch((error) => {
           let msg:string;
@@ -214,9 +227,7 @@ export default defineComponent({
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso, sua conta foi criada!';
 
-          setTimeout(() => {
-            router.push({name:'app'});
-          }, 5000);
+          redirectUser();
         })
         .catch((error) => {
           let msg:string;
@@ -250,10 +261,8 @@ export default defineComponent({
         .then(() => {
           headerNotiIcon.value = 'ph-bell-ringing';
           headerNotiText.value = 'Sucesso! Entrando na sua conta anônima.';
-
-          setTimeout(() => {
-            router.push({name:'app'});
-          }, 5000);
+          
+          redirectUser();
         })
         .catch((error) => {
           headerNotiIcon.value = 'ph-seal-warning';
