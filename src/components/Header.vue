@@ -3,7 +3,9 @@
     <header>
       <div v-if="headerType === 'Main'" class=primary>
         <img src="@/assets/logo.png" height="30" width="30" alt="Ícone de sacola com frutas e legumes.">
-        <button id="userButton" aria-label="Abrir menu de opções" title="Abrir menu de opções" @click="emitToggleOptionsMenu">
+        <button :class="{
+          active: showActiveStatus
+        }" id="userButton" aria-label="Abrir menu de opções" title="Abrir menu de opções" @click="emitToggleOptionsMenu">
           <img v-if="showProfilePic === true" :src="userProfilePic" height="40" width="40" alt="Foto de perfil do usuário.">
           <ph-user-circle-gear v-if="showProfilePic === false" :size="40" color="#333333" weight="light" />
         </button>
@@ -16,7 +18,10 @@
         <p>{{ headerTitle }}</p>
       </div>
     </header>
-    <slot name="notification"></slot>
+    <transition name="notification">
+      <slot name="notification">
+      </slot>
+    </transition>
     <slot name="listCompanion"></slot>
   </div>
 </template>
@@ -47,6 +52,7 @@ export default defineComponent({
     const userData = ref<userInfo>(userInfo);
     const showProfilePic = ref<boolean>(false);
     const userProfilePic = ref<string>('');
+    const showActiveStatus = ref<boolean>(false);
 
     if(userData.value.imageURL !== null){
       showProfilePic.value = true;
@@ -58,6 +64,7 @@ export default defineComponent({
     }
 
     const emitToggleOptionsMenu = ():void => {
+      showActiveStatus.value = !showActiveStatus.value;
       emit('toggleOptionsMenu');
     }
 
@@ -65,7 +72,8 @@ export default defineComponent({
       showProfilePic,
       userProfilePic,
       emitGoBack,
-      emitToggleOptionsMenu
+      emitToggleOptionsMenu,
+      showActiveStatus
     }
   }
 })
@@ -91,10 +99,22 @@ header > div.primary {
   width: 40px;
   border: none;
   background: transparent;
+  border-radius: 16px;
+  transition: var(--transition-regular);
+}
+
+#userButton.active {
+  background-color: var(--accent-color);
 }
 
 #userButton img {
+  border: 0px solid var(--accent-color);
   border-radius: 16px;
+  transition: var(--transition-regular);
+}
+
+#userButton.active img {
+  border: 4px solid var(--accent-color);
 }
 
 header > div.secondary {
@@ -126,5 +146,24 @@ div.secondary button {
 div.secondary p {
   font-family: var(--font-header);
   font-weight: bold;
+}
+
+.notification-enter-active, .notification-leave-active {
+  transition: var(--transition-regular);
+}
+
+.notification-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.notification-leave-from {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.notification-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
 }
 </style>

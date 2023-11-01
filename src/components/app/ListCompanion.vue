@@ -73,7 +73,7 @@ div {
   font-weight: 300;
 }
 
-div.loading {
+.loading {
   font-family: var(--font-loading);
   color: var(--font-loading-color);
 }

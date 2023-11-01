@@ -1,5 +1,5 @@
 <template>
-  <div class="item" :class="{
+  <li class="item" :class="{
     editItem: elementStatus === 'Edit'
   }" @click="editItem($event, 'oi')">
     <p class="itemName">{{ itemObject.name }}</p>
@@ -10,7 +10,7 @@
       </div>
     </section>
     <Button aria-label="Remover item" :disabled="buttonStatus === 'Loading'" :button-text="''" :button-type="'Accent'" :has-icon="'Yes-Right'" :icon-name="'ph-check-circle'" :icon-size="24" :icon-color="'#333333'" @click="deleteItem($event, itemObject.id)" />
-  </div>
+  </li>
 </template>
 
 <script lang="ts">
@@ -70,7 +70,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-div.item {
+.item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,7 +87,7 @@ div.item {
   overflow: hidden;
 }
 
-div.editItem {
+.editItem {
   border: 2px solid var(--accent-color);
 }
 

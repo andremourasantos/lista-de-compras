@@ -7,17 +7,24 @@
       <ListCompanion />
     </template>
   </Header>
-  <OptionsMenu v-if="showOptionsMenu">
-    <OptionsMenuItem v-if="showPWAInstallButton" :option-icon-name="'ph-download-simple'" :option-text="'Adicionar à tela inicial'" :option-aria-label="'Adicionar lista de compras à tela incial do dispositivo'" :option-redirect-to="'AccViewPwa'"/>
-  </OptionsMenu>
+  <transition name="optionsMenu">
+    <OptionsMenu v-if="showOptionsMenu">
+      <OptionsMenuItem v-if="showPWAInstallButton" :option-icon-name="'ph-download-simple'" :option-text="'Adicionar à tela inicial'" :option-aria-label="'Adicionar lista de compras à tela incial do dispositivo'" :option-redirect-to="'AccViewPwa'"/>
+    </OptionsMenu>
+  </transition>
   <main>
-    <WelcomeMessage id="welcomeMessage" v-if="appStatus !== 'Success'" :message-status="appStatus"/>
+    <transition name="faded-appear">
+      <WelcomeMessage id="welcomeMessage" v-if="appStatus !== 'Success'" :message-status="appStatus"/>
+    </transition>
+    
+    <transition-group tag="ul" name="listItems" id="list" v-show="appStatus === 'Success'">
+        <ListItem v-for="item in userData.userList" :key="item.id" :item-object="item" @edit-item="editItemAction(item.id)"/>
+    </transition-group>
 
-    <div id="list" v-show="appStatus === 'Success'">
-      <ListItem v-for="item in userData.userList" :key="item.id" :item-object="item" @edit-item="editItemAction(item.id)"/>
-    </div>
+    <transition name="faded-appear">
+      <AddItemModal ref="addItemModalEl" v-if="showItemModal" :modal-action="modalAction" @dialog-closed="dialogClosed"/>
+    </transition>
 
-    <AddItemModal ref="addItemModalEl" v-if="showItemModal" :modal-action="modalAction" @dialog-closed="dialogClosed"/>
     <Button id="addItem" :disabled="appStatus !== 'Success' && appStatus !== 'Success & Empty'" :button-text="'Adicionar item'" :has-icon="'Yes-Right'" :icon-name="'ph-shopping-cart'" :icon-weight="'Light'" :icon-size="20" @click="addItemAction"/>
   </main>
 </template>
@@ -95,8 +102,15 @@ export default defineComponent({
     })
 
     watch(userData.value, (newValue) => {
-      if(newValue.userList === null){return} else if (newValue.userList.length > 0){appStatus.value = 'Success'} else {
-        appStatus.value = 'Success & Empty';
+      if(newValue.userList === null){return}
+      else if (newValue.userList.length > 0){
+        appStatus.value = 'Success';
+      }
+      else {
+        //Wait for the animation of the last ListItem.
+        setTimeout(() => {
+          appStatus.value = 'Success & Empty';
+        }, 500);
       };
     })
 
@@ -167,11 +181,43 @@ main #list {
   gap: 32px;
   overflow-y: scroll;
   padding: 24px 0px 72px 0px;
+  list-style: none;
 }
 
 #addItem {
   position: absolute;
   bottom: 0px;
   right: 0px;
+}
+
+.optionsMenu-enter-active, .optionsMenu-leave-active {
+  transition: var(--transition-regular);
+}
+
+.optionsMenu-enter-from, .optionsMenu-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.listItems-move, .listItems-enter-active, .listItems-leave-active {
+  transition: var(--transition-slow);
+}
+
+.listItems-enter-from, .listItems-leave-to {
+  opacity: 0;
+  transform: scale(0.90);
+}
+
+.listItems-leave-active {
+  position: absolute;
+}
+
+.faded-appear-enter-active, .faded-appear-leave-active {
+  transition: var(--transition-regular);
+}
+
+.faded-appear-enter-from, .faded-appear-leave-to {
+  opacity: 0;
+  transform: scale(0.90);
 }
 </style>

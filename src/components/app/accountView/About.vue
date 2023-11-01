@@ -8,7 +8,7 @@
     <div id="externalLinks">
       <a href="https://github.com/andremourasantos/lista-de-compras" rel="external" target="_blank">
         <ph-arrow-square-out :size="29" color="#333333" weight="light" />
-        Acessar GitGub
+        Acessar GitHub
       </a>
       <a href="https://www.linkedin.com/in/andremourasantos/" rel="external" target="_blank">
         <ph-arrow-square-out :size="29" color="#333333" weight="light" />

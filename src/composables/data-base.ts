@@ -108,7 +108,7 @@ const saveItemOnClient = (itemInfo:itemInfo, idString:string):void => {
 
   if(userData.value.userList === null){userData.value.userList = []};
   
-  userData.value.userList.push(newObj);
+  userData.value.userList.unshift(newObj);
 }
 
 export const deleteDocFromList = (docId:string):Promise<void> => {

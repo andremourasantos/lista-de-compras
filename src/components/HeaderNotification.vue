@@ -1,13 +1,11 @@
 <template>
-  <div ref="container" :class="{
+  <div :class="{
     error: notificationIcon === 'ph-seal-warning',
     alert: notificationIcon === 'ph-warning-circle'
   }" @click="emitEvent">
     <component :is="notificationIcon" :size="16" weight="regular"/>
-    <p :class="{
-      animated: animateText
-    }" ref="textContent">{{ notificationText }}</p>
-  </div>
+    <p>{{ notificationText }}</p>
+</div>
 </template>
 
 <script lang="ts">
@@ -26,18 +24,12 @@ export default defineComponent({
   },
   emits: ['headerNotificationClick'],
   setup (props, {emit}) {
-    const container = ref<HTMLDivElement | null>(null);
-    const textContent = ref<HTMLParagraphElement | null>(null);
-    const animateText = ref<boolean>(false);
 
     const emitEvent = ():void => {
       emit('headerNotificationClick');
     }
 
     return {
-      container,
-      textContent,
-      animateText,
       emitEvent
     }
   }
@@ -65,11 +57,11 @@ div p {
   overflow-x: scroll;
 }
 
-div.error {
+.error {
   background-color: #FFC0C0;
 }
 
-div.alert {
+.alert {
   background-color: #FFEDC0;
 }
 </style>

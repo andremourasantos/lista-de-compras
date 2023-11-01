@@ -86,6 +86,9 @@ export default defineComponent({
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    height: fit-content;
+    max-width: 500px;
+    margin-inline: auto;
     gap: 32px;
     margin-top: 16px;
     padding: 0px 32px 32px 32px;

@@ -17,9 +17,7 @@
 
   <Header v-if="showView !== 'Main'" :header-type="'Secondary'" :header-title="headerTitle" @go-back="showView = 'Main'">
     <template #notification>
-      <transition name="headerNoti">
-        <HeaderNoti v-if="headerNotiText != ''" :notification-icon="headerNotiIcon" :notification-text="headerNotiText" />
-      </transition>
+      <HeaderNoti v-if="headerNotiText !== ''" :notification-icon="headerNotiIcon" :notification-text="headerNotiText" />
     </template>
   </Header>
   <main v-if="showView === 'ThirdyParties'" class="loginView">
@@ -179,6 +177,7 @@ export default defineComponent({
         .catch((error) => {
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
+
           wipeHeaderNoti('Error');
           userActionButton.value = false;
         })
@@ -214,6 +213,7 @@ export default defineComponent({
 
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = msg;
+
           wipeHeaderNoti('Error');
           userActionButton.value = false;
         })
@@ -249,6 +249,7 @@ export default defineComponent({
 
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = msg;
+
           wipeHeaderNoti('Error');
           userActionButton.value = false;
         })
@@ -267,6 +268,7 @@ export default defineComponent({
         .catch((error) => {
           headerNotiIcon.value = 'ph-seal-warning';
           headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
+
           wipeHeaderNoti('Error');
           userActionButton.value = false;
         })
@@ -331,9 +333,10 @@ main.loginView {
   align-items: center;
   justify-content: flex-start;
   height: 100%;
-  padding: 0px 24px;
+  max-width: 500px;
+  margin-inline: auto;
+  padding: 32px 24px;
   overflow-y: scroll;
-  margin-top: 32px;
   text-align: center;
 }
 
@@ -388,7 +391,6 @@ form.emailCredentials div:has(button) button {
   width: 100%;
 }
 
-
 form.emailCredentials input[type="text"], form.emailCredentials input[type="email"], form.emailCredentials input[type="password"] {
   height: 42px;
   width: 100%;
@@ -406,17 +408,5 @@ footer {
 
 footer p {
   font-size: 14px;
-}
-</style>
-
-<style>
-.headerNoti-enter-active,
-.headerNoti-leave-active {
-  transition: 250ms ease;
-}
-
-.headerNoti-enter-from,
-.headerNoti-leave-to {
-  opacity: 0;
 }
 </style>

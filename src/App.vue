@@ -46,8 +46,6 @@ export default defineComponent({
 <style>
 @charset "UTF-8";
 
-@import url('https://fonts.googleapis.com/css2?family=Flow+Circular&family=Poppins:ital,wght@0,100;0,200;0,300;0,500;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-
 :root {
   /*FONTS*/
   --font-header: 'Space Grotesk', sans-serif;
@@ -71,6 +69,16 @@ export default defineComponent({
   /*EFFECTS*/
   --light-shadow: 0px 0px 10px #1F1F1F10;
   --heavy-shadow: 0px 0px 10px #1F1F1F20;
+  --transition-regular: all 250ms ease-out;
+  --transition-slow: all 500ms ease-out;
+  --transition-quick: all 100ms ease-out;
+}
+
+@media screen and (min-width: 425px) {
+  :root {
+    /*FONTS*/
+    --font-size: 14px;
+  }
 }
 
 * {
@@ -84,6 +92,8 @@ body {
   height: 100%;
   height: 100dvh;
   width: 100%;
+  max-width: 768px;
+  margin: auto;
   padding: 16px;
   font-family: var(--font-paragraph);
   color: var(--font-paragraph-color);

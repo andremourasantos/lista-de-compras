@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-import Home from '../views/HomeView.vue';
+import App from '../views/AppView.vue';
 import Login from '../views/LoginView.vue';
 import Account from '../views/AccountView.vue';
   import AccViewMain from '../components/app/accountView/Main.vue';
@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'app',
-    component: Home,
+    component: App,
     meta: {
       requiresAuth: true
     }
