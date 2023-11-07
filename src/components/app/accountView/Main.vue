@@ -1,31 +1,26 @@
 <template>
-  <section id="userInfo">
-    <img v-if="accountImageToShow === 'userProfilePicture'" :src="userProfilePicture !== null ? userProfilePicture : ''" alt="Foto de perfil do usuário." height="128" width="128">
-    <ph-user-circle v-if="accountImageToShow === 'userIcon'" :size="128" color="'#333333'" :weight="'light'" />
-    <ph-detective v-if="accountImageToShow === 'anonymousIcon'" :size="128" color="#333333" weight="light" />
-
-    <div>
-      <h1>{{ nameToShow }}</h1>
-      <p>{{ identificationToShow }}</p>
-      <p v-if="memberSince !== ''">Membro desde {{ memberSince }}</p>
-    </div>
-  </section>
-
-  <section id="accountOptions">
-    <AccountLinkOptions :option-icon="'ph-info'" :option-name="'Sobre'" :option-description="'Sobre o aplicativo.'" :option-go="'AccViewAbout'"/>
-
-    <AccountLinkOptions v-if="false" :option-icon="'ph-sparkle'" :option-name="'Novidades'" :option-description="'Veja as últimas atualizações.'" :option-go="'AccViewAbout'"/>
-
-    <AccountLinkOptions v-if="showLinkAccountOption" :option-icon="'ph-link'" :option-name="'Vincular conta'" :option-description="'Crie uma conta permanente.'" :option-go="'AccViewAbout'"/>
-
-    <AccountLinkOptions v-if="showVerifyEmailOption" :option-icon="'ph-envelope'" :option-name="'Verificar email'" :option-description="'Confirme sua conta.'" :option-go="'AccViewVerifyEmail'"/>
-
-    <AccountLinkOptions v-if="showPwaOption" :option-icon="'ph-download-simple'" :option-name="'Adicionar à tela inicial'" :option-description="'Tenha acesso instantâneo.'" :option-go="'AccViewPwa'"/>
-
-    <AccountLinkOptions :option-icon="'ph-shield-check'" :option-name="'Política de privacidade'" :option-description="'Revise a política de privacidade do aplicativo.'" :option-go="'pp'"/>
-
-    <AccountLinkOptions :option-icon="'ph-trash-simple'" :option-name="'Deletar conta'" :option-description="'Solicite a eliminação da sua conta.'" :option-go="'AccViewDelete'"/>
-  </section>
+  <article>
+    <section id="userInfo">
+      <img v-if="accountImageToShow === 'userProfilePicture'" :src="userProfilePicture !== null ? userProfilePicture : ''" alt="Foto de perfil do usuário." height="128" width="128">
+      <ph-user-circle v-if="accountImageToShow === 'userIcon'" :size="128" color="'#333333'" :weight="'light'" />
+      <ph-detective v-if="accountImageToShow === 'anonymousIcon'" :size="128" color="#333333" weight="light" />
+      <div>
+        <h1>{{ nameToShow }}</h1>
+        <p>{{ identificationToShow }}</p>
+        <p v-if="memberSince !== ''">Membro desde {{ memberSince }}</p>
+      </div>
+    </section>
+    
+    <section id="accountOptions">
+      <AccountLinkOptions :option-icon="'ph-info'" :option-name="'Sobre'" :option-description="'Sobre o aplicativo.'" :option-go="'AccViewAbout'"/>
+      <AccountLinkOptions v-if="false" :option-icon="'ph-sparkle'" :option-name="'Novidades'" :option-description="'Veja as últimas atualizações.'" :option-go="'AccViewAbout'"/>
+      <AccountLinkOptions v-if="showLinkAccountOption" :option-icon="'ph-link'" :option-name="'Vincular conta'" :option-description="'Crie uma conta permanente.'" :option-go="'AccViewAbout'"/>
+      <AccountLinkOptions v-if="showVerifyEmailOption" :option-icon="'ph-envelope'" :option-name="'Verificar email'" :option-description="'Confirme sua conta.'" :option-go="'AccViewVerifyEmail'"/>
+      <AccountLinkOptions v-if="showPwaOption" :option-icon="'ph-download-simple'" :option-name="'Adicionar à tela inicial'" :option-description="'Tenha acesso instantâneo.'" :option-go="'AccViewPwa'"/>
+      <AccountLinkOptions :option-icon="'ph-shield-check'" :option-name="'Política de privacidade'" :option-description="'Revise a política de privacidade do aplicativo.'" :option-go="'pp'"/>
+      <AccountLinkOptions :option-icon="'ph-trash-simple'" :option-name="'Deletar conta'" :option-description="'Solicite a eliminação da sua conta.'" :option-go="'AccViewDelete'"/>
+    </section>
+  </article>
 </template>
 
 <script lang="ts">
@@ -129,6 +124,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+article {
+  width: 100%;
+}
+
 #userInfo {
   display: flex;
   flex-direction: column;

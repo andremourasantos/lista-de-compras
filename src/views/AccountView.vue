@@ -5,7 +5,11 @@
     </template>
   </Header>
   <main id="content">
-    <router-view></router-view>
+    <router-view v-slot="{Component}">
+      <transition name="page-slide">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </main>
 </template>
 
@@ -114,5 +118,21 @@ export default defineComponent({
 
   main :deep(article > button) {
     width: 100%;
+  }
+
+  @media screen and (max-width: 425px) {
+    .page-slide-enter-active, .page-slide-leave-active {
+      position: absolute;
+      transition: var(--transition-regular);
+    }
+
+    .page-slide-enter-from {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+
+    .page-slide-leave-to {
+      opacity: 0;
+    }
   }
 </style>

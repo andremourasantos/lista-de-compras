@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: '/conta',
+        path: '',
         name: 'AccViewMain',
         component: AccViewMain
       },
