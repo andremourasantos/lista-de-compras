@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Permite leitura e gravação de dados apenas para a coleção de lista de compra do usuário em questão
+    match /lista-de-compras/{uid}/{document=**} {
+      allow read, write: if request.auth.uid == uid;
+    }
+    
+    match /usuarios/{uid}/{document=**}{
+    	allow read, write: if request.auth.uid == uid;
+    }
+    
+    // Nega quaisquer outros acessos ao banco de dados
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

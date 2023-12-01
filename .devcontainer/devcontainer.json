@@ -1,9 +1,18 @@
 {
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   "features": {
-    "ghcr.io/shyim/devcontainers-features/bun:0": {},
     "ghcr.io/devcontainers-contrib/features/vue-cli:2": {},
     "ghcr.io/devcontainers-contrib/features/firebase-cli:2": {}
   },
-  "postCreateCommand": "bun install -g firebase-tools && firebase && firebase init emulators"
+  "postCreateCommand": "npm install",
+"shutdownAction": "stopContainer",
+"customizations": {
+	"vscode": {
+		"extensions": [
+			"Vue.volar",
+			"sdras.vue-vscode-snippets",
+			"mattpocock.ts-error-translator"
+		]
+	}
+}
 }

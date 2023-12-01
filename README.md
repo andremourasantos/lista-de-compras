@@ -1,25 +1,54 @@
-# Lista de compras
-Um PWA de lista de compras de supermercado que utiliza tecnologias do Firebase para armazenar e gerenciar as informações do usuário. O aplicativo tem um foco grande em acessibilidade, com o uso da fonte Atkinson Hyperlegible para máxima legibilidade e recursos adicionais que estou aprendendo. É possível instalar a aplicação e utilizá-la em multiplos dispositivos ao mesmo tempo.
+# Sobre o repositório
 
-> Esse PWA pode ser acessado pelo link: https://lista-de-compras.andremourasantos.com.br/
+Esse repositório guarda os arquivos do meu [projeto de lista de compras 🡥](https://lista-de-compras.andremourasantos.com.br), que iniciei no começo de 2023 como forma de aprofundar e aplicar meus conhecimento com o Firebase V9 JS SDK e também Powered Web App (PWA).
 
-- - -
+> Esta nova versão finaliza o ciclo de versões de teste desta aplicação, formalizando meu aprendizado em um produto consico e 100% funcional.
 
-## O que aprendi com esse projeto? 🎯
+---
 
-- Criação de interfaces, componentes com estados e propriedades e fluxos de interação no Figma.
-- Criação e manejamento de um projeto no Firebase, com a utilização do SDK v9 para JS.
-- Autenticação e verificação de informações do usuário (Firebase Auth).
-- Criação e manutenção de Banco de Dados noSQL (Firestore).
-- Princípios de funcionamento do webpack, do Service Worker para PWAs e da suíte de emuladores do Firebase.
-- Adaptação de projetos para PWA, com disparo do evento de instalação personalizado.
-- Estilização do conteúdo utilizando "grid" em CSS.
-- Utilização do esqueleto de carregamento (_loading screen skeleton_).
+## Tecnologias usadas
 
-- - -
+_*Atualizado em outubro de 2023._
 
-## Fotos 📸
+<div align="center">
+  <img height="48" title="HTML5" src="data/html5.png">
+  <img height="48" title="CSS3" src="data/css3.png">
+  <img height="48" title="JavaScript" src="data/js.png">
+  <img height="48" title="TypeScript" src="data/ts.png">
+  <img height="48" title="VueJS 3" src="data/vuejs.png">
+  <img height="48" title="Firebase Hosting" src="data/firebase-hosting.png">
+  <img height="48" title="Firebase Auth" src="data/firebase-auth.png">
+  <img height="48" title="Firebase Firestore" src="data/firebase-firestore.png">
+</div>
 
-![lista-de-compras andremourasantos com br_(Generic)](https://user-images.githubusercontent.com/92397834/231459575-c92dd6e6-bdb3-4447-a7cb-8223224f413e.png)
-![lista-de-compras andremourasantos com br_(Pixel 4)](https://user-images.githubusercontent.com/92397834/231459582-791093c9-9d2f-4507-85ae-db9d21024678.png)
-![lista-de-compras andremourasantos com br_app(Pixel 4)](https://user-images.githubusercontent.com/92397834/231459588-71c7a37c-b667-4c4b-aa9a-c29aaf3bd13e.png)
+---
+
+## O que aprendi com este projeto?
+
+Texto.
+
+---
+
+## Árvore de componentes e lógica
+
+_*Atualizado em outubro de 2023._
+
+Veja abaixo a árvore de componentes do VueJs e também o fluxograma de lógica da aplicação, assim, você poderá ter um bom entendimento de como o projeto foi estruturado desde o começo para permitir uma fácil manutenção e adição de funcionalidades.
+
+<img title="Fluxograma de lógica de autenticação da aplicação" src="data/router-fluxogram.png">
+
+---
+
+## Fotos do projeto
+
+_*Atualizado em outubro de 2023._
+
+---
+
+## Desempenho do site
+
+_*Atualizado em outubro de 2023._
+
+O desempenho do site pode ser visto a partir de testes do [PageSpeed Insights 🡥](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Flista-de-compras.andremourasantos.com.br%2F).
+
+---
