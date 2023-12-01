@@ -79,7 +79,7 @@
   </main>
   
   <footer v-if="showView === 'Main'">
-    <p>Ao usar este aplicativo, você concorda com a <router-link to="pp">política de privacidade</router-link>.</p>
+    <p>Ao usar este aplicativo, você concorda com a <router-link :to="{name:'pp'}">política de privacidade</router-link>.</p>
   </footer>
 </template>
 

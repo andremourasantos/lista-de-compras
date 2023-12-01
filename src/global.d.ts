@@ -22,7 +22,7 @@ declare global {
 
   type notificationHeaderIcon = 'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'
 
-  type quantityMetrics = 'un' | 'kg' | 'g' | 'l' | 'ml' | 'oz'
+  type quantityMetrics = 'Un.' | 'Kg' | 'g' | 'L' | 'ml' | 'Oz.'
 
   type typeItemTags = {
     quantity:number,

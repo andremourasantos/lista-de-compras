@@ -84,19 +84,27 @@ export const addDocToList = (itemInfo:itemInfo):Promise<void> => {
   const uid = userData.value.uid;
 
   return new Promise((resolve, reject) => {
-    const docToAdd:addDocToCloud = {
-      name: itemInfo.name,
-      tags: {
-        quantity: itemInfo.tags.quantity,
-        quantityMetric: itemInfo.tags.quantityMetric,
-        price: itemInfo.tags.price
-      },
-      createAt: serverTimestamp()
-    }
+    getDocs(collection(db, `usuarios/${uid}/lista-de-compras`))
+      .then(querySnapshot => {
+        if(querySnapshot.size >= 30){
+          return reject('Limite máximo de itens alcançados');
+        }
 
-    addDoc(collection(db, `usuarios/${uid}/lista-de-compras`), docToAdd)
-      .then((doc) => {resolve(); saveItemOnClient(itemInfo,doc.id);})
-      .catch((error) => reject(error))
+        const docToAdd:addDocToCloud = {
+          name: itemInfo.name,
+          tags: {
+            quantity: itemInfo.tags.quantity,
+            quantityMetric: itemInfo.tags.quantityMetric,
+            price: itemInfo.tags.price
+          },
+          createAt: serverTimestamp()
+        }
+    
+        addDoc(collection(db, `usuarios/${uid}/lista-de-compras`), docToAdd)
+          .then((doc) => {resolve(); saveItemOnClient(itemInfo,doc.id);})
+          .catch((error) => reject(error))
+      })
+      .catch(error => {return reject(error)})
   })
 }
 

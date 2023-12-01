@@ -61,7 +61,7 @@ export default defineComponent({
               deleteUserAccount()
               .then(() => {
                 notificationIcon.value = 'ph-bell-ringing';
-                notificationText.value = 'Foi uma boa caminhada, até a próxima colega!';
+                notificationText.value = 'Foi uma boa caminhada, até a próxima!';
 
                 setTimeout(() => {
                   router.push({name: 'login'});

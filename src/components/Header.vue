@@ -15,7 +15,7 @@
           <ph-arrow-circle-left :size="20" color="'#333333'" :weight="'light'" />
           Voltar
         </button>
-        <p>{{ headerTitle }}</p>
+        <h1>{{ headerTitle }}</h1>
       </div>
     </header>
     <transition name="notification">
@@ -143,9 +143,10 @@ div.secondary button {
   box-shadow: var(--light-shadow);
 }
 
-div.secondary p {
+div.secondary h1 {
   font-family: var(--font-header);
   font-weight: bold;
+  font-size: 16px;
 }
 
 .notification-enter-active, .notification-leave-active {

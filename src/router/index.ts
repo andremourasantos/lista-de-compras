@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import App from '../views/AppView.vue';
 import Login from '../views/LoginView.vue';
+import PrivacyPolicy from '../views/PrivacyPolicy.vue';
 import Account from '../views/AccountView.vue';
   import AccViewMain from '../components/app/accountView/Main.vue';
   import AccViewAbout from '../components/app/accountView/About.vue';
@@ -64,7 +65,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/politica-de-privacidade',
     name: 'pp',
-    component: Login,
+    component: PrivacyPolicy,
     meta: {
       requiresAuth: false
     }

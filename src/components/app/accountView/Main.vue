@@ -106,7 +106,7 @@ export default defineComponent({
     };
 
     if(userData.value.isAnonymous === true){
-      showLinkAccountOption.value = true;
+      showLinkAccountOption.value = false; //feature not available yet.
     };
 
     return {

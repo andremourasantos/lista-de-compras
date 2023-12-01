@@ -16,12 +16,12 @@
           <div class="multiInputs">
             <input required id="quantidade" inputmode="numeric" type="number" min="1" max="9999" step="1" placeholder="Ex.: 6" v-model="itemQuantity">
             <select required aria-label="Selecionar unidade" v-model="itemQuantityMetric">
-              <option value="un" title="Unidade">Un.</option>
-              <option value="kg" title="Quilograma">Kg</option>
+              <option value="Un." title="Unidade">Un.</option>
+              <option value="Kg" title="Quilograma">Kg</option>
               <option value="g" title="Grama">g</option>
-              <option value="l" title="Litro">L</option>
+              <option value="L" title="Litro">L</option>
               <option value="ml" title="Mililitro">ml</option>
-              <option value="oz" title="Onça">Oz</option>
+              <option value="Oz." title="Onça">Oz.</option>
             </select>
           </div>
         </div>
@@ -67,7 +67,7 @@ export default defineComponent({
     const modalEl = ref<HTMLDialogElement | null>(null);
     const itemName = ref<string | null>(null);
     const itemQuantity = ref<number | null>(null);
-    const itemQuantityMetric = ref<'un' | 'kg' | 'g' | 'l' | 'ml' | 'oz' | null>(null);
+    const itemQuantityMetric = ref<quantityMetrics | null>(null);
     const itemPrice = ref<number | null>(null);
 
     const addButtonState = ref<'Standby' | 'Loading' | 'Disabled'>('Standby');
@@ -116,8 +116,8 @@ export default defineComponent({
       }
 
       addDocToList(itemInfo)
-        .then(() => {closeDialog()})
-        .catch((error) => {alert(error)})
+        .then(() => {closeDialog();})
+        .catch((error) => {alert(error); closeDialog();})
     }
 
     const editItem = ():void => {
@@ -135,7 +135,7 @@ export default defineComponent({
 
       editDocFromList(itemIdForEditAction.value, changesObj)
         .then(() => {closeDialog();})
-        .catch((error) => {alert(error)})
+        .catch((error) => {alert(error); closeDialog();})
     }
 
     onMounted(() => {
