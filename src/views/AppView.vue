@@ -175,14 +175,21 @@ main #list {
   flex-direction: row;
   flex-wrap: wrap;
   align-content: flex-start;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
   height: 100%;
-  gap: 32px;
+  row-gap: 32px;
   overflow-y: scroll;
   padding: 24px 0px 72px 0px;
   list-style: none;
 }
+
+  @media screen and (min-width: 425px) {
+    main #list {
+      justify-content: center;
+      gap: 32px;
+    }
+  }
 
 #addItem {
   position: absolute;
