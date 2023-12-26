@@ -2,7 +2,7 @@
 
 Esse repositório guarda os arquivos do meu [projeto de lista de compras 🡥](https://lista-de-compras.andremourasantos.com.br), que iniciei no começo de 2023 como forma de aprofundar e aplicar meus conhecimentos com o Firebase V9 JS SDK e também Progressive Web Apps (PWA).
 
-> Esta nova versão finaliza o ciclo de versões de teste desta aplicação, formalizando meu aprendizado em um produto consico e 100% funcional.
+> Esta nova versão finaliza o ciclo de versões de teste desta aplicação, formalizando meu aprendizado em um produto conciso e 100% funcional.
 
 ---
 
