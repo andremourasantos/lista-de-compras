@@ -6,9 +6,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+import {PhGoogleLogo, PhEnvelope, PhDetective} from "@phosphor-icons/vue";
 
 export default defineComponent({
+  components: {PhGoogleLogo, PhEnvelope, PhDetective},
   props: {
     buttonTitle: {
       required: true,

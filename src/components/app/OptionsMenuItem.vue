@@ -8,8 +8,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import router from '@/router';
+import { PhUserCircle, PhSignOut, PhDownloadSimple } from "@phosphor-icons/vue";
 
 export default defineComponent({
+  components: {PhUserCircle, PhSignOut, PhDownloadSimple},
   props: {
     optionIconName: {
       required: true,

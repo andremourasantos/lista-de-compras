@@ -6,11 +6,11 @@
       <p>Selecione uma das opções de entrada abaixo para continuar.</p>
     </div>
     <div>
-      <LoginButton :button-title="'Continuar com Google'" :icon-title="'ph-google-logo'" @click="showView = 'ThirdyParties'"/>
-      <LoginButton :button-title="'Continuar com e-mail'" :icon-title="'ph-envelope'" @click="showView = 'EmailLogin'"/>
+      <LoginButton :button-title="'Continuar com Google'" :icon-title="'PhGoogleLogo'" @click="showView = 'ThirdyParties'"/>
+      <LoginButton :button-title="'Continuar com e-mail'" :icon-title="'PhEnvelope'" @click="showView = 'EmailLogin'"/>
       <div>
         <p>ou teste sem fazer login:</p>
-        <LoginButton class="secondary_login" :button-title="'Continuar anônimo'" :icon-title="'ph-detective'" @click="showView = 'Anonymous'"/>
+        <LoginButton class="secondary_login" :button-title="'Continuar anônimo'" :icon-title="'PhDetective'" @click="showView = 'Anonymous'"/>
       </div>
     </div>
   </main>
@@ -42,7 +42,7 @@
       </div>
       <div>
         <Button :disabled="userActionButton" type="button" :button-text="'Criar conta'" :button-type="'Secondary'" :has-icon="'No'" @click="showView = 'EmailSingUp'"/>
-        <Button :disabled="!userEmail || !userPassword || userActionButton" type="submit" :button-text="'Continuar'" :has-icon="'Yes-Right'" :icon-name="'ph-arrow-circle-right'" :icon-size="24" :icon-weight="'Regular'"/>
+        <Button :disabled="!userEmail || !userPassword || userActionButton" type="submit" :button-text="'Continuar'" :has-icon="'Yes-Right'" :icon-name="'PhArrowCircleRight'" :icon-size="24" :icon-weight="'Regular'"/>
       </div>
     </form>
   </main>
@@ -139,7 +139,7 @@ export default defineComponent({
     const userActionButton = ref<boolean>(false);
 
     //Notification refs
-    const headerNotiIcon = ref<'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'>('ph-bell-ringing');
+    const headerNotiIcon = ref<notificationHeaderIcon>('PhBellRinging');
     const headerNotiText = ref<string>('');
 
     const wipeHeaderNoti = (type:'Error' | 'Success'):void => {
@@ -169,13 +169,13 @@ export default defineComponent({
 
       loginWithGoogle()
         .then(() => {
-          headerNotiIcon.value = 'ph-bell-ringing';
+          headerNotiIcon.value = 'PhBellRinging';
           headerNotiText.value = 'Sucesso, vinculação concluída!';
 
           redirectUser();
         })
         .catch((error) => {
-          headerNotiIcon.value = 'ph-seal-warning';
+          headerNotiIcon.value = 'PhSealWarning';
           headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
 
           wipeHeaderNoti('Error');
@@ -188,7 +188,7 @@ export default defineComponent({
 
       loginWithEmail(userEmail.value, userPassword.value)
         .then(() => {
-          headerNotiIcon.value = 'ph-bell-ringing';
+          headerNotiIcon.value = 'PhBellRinging';
           headerNotiText.value = 'Sucesso, suas informações conferem!';
 
           redirectUser();
@@ -211,7 +211,7 @@ export default defineComponent({
               break;
           }
 
-          headerNotiIcon.value = 'ph-seal-warning';
+          headerNotiIcon.value = 'PhSealWarning';
           headerNotiText.value = msg;
 
           wipeHeaderNoti('Error');
@@ -224,7 +224,7 @@ export default defineComponent({
 
       createAnAccount(userEmail.value, userPassword.value, userName.value.trim())
         .then(() => {
-          headerNotiIcon.value = 'ph-bell-ringing';
+          headerNotiIcon.value = 'PhBellRinging';
           headerNotiText.value = 'Sucesso, sua conta foi criada!';
 
           redirectUser();
@@ -247,7 +247,7 @@ export default defineComponent({
               break;
           }
 
-          headerNotiIcon.value = 'ph-seal-warning';
+          headerNotiIcon.value = 'PhSealWarning';
           headerNotiText.value = msg;
 
           wipeHeaderNoti('Error');
@@ -260,13 +260,13 @@ export default defineComponent({
 
       loginAnonymously()
         .then(() => {
-          headerNotiIcon.value = 'ph-bell-ringing';
+          headerNotiIcon.value = 'PhBellRinging';
           headerNotiText.value = 'Sucesso! Entrando na sua conta anônima.';
           
           redirectUser();
         })
         .catch((error) => {
-          headerNotiIcon.value = 'ph-seal-warning';
+          headerNotiIcon.value = 'PhSealWarning';
           headerNotiText.value = 'Ocorreu um erro, tente novamente mais tarde.';
 
           wipeHeaderNoti('Error');

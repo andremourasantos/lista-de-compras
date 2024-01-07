@@ -43,18 +43,18 @@ export default defineComponent({
         const { outcome } = await pwaPrompt.value.userChoice;
 
         if(outcome === 'accepted'){
-          notificationIcon.value = 'ph-bell-ringing';
+          notificationIcon.value = 'PhBellRinging';
           notificationText.value = 'Sucesso, agora sua lista estará sempre com você!';
         } else {
           disableButton.value = false;
-          notificationIcon.value = 'ph-warning-circle';
+          notificationIcon.value = 'PhWarningCircle';
           notificationText.value = 'Você recusou a instalação, mas pode tentar novamente.';
         }
       } catch (error) {
         console.error(error);
         disableButton.value = true;
 
-        notificationIcon.value = 'ph-seal-warning';
+        notificationIcon.value = 'PhSealWarning';
         notificationText.value = 'Ocorreu um erro inesperado.';
       }
     }

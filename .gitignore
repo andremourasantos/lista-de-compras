@@ -23,4 +23,5 @@ firestore-debug.log
 *.njsproj
 *.sln
 *.sw?
+*.log
 firestore-debug.log

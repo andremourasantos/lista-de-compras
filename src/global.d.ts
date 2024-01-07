@@ -20,7 +20,7 @@ declare global {
     lastEmailVerificationSent:Date
   }
 
-  type notificationHeaderIcon = 'ph-seal-warning' | 'ph-bell-ringing' | 'ph-warning-circle'
+  type notificationHeaderIcon = 'PhSealWarning' | 'PhWarningCircle' | 'PhBellRinging'
 
   type quantityMetrics = 'Un.' | 'Kg' | 'g' | 'L' | 'ml' | 'Oz.'
 

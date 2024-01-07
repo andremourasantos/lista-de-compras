@@ -7,12 +7,12 @@
           active: showActiveStatus
         }" id="userButton" aria-label="Abrir menu de opções" title="Abrir menu de opções" @click="emitToggleOptionsMenu">
           <img v-if="showProfilePic === true" :src="userProfilePic" height="40" width="40" alt="Foto de perfil do usuário.">
-          <ph-user-circle-gear v-if="showProfilePic === false" :size="40" color="#333333" weight="light" />
+          <PhUserCircleGear v-if="showProfilePic === false" :size="40" color="#333333" weight="light" />
         </button>
       </div>
       <div v-if="headerType === 'Secondary'" class="secondary">
         <button aria-label="Retroceder" @click="emitGoBack">
-          <ph-arrow-circle-left :size="20" color="'#333333'" :weight="'light'" />
+          <PhArrowCircleLeft :size="20" color="'#333333'" :weight="'light'" />
           Voltar
         </button>
         <h1>{{ headerTitle }}</h1>
@@ -28,11 +28,13 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
+import {PhUserCircleGear, PhArrowCircleLeft} from "@phosphor-icons/vue";
 
 //Stores
 import userInfo from '@/store/user-info';
 
 export default defineComponent({
+  components: {PhUserCircleGear, PhArrowCircleLeft},
   props: {
     headerType: {
       required: true,

@@ -30,17 +30,18 @@ _*Atualizado em outubro de 2023._
 - Confirmar e-mail via Firebase Auth;
 - Criação, edição e exclusão de contas no Firebase Auth;
 - Otimização para PWA, com ícones, imagens e descrições;
-- Restringir rotas no Vue Router com base em parâmetros pré-definidos (usuário autenticado);
+- Restringir rotas no Vue Router com base em parâmetros pré-definidos (usuário autenticado), Router Guard;
 - Utilização da nova exibição de instalação de PWAs exclusiva do Chrome;
 
 ---
 
-## Árvore de componentes e lógica
+## Lógica da aplicação
 
-_*Atualizado em outubro de 2023._
+_*Atualizado em janeiro de 2024._
 
-Veja abaixo a árvore de componentes do VueJS e também o fluxograma de lógica da aplicação, assim, você poderá ter um bom entendimento de como o projeto foi estruturado desde o começo para permitir uma fácil manutenção e adição de funcionalidades.
+Veja abaixo o fluxograma de lógica e do router da aplicação, assim, você poderá ter um bom entendimento de como o projeto foi estruturado desde o começo para permitir uma fácil manutenção e adição de funcionalidades.
 
+<img title="Fluxograma de lógica da aplicação" src="data/lista-de-compras-app-fluxogram.png">
 <img title="Fluxograma de lógica de autenticação da aplicação" src="data/router-fluxogram.png">
 
 ---
@@ -56,9 +57,9 @@ _*Atualizado em dezembro de 2023._
 
 ## Desempenho do site
 
-_*Atualizado em dezembro de 2023._
+_*Atualizado em janeiro de 2024._
 
-O desempenho do site pode ser visto a partir de testes do [PageSpeed Insights 🡥](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Flista-de-compras.andremourasantos.com.br%2F). Os problemas de desempenho surgem devido à instalação da biblioteca do PhosphorIcons globalmente (para testes), o que impossibilita o tree-shaking. Em breve irei alterar a instalação para importação dos componentes individualmente (permitindo o tree-shaking).
+O desempenho do site pode ser visto a partir de testes do [PageSpeed Insights 🡥](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Flista-de-compras.andremourasantos.com.br%2F).
 
-![pagespeed-insights-teste-telefone](https://github.com/andremourasantos/lista-de-compras/assets/92397834/4a046871-6269-43db-88b7-249925bb82ec)
-![pagespeed-insights-teste-pc](https://github.com/andremourasantos/lista-de-compras/assets/92397834/275c038b-dcee-4f78-acc4-57af1599a880)
+![pagespeed-insights-teste-telefone](/data/desempenho_telefone.png)
+![pagespeed-insights-teste-pc](/data/desempenho_computador.png)

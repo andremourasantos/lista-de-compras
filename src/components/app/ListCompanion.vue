@@ -3,11 +3,11 @@
     loading: appStatus === 'Loading'
   }">
     <section>
-      <ph-hand-coins :size="20" color="#707070" weight="light" />
+      <PhHandCoins :size="20" color="#707070" weight="light" />
       <span>Total: R$ {{ totalCost }}</span>
     </section>
     <section>
-      <ph-circles-four :size="20" color="#707070" weight="light" />
+      <PhCirclesFour :size="20" color="#707070" weight="light" />
       <span>{{ totalItems }} {{ styledItemsString }} na lista</span>
     </section>
   </div>
@@ -15,11 +15,13 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref, Ref, watch } from 'vue';
+import { PhHandCoins, PhCirclesFour } from "@phosphor-icons/vue";
 
 //Stores
 import userInfo from '@/store/user-info';
 
 export default defineComponent({
+  components: { PhHandCoins, PhCirclesFour },
   setup () {
     const userData = ref<userInfo>(userInfo);
     const totalCost = ref<string>('0');

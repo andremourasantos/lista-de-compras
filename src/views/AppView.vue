@@ -9,7 +9,7 @@
   </Header>
   <transition name="optionsMenu">
     <OptionsMenu v-if="showOptionsMenu">
-      <OptionsMenuItem v-if="showPWAInstallButton" :option-icon-name="'ph-download-simple'" :option-text="'Adicionar à tela inicial'" :option-aria-label="'Adicionar lista de compras à tela incial do dispositivo'" :option-redirect-to="'AccViewPwa'"/>
+      <OptionsMenuItem v-if="showPWAInstallButton" :option-icon-name="'PhDownloadSimple'" :option-text="'Adicionar à tela inicial'" :option-aria-label="'Adicionar lista de compras à tela incial do dispositivo'" :option-redirect-to="'AccViewPwa'"/>
     </OptionsMenu>
   </transition>
   <main>
@@ -25,12 +25,13 @@
       <AddItemModal ref="addItemModalEl" v-if="showItemModal" :modal-action="modalAction" @dialog-closed="dialogClosed"/>
     </transition>
 
-    <Button id="addItem" :disabled="appStatus !== 'Success' && appStatus !== 'Success & Empty'" :button-text="'Adicionar item'" :has-icon="'Yes-Right'" :icon-name="'ph-shopping-cart'" :icon-weight="'Light'" :icon-size="20" @click="addItemAction"/>
+    <Button id="addItem" :disabled="appStatus !== 'Success' && appStatus !== 'Success & Empty'" :button-text="'Adicionar item'" :has-icon="'Yes-Right'" :icon-name="'PhShoppingCart'" :icon-weight="'Light'" :icon-size="20" @click="addItemAction"/>
   </main>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, Ref, onMounted, watch, provide, inject } from 'vue';
+import { PhShoppingCart } from "@phosphor-icons/vue";
 
 //Composables
 import { isUserEmailVerified, isUserAnonymous } from '@/composables/auth';
@@ -51,7 +52,7 @@ import ListItem from '@/components/app/ListItem.vue';
 import userInfo from '@/store/user-info';
 
 export default defineComponent({
-  components: {Header, OptionsMenu, OptionsMenuItem, ListCompanion, HeaderNotification, WelcomeMessage, Button, AddItemModal, ListItem},
+  components: {Header, OptionsMenu, OptionsMenuItem, ListCompanion, HeaderNotification, WelcomeMessage, Button, AddItemModal, ListItem, PhShoppingCart},
   setup () {
     const showOptionsMenu = ref<boolean>(false);
     const appStatus = ref<'Loading' | 'Success' | 'Success & Empty' | 'Error'>('Loading');
@@ -63,7 +64,7 @@ export default defineComponent({
 
     //Notification related
     const showNotification = ref<boolean>(false);
-    const notificationIcon = ref<notificationHeaderIcon>('ph-bell-ringing');
+    const notificationIcon = ref<notificationHeaderIcon>('PhBellRinging');
     const notificationText = ref<string>('');
 
     onMounted(() => {
@@ -91,12 +92,12 @@ export default defineComponent({
       //Notification check chain
       if(isUserAnonymous() === true){
         showNotification.value = true;
-        notificationIcon.value = 'ph-warning-circle';
+        notificationIcon.value = 'PhWarningCircle';
         notificationText.value = 'Você está utilizando uma conta anônima.';
 
       } else if(isUserEmailVerified() === false){
         showNotification.value = true;
-        notificationIcon.value = 'ph-warning-circle';
+        notificationIcon.value = 'PhWarningCircle';
         notificationText.value = 'Verifique sua conta, confira a sua caixa de entrada!';
       }
     })

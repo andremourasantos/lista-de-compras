@@ -50,7 +50,7 @@ export default defineComponent({
       getUserObject()
         .then(async (res) => {
           if(res === null){
-            notificationIcon.value = 'ph-seal-warning';
+            notificationIcon.value = 'PhSealWarning';
             notificationText.value = 'Ocorreu um erro. Tente fazer login novamente.';
 
             return;
@@ -60,7 +60,7 @@ export default defineComponent({
             .then(() => {
               deleteUserAccount()
               .then(() => {
-                notificationIcon.value = 'ph-bell-ringing';
+                notificationIcon.value = 'PhBellRinging';
                 notificationText.value = 'Foi uma boa caminhada, até a próxima!';
 
                 setTimeout(() => {
@@ -71,13 +71,13 @@ export default defineComponent({
                 console.error(error);
                 disableButtons.value = false;
 
-                notificationIcon.value = 'ph-seal-warning';
+                notificationIcon.value = 'PhSealWarning';
                 notificationText.value = 'Ocorreu um erro. Tente fazer login novamente.';
               })
             })
             .catch((error) => {
               if(error = 'delete-user-list'){
-                notificationIcon.value = 'ph-seal-warning';
+                notificationIcon.value = 'PhSealWarning';
                 notificationText.value = 'Primeiro, remova todos os itens da sua lista de compras.';
               }
             })

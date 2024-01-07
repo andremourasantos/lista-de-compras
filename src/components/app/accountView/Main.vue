@@ -2,8 +2,8 @@
   <article>
     <section id="userInfo">
       <img v-if="accountImageToShow === 'userProfilePicture'" :src="userProfilePicture !== null ? userProfilePicture : ''" alt="Foto de perfil do usuário." height="128" width="128">
-      <ph-user-circle v-if="accountImageToShow === 'userIcon'" :size="128" color="'#333333'" :weight="'light'" />
-      <ph-detective v-if="accountImageToShow === 'anonymousIcon'" :size="128" color="#333333" weight="light" />
+      <PhUserCircle v-if="accountImageToShow === 'userIcon'" :size="128" color="'#333333'" :weight="'light'" />
+      <PhDetective v-if="accountImageToShow === 'anonymousIcon'" :size="128" color="#333333" weight="light" />
       <div>
         <h1>{{ nameToShow }}</h1>
         <p>{{ identificationToShow }}</p>
@@ -12,19 +12,20 @@
     </section>
     
     <section id="accountOptions">
-      <AccountLinkOptions :option-icon="'ph-info'" :option-name="'Sobre'" :option-description="'Sobre o aplicativo.'" :option-go="'AccViewAbout'"/>
-      <AccountLinkOptions v-if="false" :option-icon="'ph-sparkle'" :option-name="'Novidades'" :option-description="'Veja as últimas atualizações.'" :option-go="'AccViewAbout'"/>
-      <AccountLinkOptions v-if="showLinkAccountOption" :option-icon="'ph-link'" :option-name="'Vincular conta'" :option-description="'Crie uma conta permanente.'" :option-go="'AccViewAbout'"/>
-      <AccountLinkOptions v-if="showVerifyEmailOption" :option-icon="'ph-envelope'" :option-name="'Verificar email'" :option-description="'Confirme sua conta.'" :option-go="'AccViewVerifyEmail'"/>
-      <AccountLinkOptions v-if="showPwaOption" :option-icon="'ph-download-simple'" :option-name="'Adicionar à tela inicial'" :option-description="'Tenha acesso instantâneo.'" :option-go="'AccViewPwa'"/>
-      <AccountLinkOptions :option-icon="'ph-shield-check'" :option-name="'Política de privacidade'" :option-description="'Revise a política de privacidade do aplicativo.'" :option-go="'pp'"/>
-      <AccountLinkOptions :option-icon="'ph-trash-simple'" :option-name="'Deletar conta'" :option-description="'Solicite a eliminação da sua conta.'" :option-go="'AccViewDelete'"/>
+      <AccountLinkOptions :option-icon="'PhInfo'" :option-name="'Sobre'" :option-description="'Sobre o aplicativo.'" :option-go="'AccViewAbout'"/>
+      <AccountLinkOptions v-if="false" :option-icon="'PhSparkle'" :option-name="'Novidades'" :option-description="'Veja as últimas atualizações.'" :option-go="'AccViewAbout'"/>
+      <AccountLinkOptions v-if="showLinkAccountOption" :option-icon="'PhLink'" :option-name="'Vincular conta'" :option-description="'Crie uma conta permanente.'" :option-go="'AccViewAbout'"/>
+      <AccountLinkOptions v-if="showVerifyEmailOption" :option-icon="'PhEnvelope'" :option-name="'Verificar email'" :option-description="'Confirme sua conta.'" :option-go="'AccViewVerifyEmail'"/>
+      <AccountLinkOptions v-if="showPwaOption" :option-icon="'PhDownloadSimple'" :option-name="'Adicionar à tela inicial'" :option-description="'Tenha acesso instantâneo.'" :option-go="'AccViewPwa'"/>
+      <AccountLinkOptions :option-icon="'PhShieldCheck'" :option-name="'Política de privacidade'" :option-description="'Revise a política de privacidade do aplicativo.'" :option-go="'pp'"/>
+      <AccountLinkOptions :option-icon="'PhTrashSimple'" :option-name="'Deletar conta'" :option-description="'Solicite a eliminação da sua conta.'" :option-go="'AccViewDelete'"/>
     </section>
   </article>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, Ref, inject, onBeforeUnmount, onMounted } from 'vue';
+import { PhUserCircle, PhDetective } from "@phosphor-icons/vue";
 
 //Compsables
 import { getUserObject } from '@/composables/auth';
@@ -39,7 +40,7 @@ import AccountLinkOptions from './AccountLinkOptions.vue';
 import userInfo from '@/store/user-info';
 
 export default defineComponent({
-  components: {AccountLinkOptions},
+  components: {AccountLinkOptions, PhUserCircle, PhDetective},
   setup () {
     //Related to AccountView.vue
     const headerTitle = inject('headerTitle') as Ref<string>;
@@ -55,10 +56,10 @@ export default defineComponent({
     //Notification check chain
     onMounted(() => {
       if(isUserAnonymous() === true){
-        notificationIcon.value = 'ph-warning-circle';
+        notificationIcon.value = 'PhWarningCircle';
         notificationText.value = 'Você está utilizando uma conta anônima.';
       } else if(isUserEmailVerified() === false){
-        notificationIcon.value = 'ph-warning-circle';
+        notificationIcon.value = 'PhWarningCircle';
         notificationText.value = 'Verifique sua conta, confira a sua caixa de entrada!';
       }
     })

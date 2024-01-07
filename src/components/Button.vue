@@ -11,8 +11,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { PhShoppingCart, PhCheckCircle, PhArrowCircleRight } from "@phosphor-icons/vue";
 
 export default defineComponent({
+  components: {PhShoppingCart, PhCheckCircle, PhArrowCircleRight},
   props: {
     buttonText: {
       required: true,

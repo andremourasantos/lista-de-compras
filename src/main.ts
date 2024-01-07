@@ -2,12 +2,10 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
-import PhosphorIcons from "@phosphor-icons/vue";
-
 //Firebase
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAAdgbV_X6cdkZWytuuUuA2-_XlvL_V4mo",
@@ -25,5 +23,4 @@ const analytics = getAnalytics(app);
 
 createApp(App)
   .use(router)
-  .use(PhosphorIcons)
   .mount('#app')

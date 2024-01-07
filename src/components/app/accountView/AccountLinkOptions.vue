@@ -10,8 +10,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { PhInfo, PhSparkle, PhLink, PhEnvelope, PhDownloadSimple, PhShieldCheck, PhTrashSimple } from "@phosphor-icons/vue";
 
 export default defineComponent({
+  components: {PhInfo, PhSparkle, PhLink, PhEnvelope, PhDownloadSimple, PhShieldCheck, PhTrashSimple},
   props: {
     optionGo: {
       required: true,

@@ -41,7 +41,7 @@ export default defineComponent({
 
     //Notification related
     const showNotification = ref<boolean>(false);
-    const notificationIcon = ref<notificationHeaderIcon>('ph-bell-ringing');
+    const notificationIcon = ref<notificationHeaderIcon>('PhBellRinging');
     const notificationText = ref<string>('');
 
     const wipeNotification = (pageHeader:string, timeDelay:string):void => {

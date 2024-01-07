@@ -1,7 +1,7 @@
 <template>
   <div :class="{
-    error: notificationIcon === 'ph-seal-warning',
-    alert: notificationIcon === 'ph-warning-circle'
+    error: notificationIcon === 'PhSealWarning',
+    alert: notificationIcon === 'PhWarningCircle'
   }" @click="emitEvent">
     <component :is="notificationIcon" :size="16" weight="regular"/>
     <p>{{ notificationText }}</p>
@@ -10,8 +10,10 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
+import { PhSealWarning, PhWarningCircle, PhBellRinging } from "@phosphor-icons/vue";
 
 export default defineComponent({
+  components: {PhSealWarning, PhWarningCircle, PhBellRinging},
   props: {
     notificationIcon: {
       required: true,

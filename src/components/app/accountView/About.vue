@@ -7,29 +7,31 @@
     </div>
     <div id="externalLinks">
       <a href="https://github.com/andremourasantos/lista-de-compras" rel="external" target="_blank">
-        <ph-arrow-square-out :size="29" color="#333333" weight="light" />
+        <PhArrowSquareOut :size="29" color="#333333" weight="light" />
         Acessar GitHub
       </a>
       <a href="https://www.linkedin.com/in/andremourasantos/" rel="external" target="_blank">
-        <ph-arrow-square-out :size="29" color="#333333" weight="light" />
+        <PhArrowSquareOut :size="29" color="#333333" weight="light" />
         Acessar LinkedIn
       </a>
       <a href="https://andremourasantos.com.br/" rel="external" target="_blank">
-        <ph-arrow-square-out :size="29" color="#333333" weight="light" />
+        <PhArrowSquareOut :size="29" color="#333333" weight="light" />
         Site de André Moura Santos
       </a>
     </div>
     <div id="info">
-      <ph-info :size="29" color="#333333" weight="light" />
+      <PhInfo :size="29" color="#333333" weight="light" />
       <p>Versão de Nov./23</p>
     </div>
   </article>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, inject } from 'vue'
+import { defineComponent, ref, Ref, inject } from 'vue';
+import { PhArrowSquareOut, PhInfo } from "@phosphor-icons/vue";
 
 export default defineComponent({
+  components: {PhArrowSquareOut, PhInfo},
   setup () {
     const headerTitle = inject('headerTitle') as Ref<string>;
     const goBackAction = inject('goBackAction') as Ref<'goBackToApp' | 'goBackToMainView'>;
